@@ -1,8 +1,8 @@
-import core.entity.{Entity, EntityFactory}
+import core.entity.{Entity, EntityFactory, EntityHolder}
 import core.event.Event
 import core.event.Event._
 import core.timer.Timer
-import core.world.{EntityHolder, WorldFrame}
+import core.world.WorldFrame
 
 object Main extends App {
     val timeCounter: Timer = new Timer(0, true)

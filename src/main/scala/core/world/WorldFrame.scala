@@ -1,10 +1,10 @@
 package core.world
 
-import core.timer.Timer
-import core.entity.Entity
 import core.entity.Entity.Physical
 import core.entity.properties.position.Coordinates
+import core.entity.{Entity, EntityHolder}
 import core.event.Event
+import core.timer.Timer
 import json.{JSONParsable, JValue, MyJ}
 
 class WorldFrame(private val entityHolder: EntityHolder,

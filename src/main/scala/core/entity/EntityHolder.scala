@@ -1,6 +1,5 @@
-package core.world
+package core.entity
 
-import core.entity.Entity
 import core.entity.Entity.Positioned
 import core.entity.properties.position.Coordinates
 
