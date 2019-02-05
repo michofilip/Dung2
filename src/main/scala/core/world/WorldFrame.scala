@@ -37,11 +37,10 @@ class WorldFrame(private val entityHolder: EntityHolder,
     }
     
     def nextFrame(externalEvents: Vector[Event] = Vector.empty): WorldFrame = {
-        implicit val mf: WorldFrame = this
-        
         val (newEntityHolder, newEvents) =
             events.foldLeft(entityHolder, externalEvents) {
                 case ((tempEntityHolder, tempEvents), event) =>
+                    implicit val eh: EntityHolder = tempEntityHolder
                     tempEntityHolder.getById(event.entityId) match {
                         case Some(entity) =>
                             val (resultEntities, resultEvents) = event.applyTo(entity)
