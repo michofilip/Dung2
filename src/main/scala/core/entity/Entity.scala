@@ -12,7 +12,6 @@ import json.{JSONParsable, JValue}
 
 sealed abstract class Entity extends JSONParsable {
     protected type T <: Entity
-    protected val clock: Timer
     val id: String
     val timeStamp: Long
 }
@@ -90,8 +89,8 @@ object Entity {
             animationSelector.getAnimation(stateOpt, directionOpt)
         }
         
-        def getFrame: Frame = {
-            animation.getFrame(clock.getTime - timeStamp)
+        def getFrame(implicit timer: Timer): Frame = {
+            animation.getFrame(timer.getTime - timeStamp)
         }
     }
     
@@ -108,18 +107,15 @@ object Entity {
     
     // abstract classes
     sealed abstract class Switchable extends Entity with MultiState {
-//        def starClosing():T
+        //        def starClosing():T
         
         
-        def setSwitchableState(state: SwitchableState): T = {
+        def setSwitchableState(state: SwitchableState)(implicit timer: Timer): T = {
             (this.state, state) match {
-                case (Off, SwitchingOn) => setState(state, clock.getTime)
-                case (SwitchingOn, On) => setState(state, clock.getTime)
-                case (On, SwitchingOff) => setState(state, clock.getTime)
-                case (SwitchingOff, Off) => setState(state, clock.getTime)
-                
-                case (SwitchingOn, SwitchingOff) => setState(state, timeStamp) //todo it's wrong, fix it
-                case (SwitchingOff, SwitchingOn) => setState(state, timeStamp) //todo it's wrong, fix it
+                case (Off, SwitchingOn) => setState(state, timer.getTime)
+                case (SwitchingOn, On) => setState(state, timer.getTime)
+                case (On, SwitchingOff) => setState(state, timer.getTime)
+                case (SwitchingOff, Off) => setState(state, timer.getTime)
                 
                 case _ => setState(this.state, timeStamp)
             }
@@ -129,23 +125,17 @@ object Entity {
     sealed abstract class Openable extends Entity with MultiState {
         val lockCode: Long
         
-        def setOpenableState(openableState: OpenableState): T = {
+        def setOpenableState(openableState: OpenableState)(implicit timer: Timer): T = {
             (this.state, state) match {
-                case (Open, Closing) => setState(state, clock.getTime)
-                case (Closing, Close) => setState(state, clock.getTime)
-                case (Close, Opening) => setState(state, clock.getTime)
-                case (Opening, Open) => setState(state, clock.getTime)
+                case (Open, Closing) => setState(state, timer.getTime)
+                case (Closing, Close) => setState(state, timer.getTime)
+                case (Close, Opening) => setState(state, timer.getTime)
+                case (Opening, Open) => setState(state, timer.getTime)
                 
-                case (Closing, Opening) => setState(state, timeStamp) //todo it's wrong, fix it
-                case (Opening, Closing) => setState(state, timeStamp) //todo it's wrong, fix it
-                
-                case (Close, Locking) => setState(state, clock.getTime)
-                case (Locking, Locked) => setState(state, clock.getTime)
-                case (Locked, Unlocking) => setState(state, clock.getTime)
-                case (Unlocking, Close) => setState(state, clock.getTime)
-                
-                case (Locking, Unlocking) => setState(state, timeStamp) //todo it's wrong, fix it
-                case (Unlocking, Locking) => setState(state, timeStamp) //todo it's wrong, fix it
+                case (Close, Locking) => setState(state, timer.getTime)
+                case (Locking, Locked) => setState(state, timer.getTime)
+                case (Locked, Unlocking) => setState(state, timer.getTime)
+                case (Unlocking, Close) => setState(state, timer.getTime)
                 
                 case _ => setState(this.state, timeStamp)
             }
@@ -154,18 +144,17 @@ object Entity {
     
     sealed abstract class Character extends Entity with MultiState {
         // TODO basic template
-        def setCharacterState(characterState: CharacterState): T =
+        def setCharacterState(characterState: CharacterState)(implicit timer: Timer): T =
             if (characterState != state)
-                setState(characterState, clock.getTime)
+                setState(characterState, timer.getTime)
             else
                 setState(state, timeStamp)
     }
     
     // final classes
-    final class EntityCreator(override protected val clock: Timer) extends Entity {
+    final class EntityCreator(override val timeStamp: Long) extends Entity {
         override protected type T = EntityCreator
         override val id: String = "EntityCreator"
-        override val timeStamp: Long = clock.getTime
         
         override def toJSON: JValue = {
             import json.MyJ._
@@ -177,10 +166,9 @@ object Entity {
         }
     }
     
-    final class ScriptRunner(override protected val clock: Timer) extends Entity {
+    final class ScriptRunner(override val timeStamp: Long) extends Entity {
         override protected type T = ScriptRunner
         override val id: String = "ScriptRunner"
-        override val timeStamp: Long = clock.getTime
         
         override def toJSON: JValue = {
             import json.MyJ._
@@ -192,8 +180,39 @@ object Entity {
         }
     }
     
-    final class Static(override protected val clock: Timer,
-                       override val id: String,
+    final class TimeCounter(val timer: Timer) extends Entity {
+        override protected type T = TimeCounter
+        override val id: String = "TimeCounter"
+        override val timeStamp: Long = timer.getTime
+        
+        override def toJSON: JValue = {
+            import json.MyJ._
+            jObject(
+                "entity" -> "TimeCounter",
+                "id" -> id,
+                "timeStamp" -> timeStamp,
+                "timer" -> timer.getTime
+            )
+        }
+    }
+    
+    final class TurnCounter(val turn: Long) extends Entity {
+        override protected type T = TurnCounter
+        override val id: String = "TurnCounter"
+        override val timeStamp: Long = 0
+        
+        override def toJSON: JValue = {
+            import json.MyJ._
+            jObject(
+                "entity" -> "TimeCounter",
+                "id" -> id,
+                "timeStamp" -> timeStamp,
+                "turn" -> turn
+            )
+        }
+    }
+    
+    final class Static(override val id: String,
                        override val timeStamp: Long,
                        override val position: Position,
                        override protected val physicsSelector: PhysicsSelector,
@@ -206,7 +225,7 @@ object Entity {
             update(position = position)
         
         private def update(position: Position = position): T =
-            new Static(clock, id, timeStamp, position, physicsSelector, animationSelector)
+            new Static(id, timeStamp, position, physicsSelector, animationSelector)
         
         override def toJSON: JValue = {
             import json.MyJ._
@@ -221,8 +240,7 @@ object Entity {
         }
     }
     
-    final class Switch(override protected val clock: Timer,
-                       override val id: String,
+    final class Switch(override val id: String,
                        override val timeStamp: Long,
                        override val state: State,
                        override val position: Position,
@@ -239,7 +257,7 @@ object Entity {
             update(position = position)
         
         private def update(timeStamp: Long = timeStamp, state: State = state, position: Position = position): T =
-            new Switch(clock, id, timeStamp, state, position, physicsSelector, animationSelector)
+            new Switch(id, timeStamp, state, position, physicsSelector, animationSelector)
         
         override def toJSON: JValue = {
             import json.MyJ._
@@ -255,8 +273,7 @@ object Entity {
         }
     }
     
-    final class Door(override protected val clock: Timer,
-                     override val id: String,
+    final class Door(override val id: String,
                      override val timeStamp: Long,
                      override val state: State,
                      override val position: Position,
@@ -274,7 +291,7 @@ object Entity {
             update(position = position)
         
         private def update(timeStamp: Long = timeStamp, state: State = state, position: Position = position): T =
-            new Door(clock, id, timeStamp, state, position, lockCode, physicsSelector, animationSelector)
+            new Door(id, timeStamp, state, position, lockCode, physicsSelector, animationSelector)
         
         override def toJSON: JValue = {
             import json.MyJ._
@@ -291,8 +308,7 @@ object Entity {
         }
     }
     
-    final class Player(override protected val clock: Timer,
-                       override val id: String, override val timeStamp: Long,
+    final class Player(override val id: String, override val timeStamp: Long,
                        override val state: State,
                        override val position: Position,
                        override protected val physicsSelector: PhysicsSelector,
@@ -308,7 +324,7 @@ object Entity {
             update(position = position)
         
         private def update(timeStamp: Long = timeStamp, state: State = state, position: Position = position): T =
-            new Player(clock, id, timeStamp, state, position, physicsSelector, animationSelector)
+            new Player(id, timeStamp, state, position, physicsSelector, animationSelector)
         
         override def toJSON: JValue = {
             import json.MyJ._

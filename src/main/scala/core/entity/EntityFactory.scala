@@ -1,11 +1,11 @@
 package core.entity
 
-import core.timer.Timer
 import core.entity.properties.position.Direction.North
 import core.entity.properties.position.{Coordinates, Position}
 import core.entity.properties.state.State._
 import core.entity.selectors.AnimationSelector._
 import core.entity.selectors.PhysicsSelector._
+import core.timer.Timer
 
 class EntityFactory(private val clock: Timer) {
     
@@ -24,7 +24,7 @@ class EntityFactory(private val clock: Timer) {
         val physicsSelector = LeverPhysicsSelector
         val animationSelector = LeverAnimationSelector
         
-        new Entity.Switch(clock, id, clock.getTime, state, position, physicsSelector, animationSelector)
+        new Entity.Switch(id, clock.getTime, state, position, physicsSelector, animationSelector)
     }
     
     private def door(): Entity = {
@@ -35,6 +35,6 @@ class EntityFactory(private val clock: Timer) {
         val physicsSelector = LeverPhysicsSelector
         val animationSelector = LeverAnimationSelector
         
-        new Entity.Door(clock, id, clock.getTime, state, position, lockCode, physicsSelector, animationSelector)
+        new Entity.Door(id, clock.getTime, state, position, lockCode, physicsSelector, animationSelector)
     }
 }

@@ -1,3 +1,4 @@
+import core.entity
 import core.entity.{Entity, EntityFactory, EntityHolder}
 import core.event.Event
 import core.event.Event._
@@ -9,7 +10,12 @@ object Main extends App {
     val entityFactory = new EntityFactory(timeCounter)
     var ent = entityFactory.create("lever").get
     
-    val ents = Seq[Entity](ent)
+    val ents = Seq[Entity](
+        ent,
+        new entity.Entity.TimeCounter(timeCounter),
+        //        new entity.Entity.TurnCounter(0),
+        //        new entity.Entity.ScriptRunner(0),
+    )
     val events = Vector[Event](
         SwitchOn("1000")
     )
