@@ -1,8 +1,7 @@
 package core.entity
 
-import core.entity.Entity.{Positioned, TimeCounter, TurnCounter}
+import core.entity.Entity.Positioned
 import core.entity.properties.position.Coordinates
-import core.timer.Timer
 
 class EntityHolder private(private val entitiesById: Map[String, Entity],
                            private val entitiesByCoordinates: Map[Coordinates, Map[String, Entity]]) {
@@ -70,16 +69,6 @@ class EntityHolder private(private val entitiesById: Map[String, Entity],
     
     def forallAtCoordinates(coordinates: Coordinates, condition: Entity => Boolean): Boolean = {
         getByCoordinates(coordinates).forall(condition)
-    }
-    
-    def getTimer: Timer = entitiesById.get("TimeCounter") match {
-        case Some(en: TimeCounter) => en.timer
-        case _ => new Timer(0, false)
-    }
-    
-    def getTurn: Long = entitiesById.get("TurnCounter") match {
-        case Some(en: TurnCounter) => en.turn
-        case _ => 0
     }
     
 }

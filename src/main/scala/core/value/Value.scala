@@ -1,10 +1,9 @@
 package core.value
 
-import core.entity.Entity.{MultiState, Positioned}
+import core.entity.Entity.{MultiState, Positioned, TimeCounter, TurnCounter}
 import core.entity.EntityHolder
 import core.entity.properties.position.{Coordinates, Direction}
 import core.entity.properties.state.State
-import core.value.Value.BasicValue.BooleanValue
 import core.value.Value.BasicValue.BooleanValue._
 import core.value.Value.BasicValue.ByteValue._
 import core.value.Value.BasicValue.CharValue._
@@ -14,6 +13,7 @@ import core.value.Value.BasicValue.IntValue._
 import core.value.Value.BasicValue.LongValue._
 import core.value.Value.BasicValue.ShortValue._
 import core.value.Value.BasicValue.StringValue._
+import core.value.Value.BasicValue._
 import core.value.Value.CustomValue.CoordinatesValue._
 import core.value.Value.CustomValue.DirectionValue._
 import core.value.Value.CustomValue.StateValue._
@@ -2014,6 +2014,42 @@ object Value {
         
         sealed abstract class DirectionValue extends Value {
             override final type T = Direction
+        }
+        
+        object LongValue {
+            
+            final case object GetTime extends LongValue {
+                override def getValue(implicit entityHolder: EntityHolder): Option[Long] = {
+                    entityHolder.getById("TimeCounter") match {
+                        case Some(en: TimeCounter) => Some(en.timer.getTime)
+                        case _ => None
+                    }
+                }
+                
+                override def toJSON: JValue = {
+                    import json.MyJ._
+                    jObject(
+                        "value" -> this.getClass.getSimpleName
+                    )
+                }
+            }
+            
+            final case object GetTurn extends LongValue {
+                override def getValue(implicit entityHolder: EntityHolder): Option[Long] = {
+                    entityHolder.getById("TurnCounter") match {
+                        case Some(en: TurnCounter) => Some(en.turn)
+                        case _ => None
+                    }
+                }
+                
+                override def toJSON: JValue = {
+                    import json.MyJ._
+                    jObject(
+                        "value" -> this.getClass.getSimpleName
+                    )
+                }
+            }
+            
         }
         
         object StateValue {

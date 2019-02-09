@@ -64,9 +64,7 @@ object Entity {
                 case en: MultiState => Some(en.state)
                 case _ => None
             }
-            physicsSelector.getPhysics {
-                stateOpt
-            }
+            physicsSelector.getPhysics(stateOpt)
         }
     }
     
@@ -110,14 +108,14 @@ object Entity {
         //        def starClosing():T
         
         
-        def setSwitchableState(state: SwitchableState)(implicit timer: Timer): T = {
-            (this.state, state) match {
-                case (Off, SwitchingOn) => setState(state, timer.getTime)
-                case (SwitchingOn, On) => setState(state, timer.getTime)
-                case (On, SwitchingOff) => setState(state, timer.getTime)
-                case (SwitchingOff, Off) => setState(state, timer.getTime)
+        def setSwitchableState(switchableState: SwitchableState, timeStamp: Long): T = {
+            (state, switchableState) match {
+                case (Off, SwitchingOn) => setState(switchableState, timeStamp)
+                case (SwitchingOn, On) => setState(switchableState, timeStamp)
+                case (On, SwitchingOff) => setState(switchableState, timeStamp)
+                case (SwitchingOff, Off) => setState(switchableState, timeStamp)
                 
-                case _ => setState(this.state, timeStamp)
+                case _ => setState(state, this.timeStamp)
             }
         }
     }
@@ -125,28 +123,28 @@ object Entity {
     sealed abstract class Openable extends Entity with MultiState {
         val lockCode: Long
         
-        def setOpenableState(openableState: OpenableState)(implicit timer: Timer): T = {
-            (this.state, state) match {
-                case (Open, Closing) => setState(state, timer.getTime)
-                case (Closing, Close) => setState(state, timer.getTime)
-                case (Close, Opening) => setState(state, timer.getTime)
-                case (Opening, Open) => setState(state, timer.getTime)
+        def setOpenableState(openableState: OpenableState, timeStamp: Long): T = {
+            (state, openableState) match {
+                case (Open, Closing) => setState(openableState, timeStamp)
+                case (Closing, Close) => setState(openableState, timeStamp)
+                case (Close, Opening) => setState(openableState, timeStamp)
+                case (Opening, Open) => setState(openableState, timeStamp)
                 
-                case (Close, Locking) => setState(state, timer.getTime)
-                case (Locking, Locked) => setState(state, timer.getTime)
-                case (Locked, Unlocking) => setState(state, timer.getTime)
-                case (Unlocking, Close) => setState(state, timer.getTime)
+                case (Close, Locking) => setState(openableState, timeStamp)
+                case (Locking, Locked) => setState(openableState, timeStamp)
+                case (Locked, Unlocking) => setState(openableState, timeStamp)
+                case (Unlocking, Close) => setState(openableState, timeStamp)
                 
-                case _ => setState(this.state, timeStamp)
+                case _ => setState(state, this.timeStamp)
             }
         }
     }
     
     sealed abstract class Character extends Entity with MultiState {
         // TODO basic template
-        def setCharacterState(characterState: CharacterState)(implicit timer: Timer): T =
+        def setCharacterState(characterState: CharacterState, timeStamp: Long): T =
             if (characterState != state)
-                setState(characterState, timer.getTime)
+                setState(characterState, timeStamp)
             else
                 setState(state, timeStamp)
     }
