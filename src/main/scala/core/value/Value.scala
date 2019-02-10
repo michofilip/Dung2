@@ -24,11 +24,18 @@ import scala.language.implicitConversions
 sealed abstract class Value extends JSONParsable {
     type T
     
-    def getValue(implicit entityHolder: EntityHolder): Option[T]
+    def get(implicit entityHolder: EntityHolder): Option[T]
+    
+    def getOrElse(default: T)(implicit entityHolder: EntityHolder): T = {
+        get match {
+            case Some(value) => value
+            case None => default
+        }
+    }
     
     def ===(that: Value): BooleanValue = Equals(this, that)
     
-    def =!=(that: Value): BooleanValue = Unequals(this, that)
+    def !==(that: Value): BooleanValue = Unequals(this, that)
 }
 
 object Value {
@@ -503,7 +510,7 @@ object Value {
             }
             
             final case class BooleanConstant(value: Boolean) extends BooleanValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Boolean] = Some(value)
+                override def get(implicit entityHolder: EntityHolder): Option[Boolean] = Some(value)
                 
                 override def toJSON: JValue = {
                     import json.MyJ._
@@ -515,8 +522,8 @@ object Value {
             }
             
             final case class NOT(value: BooleanValue) extends BooleanValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Boolean] = {
-                    value.getValue match {
+                override def get(implicit entityHolder: EntityHolder): Option[Boolean] = {
+                    value.get match {
                         case Some(v) => Some(!v)
                         case _ => None
                     }
@@ -532,8 +539,8 @@ object Value {
             }
             
             final case class AND(value1: BooleanValue, value2: BooleanValue) extends BooleanValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Boolean] = {
-                    (value1.getValue, value2.getValue) match {
+                override def get(implicit entityHolder: EntityHolder): Option[Boolean] = {
+                    (value1.get, value2.get) match {
                         case (Some(v1), Some(v2)) => Some(v1 && v2)
                         case _ => None
                     }
@@ -550,8 +557,8 @@ object Value {
             }
             
             final case class NAND(value1: BooleanValue, value2: BooleanValue) extends BooleanValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Boolean] = {
-                    (value1.getValue, value2.getValue) match {
+                override def get(implicit entityHolder: EntityHolder): Option[Boolean] = {
+                    (value1.get, value2.get) match {
                         case (Some(v1), Some(v2)) => Some(!(v1 && v2))
                         case _ => None
                     }
@@ -568,8 +575,8 @@ object Value {
             }
             
             final case class OR(value1: BooleanValue, value2: BooleanValue) extends BooleanValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Boolean] = {
-                    (value1.getValue, value2.getValue) match {
+                override def get(implicit entityHolder: EntityHolder): Option[Boolean] = {
+                    (value1.get, value2.get) match {
                         case (Some(v1), Some(v2)) => Some(v1 || v2)
                         case _ => None
                     }
@@ -586,8 +593,8 @@ object Value {
             }
             
             final case class NOR(value1: BooleanValue, value2: BooleanValue) extends BooleanValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Boolean] = {
-                    (value1.getValue, value2.getValue) match {
+                override def get(implicit entityHolder: EntityHolder): Option[Boolean] = {
+                    (value1.get, value2.get) match {
                         case (Some(v1), Some(v2)) => Some(!(v1 || v2))
                         case _ => None
                     }
@@ -604,8 +611,8 @@ object Value {
             }
             
             final case class XOR(value1: BooleanValue, value2: BooleanValue) extends BooleanValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Boolean] = {
-                    (value1.getValue, value2.getValue) match {
+                override def get(implicit entityHolder: EntityHolder): Option[Boolean] = {
+                    (value1.get, value2.get) match {
                         case (Some(v1), Some(v2)) => Some((v1 && !v2) || (!v1 && v2))
                         case _ => None
                     }
@@ -622,8 +629,8 @@ object Value {
             }
             
             final case class XNOR(value1: BooleanValue, value2: BooleanValue) extends BooleanValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Boolean] = {
-                    (value1.getValue, value2.getValue) match {
+                override def get(implicit entityHolder: EntityHolder): Option[Boolean] = {
+                    (value1.get, value2.get) match {
                         case (Some(v1), Some(v2)) => Some((v1 || !v2) && (!v1 || v2))
                         case _ => None
                     }
@@ -640,8 +647,8 @@ object Value {
             }
             
             final case class Equals(value1: Value, value2: Value) extends BooleanValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Boolean] = {
-                    (value1.getValue, value2.getValue) match {
+                override def get(implicit entityHolder: EntityHolder): Option[Boolean] = {
+                    (value1.get, value2.get) match {
                         case (Some(v1), Some(v2)) => Some(v1 == v2)
                         case _ => None
                     }
@@ -658,8 +665,8 @@ object Value {
             }
             
             final case class Unequals(value1: Value, value2: Value) extends BooleanValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Boolean] = {
-                    (value1.getValue, value2.getValue) match {
+                override def get(implicit entityHolder: EntityHolder): Option[Boolean] = {
+                    (value1.get, value2.get) match {
                         case (Some(v1), Some(v2)) => Some(v1 != v2)
                         case _ => None
                     }
@@ -676,8 +683,8 @@ object Value {
             }
             
             final case class Less(value1: OrderedValue, value2: OrderedValue) extends BooleanValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Boolean] = {
-                    (value1.getValue, value2.getValue) match {
+                override def get(implicit entityHolder: EntityHolder): Option[Boolean] = {
+                    (value1.get, value2.get) match {
                         case (Some(v1: Byte), Some(v2: Byte)) => Some(v1 < v2)
                         case (Some(v1: Byte), Some(v2: Short)) => Some(v1 < v2)
                         case (Some(v1: Byte), Some(v2: Int)) => Some(v1 < v2)
@@ -735,8 +742,8 @@ object Value {
             }
             
             final case class LessEqual(value1: OrderedValue, value2: OrderedValue) extends BooleanValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Boolean] = {
-                    (value1.getValue, value2.getValue) match {
+                override def get(implicit entityHolder: EntityHolder): Option[Boolean] = {
+                    (value1.get, value2.get) match {
                         case (Some(v1: Byte), Some(v2: Byte)) => Some(v1 <= v2)
                         case (Some(v1: Byte), Some(v2: Short)) => Some(v1 <= v2)
                         case (Some(v1: Byte), Some(v2: Int)) => Some(v1 <= v2)
@@ -794,8 +801,8 @@ object Value {
             }
             
             final case class Greater(value1: OrderedValue, value2: OrderedValue) extends BooleanValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Boolean] = {
-                    (value1.getValue, value2.getValue) match {
+                override def get(implicit entityHolder: EntityHolder): Option[Boolean] = {
+                    (value1.get, value2.get) match {
                         case (Some(v1: Byte), Some(v2: Byte)) => Some(v1 > v2)
                         case (Some(v1: Byte), Some(v2: Short)) => Some(v1 > v2)
                         case (Some(v1: Byte), Some(v2: Int)) => Some(v1 > v2)
@@ -853,8 +860,8 @@ object Value {
             }
             
             final case class GreaterEqual(value1: OrderedValue, value2: OrderedValue) extends BooleanValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Boolean] = {
-                    (value1.getValue, value2.getValue) match {
+                override def get(implicit entityHolder: EntityHolder): Option[Boolean] = {
+                    (value1.get, value2.get) match {
                         case (Some(v1: Byte), Some(v2: Byte)) => Some(v1 >= v2)
                         case (Some(v1: Byte), Some(v2: Short)) => Some(v1 >= v2)
                         case (Some(v1: Byte), Some(v2: Int)) => Some(v1 >= v2)
@@ -937,7 +944,7 @@ object Value {
             }
             
             final case class ByteConstant(value: Byte) extends ByteValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Byte] = Some(value)
+                override def get(implicit entityHolder: EntityHolder): Option[Byte] = Some(value)
                 
                 override def toJSON: JValue = {
                     import json.MyJ._
@@ -949,8 +956,8 @@ object Value {
             }
             
             final case class ByteNegate(value: ByteValue) extends ByteValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Byte] = {
-                    value.getValue match {
+                override def get(implicit entityHolder: EntityHolder): Option[Byte] = {
+                    value.get match {
                         case Some(v) => Some((-v).toByte)
                         case _ => None
                     }
@@ -966,8 +973,8 @@ object Value {
             }
             
             final case class ByteAdd(value1: ByteValue, value2: ByteValue) extends ByteValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Byte] = {
-                    (value1.getValue, value2.getValue) match {
+                override def get(implicit entityHolder: EntityHolder): Option[Byte] = {
+                    (value1.get, value2.get) match {
                         case (Some(v1), Some(v2)) => Some((v1 + v2).toByte)
                         case _ => None
                     }
@@ -984,8 +991,8 @@ object Value {
             }
             
             final case class ByteSubtract(value1: ByteValue, value2: ByteValue) extends ByteValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Byte] = {
-                    (value1.getValue, value2.getValue) match {
+                override def get(implicit entityHolder: EntityHolder): Option[Byte] = {
+                    (value1.get, value2.get) match {
                         case (Some(v1), Some(v2)) => Some((v1 - v2).toByte)
                         case _ => None
                     }
@@ -1002,8 +1009,8 @@ object Value {
             }
             
             final case class ByteMultiply(value1: ByteValue, value2: ByteValue) extends ByteValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Byte] = {
-                    (value1.getValue, value2.getValue) match {
+                override def get(implicit entityHolder: EntityHolder): Option[Byte] = {
+                    (value1.get, value2.get) match {
                         case (Some(v1), Some(v2)) => Some((v1 * v2).toByte)
                         case _ => None
                     }
@@ -1020,8 +1027,8 @@ object Value {
             }
             
             final case class ByteDivide(value1: ByteValue, value2: ByteValue) extends ByteValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Byte] = {
-                    (value1.getValue, value2.getValue) match {
+                override def get(implicit entityHolder: EntityHolder): Option[Byte] = {
+                    (value1.get, value2.get) match {
                         case (Some(v1), Some(v2)) => Some((v1 / v2).toByte)
                         case _ => None
                     }
@@ -1038,8 +1045,8 @@ object Value {
             }
             
             final case class ByteMod(value1: ByteValue, value2: ByteValue) extends ByteValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Byte] = {
-                    (value1.getValue, value2.getValue) match {
+                override def get(implicit entityHolder: EntityHolder): Option[Byte] = {
+                    (value1.get, value2.get) match {
                         case (Some(v1), Some(v2)) => Some((v1 % v2).toByte)
                         case _ => None
                     }
@@ -1056,8 +1063,8 @@ object Value {
             }
             
             final case class NumericToByte(value: NumericValue) extends ByteValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Byte] = {
-                    value.getValue match {
+                override def get(implicit entityHolder: EntityHolder): Option[Byte] = {
+                    value.get match {
                         case Some(v: Byte) => Some(v.toByte)
                         case Some(v: Short) => Some(v.toByte)
                         case Some(v: Int) => Some(v.toByte)
@@ -1103,7 +1110,7 @@ object Value {
             }
             
             final case class ShortConstant(value: Short) extends ShortValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Short] = Some(value)
+                override def get(implicit entityHolder: EntityHolder): Option[Short] = Some(value)
                 
                 override def toJSON: JValue = {
                     import json.MyJ._
@@ -1115,8 +1122,8 @@ object Value {
             }
             
             final case class ShortNegate(value: ShortValue) extends ShortValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Short] = {
-                    value.getValue match {
+                override def get(implicit entityHolder: EntityHolder): Option[Short] = {
+                    value.get match {
                         case Some(v) => Some((-v).toShort)
                         case _ => None
                     }
@@ -1132,8 +1139,8 @@ object Value {
             }
             
             final case class ShortAdd(value1: ShortValue, value2: ShortValue) extends ShortValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Short] = {
-                    (value1.getValue, value2.getValue) match {
+                override def get(implicit entityHolder: EntityHolder): Option[Short] = {
+                    (value1.get, value2.get) match {
                         case (Some(v1), Some(v2)) => Some((v1 + v2).toShort)
                         case _ => None
                     }
@@ -1150,8 +1157,8 @@ object Value {
             }
             
             final case class ShortSubtract(value1: ShortValue, value2: ShortValue) extends ShortValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Short] = {
-                    (value1.getValue, value2.getValue) match {
+                override def get(implicit entityHolder: EntityHolder): Option[Short] = {
+                    (value1.get, value2.get) match {
                         case (Some(v1), Some(v2)) => Some((v1 - v2).toShort)
                         case _ => None
                     }
@@ -1168,8 +1175,8 @@ object Value {
             }
             
             final case class ShortMultiply(value1: ShortValue, value2: ShortValue) extends ShortValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Short] = {
-                    (value1.getValue, value2.getValue) match {
+                override def get(implicit entityHolder: EntityHolder): Option[Short] = {
+                    (value1.get, value2.get) match {
                         case (Some(v1), Some(v2)) => Some((v1 * v2).toShort)
                         case _ => None
                     }
@@ -1186,8 +1193,8 @@ object Value {
             }
             
             final case class ShortDivide(value1: ShortValue, value2: ShortValue) extends ShortValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Short] = {
-                    (value1.getValue, value2.getValue) match {
+                override def get(implicit entityHolder: EntityHolder): Option[Short] = {
+                    (value1.get, value2.get) match {
                         case (Some(v1), Some(v2)) => Some((v1 / v2).toShort)
                         case _ => None
                     }
@@ -1204,8 +1211,8 @@ object Value {
             }
             
             final case class ShortMod(value1: ShortValue, value2: ShortValue) extends ShortValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Short] = {
-                    (value1.getValue, value2.getValue) match {
+                override def get(implicit entityHolder: EntityHolder): Option[Short] = {
+                    (value1.get, value2.get) match {
                         case (Some(v1), Some(v2)) => Some((v1 % v2).toShort)
                         case _ => None
                     }
@@ -1222,8 +1229,8 @@ object Value {
             }
             
             final case class NumericToShort(value: NumericValue) extends ShortValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Short] = {
-                    value.getValue match {
+                override def get(implicit entityHolder: EntityHolder): Option[Short] = {
+                    value.get match {
                         case Some(v: Byte) => Some(v.toShort)
                         case Some(v: Short) => Some(v.toShort)
                         case Some(v: Int) => Some(v.toShort)
@@ -1269,7 +1276,7 @@ object Value {
             }
             
             final case class IntConstant(value: Int) extends IntValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Int] = Some(value)
+                override def get(implicit entityHolder: EntityHolder): Option[Int] = Some(value)
                 
                 override def toJSON: JValue = {
                     import json.MyJ._
@@ -1281,8 +1288,8 @@ object Value {
             }
             
             final case class IntNegate(value: IntValue) extends IntValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Int] = {
-                    value.getValue match {
+                override def get(implicit entityHolder: EntityHolder): Option[Int] = {
+                    value.get match {
                         case Some(v) => Some(-v)
                         case _ => None
                     }
@@ -1298,8 +1305,8 @@ object Value {
             }
             
             final case class IntAdd(value1: IntValue, value2: IntValue) extends IntValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Int] = {
-                    (value1.getValue, value2.getValue) match {
+                override def get(implicit entityHolder: EntityHolder): Option[Int] = {
+                    (value1.get, value2.get) match {
                         case (Some(v1), Some(v2)) => Some(v1 + v2)
                         case _ => None
                     }
@@ -1316,8 +1323,8 @@ object Value {
             }
             
             final case class IntSubtract(value1: IntValue, value2: IntValue) extends IntValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Int] = {
-                    (value1.getValue, value2.getValue) match {
+                override def get(implicit entityHolder: EntityHolder): Option[Int] = {
+                    (value1.get, value2.get) match {
                         case (Some(v1), Some(v2)) => Some(v1 - v2)
                         case _ => None
                     }
@@ -1334,8 +1341,8 @@ object Value {
             }
             
             final case class IntMultiply(value1: IntValue, value2: IntValue) extends IntValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Int] = {
-                    (value1.getValue, value2.getValue) match {
+                override def get(implicit entityHolder: EntityHolder): Option[Int] = {
+                    (value1.get, value2.get) match {
                         case (Some(v1), Some(v2)) => Some(v1 * v2)
                         case _ => None
                     }
@@ -1352,8 +1359,8 @@ object Value {
             }
             
             final case class IntDivide(value1: IntValue, value2: IntValue) extends IntValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Int] = {
-                    (value1.getValue, value2.getValue) match {
+                override def get(implicit entityHolder: EntityHolder): Option[Int] = {
+                    (value1.get, value2.get) match {
                         case (Some(v1), Some(v2)) => Some(v1 / v2)
                         case _ => None
                     }
@@ -1370,8 +1377,8 @@ object Value {
             }
             
             final case class IntMod(value1: IntValue, value2: IntValue) extends IntValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Int] = {
-                    (value1.getValue, value2.getValue) match {
+                override def get(implicit entityHolder: EntityHolder): Option[Int] = {
+                    (value1.get, value2.get) match {
                         case (Some(v1), Some(v2)) => Some(v1 % v2)
                         case _ => None
                     }
@@ -1388,8 +1395,8 @@ object Value {
             }
             
             final case class NumericToInt(value: NumericValue) extends IntValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Int] = {
-                    value.getValue match {
+                override def get(implicit entityHolder: EntityHolder): Option[Int] = {
+                    value.get match {
                         case Some(v: Byte) => Some(v.toInt)
                         case Some(v: Short) => Some(v.toInt)
                         case Some(v: Int) => Some(v.toInt)
@@ -1435,7 +1442,7 @@ object Value {
             }
             
             final case class LongConstant(value: Long) extends LongValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Long] = Some(value)
+                override def get(implicit entityHolder: EntityHolder): Option[Long] = Some(value)
                 
                 override def toJSON: JValue = {
                     import json.MyJ._
@@ -1447,8 +1454,8 @@ object Value {
             }
             
             final case class LongNegate(value: LongValue) extends LongValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Long] = {
-                    value.getValue match {
+                override def get(implicit entityHolder: EntityHolder): Option[Long] = {
+                    value.get match {
                         case Some(v) => Some(-v)
                         case _ => None
                     }
@@ -1464,8 +1471,8 @@ object Value {
             }
             
             final case class LongAdd(value1: LongValue, value2: LongValue) extends LongValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Long] = {
-                    (value1.getValue, value2.getValue) match {
+                override def get(implicit entityHolder: EntityHolder): Option[Long] = {
+                    (value1.get, value2.get) match {
                         case (Some(v1), Some(v2)) => Some(v1 + v2)
                         case _ => None
                     }
@@ -1482,8 +1489,8 @@ object Value {
             }
             
             final case class LongSubtract(value1: LongValue, value2: LongValue) extends LongValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Long] = {
-                    (value1.getValue, value2.getValue) match {
+                override def get(implicit entityHolder: EntityHolder): Option[Long] = {
+                    (value1.get, value2.get) match {
                         case (Some(v1), Some(v2)) => Some(v1 - v2)
                         case _ => None
                     }
@@ -1500,8 +1507,8 @@ object Value {
             }
             
             final case class LongMultiply(value1: LongValue, value2: LongValue) extends LongValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Long] = {
-                    (value1.getValue, value2.getValue) match {
+                override def get(implicit entityHolder: EntityHolder): Option[Long] = {
+                    (value1.get, value2.get) match {
                         case (Some(v1), Some(v2)) => Some(v1 * v2)
                         case _ => None
                     }
@@ -1518,8 +1525,8 @@ object Value {
             }
             
             final case class LongDivide(value1: LongValue, value2: LongValue) extends LongValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Long] = {
-                    (value1.getValue, value2.getValue) match {
+                override def get(implicit entityHolder: EntityHolder): Option[Long] = {
+                    (value1.get, value2.get) match {
                         case (Some(v1), Some(v2)) => Some(v1 / v2)
                         case _ => None
                     }
@@ -1536,8 +1543,8 @@ object Value {
             }
             
             final case class LongMod(value1: LongValue, value2: LongValue) extends LongValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Long] = {
-                    (value1.getValue, value2.getValue) match {
+                override def get(implicit entityHolder: EntityHolder): Option[Long] = {
+                    (value1.get, value2.get) match {
                         case (Some(v1), Some(v2)) => Some(v1 % v2)
                         case _ => None
                     }
@@ -1554,8 +1561,8 @@ object Value {
             }
             
             final case class NumericToLong(value: NumericValue) extends LongValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Long] = {
-                    value.getValue match {
+                override def get(implicit entityHolder: EntityHolder): Option[Long] = {
+                    value.get match {
                         case Some(v: Byte) => Some(v.toLong)
                         case Some(v: Short) => Some(v.toLong)
                         case Some(v: Int) => Some(v.toLong)
@@ -1601,7 +1608,7 @@ object Value {
             }
             
             final case class FloatConstant(value: Float) extends FloatValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Float] = Some(value)
+                override def get(implicit entityHolder: EntityHolder): Option[Float] = Some(value)
                 
                 override def toJSON: JValue = {
                     import json.MyJ._
@@ -1613,8 +1620,8 @@ object Value {
             }
             
             final case class FloatNegate(value: FloatValue) extends FloatValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Float] = {
-                    value.getValue match {
+                override def get(implicit entityHolder: EntityHolder): Option[Float] = {
+                    value.get match {
                         case Some(v) => Some(-v)
                         case _ => None
                     }
@@ -1630,8 +1637,8 @@ object Value {
             }
             
             final case class FloatAdd(value1: FloatValue, value2: FloatValue) extends FloatValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Float] = {
-                    (value1.getValue, value2.getValue) match {
+                override def get(implicit entityHolder: EntityHolder): Option[Float] = {
+                    (value1.get, value2.get) match {
                         case (Some(v1), Some(v2)) => Some(v1 + v2)
                         case _ => None
                     }
@@ -1648,8 +1655,8 @@ object Value {
             }
             
             final case class FloatSubtract(value1: FloatValue, value2: FloatValue) extends FloatValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Float] = {
-                    (value1.getValue, value2.getValue) match {
+                override def get(implicit entityHolder: EntityHolder): Option[Float] = {
+                    (value1.get, value2.get) match {
                         case (Some(v1), Some(v2)) => Some(v1 - v2)
                         case _ => None
                     }
@@ -1666,8 +1673,8 @@ object Value {
             }
             
             final case class FloatMultiply(value1: FloatValue, value2: FloatValue) extends FloatValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Float] = {
-                    (value1.getValue, value2.getValue) match {
+                override def get(implicit entityHolder: EntityHolder): Option[Float] = {
+                    (value1.get, value2.get) match {
                         case (Some(v1), Some(v2)) => Some(v1 * v2)
                         case _ => None
                     }
@@ -1684,8 +1691,8 @@ object Value {
             }
             
             final case class FloatDivide(value1: FloatValue, value2: FloatValue) extends FloatValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Float] = {
-                    (value1.getValue, value2.getValue) match {
+                override def get(implicit entityHolder: EntityHolder): Option[Float] = {
+                    (value1.get, value2.get) match {
                         case (Some(v1), Some(v2)) => Some(v1 / v2)
                         case _ => None
                     }
@@ -1702,8 +1709,8 @@ object Value {
             }
             
             final case class NumericToFloat(value: NumericValue) extends FloatValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Float] = {
-                    value.getValue match {
+                override def get(implicit entityHolder: EntityHolder): Option[Float] = {
+                    value.get match {
                         case Some(v: Byte) => Some(v.toFloat)
                         case Some(v: Short) => Some(v.toFloat)
                         case Some(v: Int) => Some(v.toFloat)
@@ -1749,7 +1756,7 @@ object Value {
             }
             
             final case class DoubleConstant(value: Double) extends DoubleValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Double] = Some(value)
+                override def get(implicit entityHolder: EntityHolder): Option[Double] = Some(value)
                 
                 override def toJSON: JValue = {
                     import json.MyJ._
@@ -1761,8 +1768,8 @@ object Value {
             }
             
             final case class DoubleNegate(value: DoubleValue) extends DoubleValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Double] = {
-                    value.getValue match {
+                override def get(implicit entityHolder: EntityHolder): Option[Double] = {
+                    value.get match {
                         case Some(v) => Some(-v)
                         case _ => None
                     }
@@ -1778,8 +1785,8 @@ object Value {
             }
             
             final case class DoubleAdd(value1: DoubleValue, value2: DoubleValue) extends DoubleValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Double] = {
-                    (value1.getValue, value2.getValue) match {
+                override def get(implicit entityHolder: EntityHolder): Option[Double] = {
+                    (value1.get, value2.get) match {
                         case (Some(v1), Some(v2)) => Some(v1 + v2)
                         case _ => None
                     }
@@ -1796,8 +1803,8 @@ object Value {
             }
             
             final case class DoubleSubtract(value1: DoubleValue, value2: DoubleValue) extends DoubleValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Double] = {
-                    (value1.getValue, value2.getValue) match {
+                override def get(implicit entityHolder: EntityHolder): Option[Double] = {
+                    (value1.get, value2.get) match {
                         case (Some(v1), Some(v2)) => Some(v1 - v2)
                         case _ => None
                     }
@@ -1814,8 +1821,8 @@ object Value {
             }
             
             final case class DoubleMultiply(value1: DoubleValue, value2: DoubleValue) extends DoubleValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Double] = {
-                    (value1.getValue, value2.getValue) match {
+                override def get(implicit entityHolder: EntityHolder): Option[Double] = {
+                    (value1.get, value2.get) match {
                         case (Some(v1), Some(v2)) => Some(v1 * v2)
                         case _ => None
                     }
@@ -1832,8 +1839,8 @@ object Value {
             }
             
             final case class DoubleDivide(value1: DoubleValue, value2: DoubleValue) extends DoubleValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Double] = {
-                    (value1.getValue, value2.getValue) match {
+                override def get(implicit entityHolder: EntityHolder): Option[Double] = {
+                    (value1.get, value2.get) match {
                         case (Some(v1), Some(v2)) => Some(v1 / v2)
                         case _ => None
                     }
@@ -1850,8 +1857,8 @@ object Value {
             }
             
             final case class NumericToDouble(value: NumericValue) extends DoubleValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Double] = {
-                    value.getValue match {
+                override def get(implicit entityHolder: EntityHolder): Option[Double] = {
+                    value.get match {
                         case Some(v: Byte) => Some(v.toDouble)
                         case Some(v: Short) => Some(v.toDouble)
                         case Some(v: Int) => Some(v.toDouble)
@@ -1885,7 +1892,7 @@ object Value {
             }
             
             final case class CharConstant(value: Char) extends CharValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Char] = Some(value)
+                override def get(implicit entityHolder: EntityHolder): Option[Char] = Some(value)
                 
                 override def toJSON: JValue = {
                     import json.MyJ._
@@ -1910,7 +1917,7 @@ object Value {
             }
             
             final case class StringConstant(value: String) extends StringValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[String] = Some(value)
+                override def get(implicit entityHolder: EntityHolder): Option[String] = Some(value)
                 
                 override def toJSON: JValue = {
                     import json.MyJ._
@@ -1922,8 +1929,8 @@ object Value {
             }
             
             final case class Concatenate(value1: StringValue, value2: StringValue) extends StringValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[String] = {
-                    (value1.getValue, value2.getValue) match {
+                override def get(implicit entityHolder: EntityHolder): Option[String] = {
+                    (value1.get, value2.get) match {
                         case (Some(v1), Some(v2)) => Some(v1 + v2)
                         case _ => None
                     }
@@ -1940,8 +1947,8 @@ object Value {
             }
             
             final case class Length(value: StringValue) extends IntValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Int] = {
-                    value.getValue match {
+                override def get(implicit entityHolder: EntityHolder): Option[Int] = {
+                    value.get match {
                         case Some(v) => Some(v.length)
                         case _ => None
                     }
@@ -1957,8 +1964,8 @@ object Value {
             }
             
             final case class NumericToString(value: NumericValue) extends StringValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[String] = {
-                    value.getValue match {
+                override def get(implicit entityHolder: EntityHolder): Option[String] = {
+                    value.get match {
                         case Some(v: Byte) => Some(v.toString)
                         case Some(v: Short) => Some(v.toString)
                         case Some(v: Int) => Some(v.toString)
@@ -1983,7 +1990,7 @@ object Value {
         case object UnitValue extends Value {
             override type T = Unit
             
-            override def getValue(implicit entityHolder: EntityHolder): Option[Unit] = None
+            override def get(implicit entityHolder: EntityHolder): Option[Unit] = None
             
             override def toJSON: JValue = {
                 import json.MyJ._
@@ -2019,12 +2026,12 @@ object Value {
         object BooleanValue {
             
             final case class IsSolidAtCoordinates(value: CoordinatesValue) extends BooleanValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Boolean] = {
+                override def get(implicit entityHolder: EntityHolder): Option[Boolean] = {
                     val condition: Entity => Boolean = {
                         case en: Physical if en.physics.solid => true
                         case _ => false
                     }
-                    value.getValue match {
+                    value.get match {
                         case Some(v) => Some(entityHolder.existsAtCoordinates(v, condition))
                         case None => None
                     }
@@ -2040,12 +2047,12 @@ object Value {
             }
             
             final case class IsOpaqueAtCoordinates(value: CoordinatesValue) extends BooleanValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Boolean] = {
+                override def get(implicit entityHolder: EntityHolder): Option[Boolean] = {
                     val condition: Entity => Boolean = {
                         case en: Physical if en.physics.opaque => true
                         case _ => false
                     }
-                    value.getValue match {
+                    value.get match {
                         case Some(v) => Some(entityHolder.existsAtCoordinates(v, condition))
                         case None => None
                     }
@@ -2065,7 +2072,7 @@ object Value {
         object LongValue {
             
             final case object GetTime extends LongValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Long] = {
+                override def get(implicit entityHolder: EntityHolder): Option[Long] = {
                     entityHolder.getById("TimeCounter") match {
                         case Some(en: TimeCounter) => Some(en.timer.getTime)
                         case _ => None
@@ -2081,7 +2088,7 @@ object Value {
             }
             
             final case object GetTurn extends LongValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Long] = {
+                override def get(implicit entityHolder: EntityHolder): Option[Long] = {
                     entityHolder.getById("TurnCounter") match {
                         case Some(en: TurnCounter) => Some(en.turn)
                         case _ => None
@@ -2110,7 +2117,7 @@ object Value {
             }
             
             final case class StateConstant(value: State) extends StateValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[State] = Some(value)
+                override def get(implicit entityHolder: EntityHolder): Option[State] = Some(value)
                 
                 override def toJSON: JValue = {
                     import json.MyJ._
@@ -2122,7 +2129,7 @@ object Value {
             }
             
             final case class GetState(entityId: String) extends StateValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[State] = {
+                override def get(implicit entityHolder: EntityHolder): Option[State] = {
                     entityHolder.getById(entityId) match {
                         case Some(en: MultiState) => Some(en.state)
                         case _ => None
@@ -2152,7 +2159,7 @@ object Value {
             }
             
             final case class CoordinatesConstant(value: Coordinates) extends CoordinatesValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Coordinates] = Some(value)
+                override def get(implicit entityHolder: EntityHolder): Option[Coordinates] = Some(value)
                 
                 override def toJSON: JValue = {
                     import json.MyJ._
@@ -2164,7 +2171,7 @@ object Value {
             }
             
             final case class GetConcatenate(entityId: String) extends CoordinatesValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Coordinates] = {
+                override def get(implicit entityHolder: EntityHolder): Option[Coordinates] = {
                     entityHolder.getById(entityId) match {
                         case Some(en: Positioned) => Some(en.position.coordinates)
                         case _ => None
@@ -2194,7 +2201,7 @@ object Value {
             }
             
             final case class DirectionConstant(value: Direction) extends DirectionValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Direction] = Some(value)
+                override def get(implicit entityHolder: EntityHolder): Option[Direction] = Some(value)
                 
                 override def toJSON: JValue = {
                     import json.MyJ._
@@ -2206,7 +2213,7 @@ object Value {
             }
             
             final case class GetDirection(entityId: String) extends DirectionValue {
-                override def getValue(implicit entityHolder: EntityHolder): Option[Direction] = {
+                override def get(implicit entityHolder: EntityHolder): Option[Direction] = {
                     entityHolder.getById(entityId) match {
                         case Some(en: Positioned) => Some(en.position.direction)
                         case _ => None

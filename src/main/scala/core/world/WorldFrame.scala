@@ -20,21 +20,21 @@ class WorldFrame(private val entityHolder: EntityHolder,
         entityHolder.getByCoordinates(coordinates)
     }
     
-    def isSolidAtCoordinates(coordinates: Coordinates): Boolean = {
-        val condition: Entity => Boolean = {
-            case en: Physical if en.physics.solid => true
-            case _ => false
-        }
-        entityHolder.existsAtCoordinates(coordinates, condition)
-    }
-    
-    def isOpaqueAtCoordinates(coordinates: Coordinates): Boolean = {
-        val condition: Entity => Boolean = {
-            case en: Physical if en.physics.opaque => true
-            case _ => false
-        }
-        entityHolder.existsAtCoordinates(coordinates, condition)
-    }
+//    def isSolidAtCoordinates(coordinates: Coordinates): Boolean = {
+//        val condition: Entity => Boolean = {
+//            case en: Physical if en.physics.solid => true
+//            case _ => false
+//        }
+//        entityHolder.existsAtCoordinates(coordinates, condition)
+//    }
+//
+//    def isOpaqueAtCoordinates(coordinates: Coordinates): Boolean = {
+//        val condition: Entity => Boolean = {
+//            case en: Physical if en.physics.opaque => true
+//            case _ => false
+//        }
+//        entityHolder.existsAtCoordinates(coordinates, condition)
+//    }
     
     def nextFrame(externalEvents: Vector[Event] = Vector.empty): WorldFrame = {
         val (newEntityHolder, newEvents) =

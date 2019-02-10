@@ -17,7 +17,7 @@
 //sealed abstract class Value {
 //    type T
 //
-//    def getValue(implicit mapFrame: MapFrame): Option[T]
+//    def get(implicit mapFrame: MapFrame): Option[T]
 //
 //    def ===(that: Value): BooleanValue = Equals(this, that)
 //
@@ -494,12 +494,12 @@
 //        }
 //
 //        final case class BooleanConstant(value: Boolean) extends BooleanValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Boolean] = Some(value)
+//            override def get(implicit mapFrame: MapFrame): Option[Boolean] = Some(value)
 //        }
 //
 //        final case class NOT(value: BooleanValue) extends BooleanValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Boolean] = {
-//                value.getValue match {
+//            override def get(implicit mapFrame: MapFrame): Option[Boolean] = {
+//                value.get match {
 //                    case Some(v) => Some(!v)
 //                    case _ => None
 //                }
@@ -507,8 +507,8 @@
 //        }
 //
 //        final case class AND(value1: BooleanValue, value2: BooleanValue) extends BooleanValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Boolean] = {
-//                (value1.getValue, value2.getValue) match {
+//            override def get(implicit mapFrame: MapFrame): Option[Boolean] = {
+//                (value1.get, value2.get) match {
 //                    case (Some(v1), Some(v2)) => Some(v1 && v2)
 //                    case _ => None
 //                }
@@ -516,8 +516,8 @@
 //        }
 //
 //        final case class NAND(value1: BooleanValue, value2: BooleanValue) extends BooleanValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Boolean] = {
-//                (value1.getValue, value2.getValue) match {
+//            override def get(implicit mapFrame: MapFrame): Option[Boolean] = {
+//                (value1.get, value2.get) match {
 //                    case (Some(v1), Some(v2)) => Some(!(v1 && v2))
 //                    case _ => None
 //                }
@@ -525,8 +525,8 @@
 //        }
 //
 //        final case class OR(value1: BooleanValue, value2: BooleanValue) extends BooleanValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Boolean] = {
-//                (value1.getValue, value2.getValue) match {
+//            override def get(implicit mapFrame: MapFrame): Option[Boolean] = {
+//                (value1.get, value2.get) match {
 //                    case (Some(v1), Some(v2)) => Some(v1 || v2)
 //                    case _ => None
 //                }
@@ -534,8 +534,8 @@
 //        }
 //
 //        final case class NOR(value1: BooleanValue, value2: BooleanValue) extends BooleanValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Boolean] = {
-//                (value1.getValue, value2.getValue) match {
+//            override def get(implicit mapFrame: MapFrame): Option[Boolean] = {
+//                (value1.get, value2.get) match {
 //                    case (Some(v1), Some(v2)) => Some(!(v1 || v2))
 //                    case _ => None
 //                }
@@ -543,8 +543,8 @@
 //        }
 //
 //        final case class XOR(value1: BooleanValue, value2: BooleanValue) extends BooleanValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Boolean] = {
-//                (value1.getValue, value2.getValue) match {
+//            override def get(implicit mapFrame: MapFrame): Option[Boolean] = {
+//                (value1.get, value2.get) match {
 //                    case (Some(v1), Some(v2)) => Some((v1 && !v2) || (!v1 && v2))
 //                    case _ => None
 //                }
@@ -552,8 +552,8 @@
 //        }
 //
 //        final case class XNOR(value1: BooleanValue, value2: BooleanValue) extends BooleanValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Boolean] = {
-//                (value1.getValue, value2.getValue) match {
+//            override def get(implicit mapFrame: MapFrame): Option[Boolean] = {
+//                (value1.get, value2.get) match {
 //                    case (Some(v1), Some(v2)) => Some((v1 || !v2) && (!v1 || v2))
 //                    case _ => None
 //                }
@@ -561,8 +561,8 @@
 //        }
 //
 //        final case class Equals(value1: Value, value2: Value) extends BooleanValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Boolean] = {
-//                (value1.getValue, value2.getValue) match {
+//            override def get(implicit mapFrame: MapFrame): Option[Boolean] = {
+//                (value1.get, value2.get) match {
 //                    case (Some(v1), Some(v2)) => Some(v1 == v2)
 //                    case _ => None
 //                }
@@ -570,8 +570,8 @@
 //        }
 //
 //        final case class Unequals(value1: Value, value2: Value) extends BooleanValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Boolean] = {
-//                (value1.getValue, value2.getValue) match {
+//            override def get(implicit mapFrame: MapFrame): Option[Boolean] = {
+//                (value1.get, value2.get) match {
 //                    case (Some(v1), Some(v2)) => Some(v1 != v2)
 //                    case _ => None
 //                }
@@ -579,8 +579,8 @@
 //        }
 //
 //        final case class Less(value1: OrderedValue, value2: OrderedValue) extends BooleanValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Boolean] = {
-//                (value1.getValue, value2.getValue) match {
+//            override def get(implicit mapFrame: MapFrame): Option[Boolean] = {
+//                (value1.get, value2.get) match {
 //                    case (Some(v1: Byte), Some(v2: Byte)) => Some(v1 < v2)
 //                    case (Some(v1: Byte), Some(v2: Short)) => Some(v1 < v2)
 //                    case (Some(v1: Byte), Some(v2: Int)) => Some(v1 < v2)
@@ -629,8 +629,8 @@
 //        }
 //
 //        final case class LessEqual(value1: OrderedValue, value2: OrderedValue) extends BooleanValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Boolean] = {
-//                (value1.getValue, value2.getValue) match {
+//            override def get(implicit mapFrame: MapFrame): Option[Boolean] = {
+//                (value1.get, value2.get) match {
 //                    case (Some(v1: Byte), Some(v2: Byte)) => Some(v1 <= v2)
 //                    case (Some(v1: Byte), Some(v2: Short)) => Some(v1 <= v2)
 //                    case (Some(v1: Byte), Some(v2: Int)) => Some(v1 <= v2)
@@ -679,8 +679,8 @@
 //        }
 //
 //        final case class Grater(value1: OrderedValue, value2: OrderedValue) extends BooleanValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Boolean] = {
-//                (value1.getValue, value2.getValue) match {
+//            override def get(implicit mapFrame: MapFrame): Option[Boolean] = {
+//                (value1.get, value2.get) match {
 //                    case (Some(v1: Byte), Some(v2: Byte)) => Some(v1 > v2)
 //                    case (Some(v1: Byte), Some(v2: Short)) => Some(v1 > v2)
 //                    case (Some(v1: Byte), Some(v2: Int)) => Some(v1 > v2)
@@ -729,8 +729,8 @@
 //        }
 //
 //        final case class GraterEqual(value1: OrderedValue, value2: OrderedValue) extends BooleanValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Boolean] = {
-//                (value1.getValue, value2.getValue) match {
+//            override def get(implicit mapFrame: MapFrame): Option[Boolean] = {
+//                (value1.get, value2.get) match {
 //                    case (Some(v1: Byte), Some(v2: Byte)) => Some(v1 >= v2)
 //                    case (Some(v1: Byte), Some(v2: Short)) => Some(v1 >= v2)
 //                    case (Some(v1: Byte), Some(v2: Int)) => Some(v1 >= v2)
@@ -806,12 +806,12 @@
 //        }
 //
 //        final case class ByteConstant(value: Byte) extends ByteValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Byte] = Some(value)
+//            override def get(implicit mapFrame: MapFrame): Option[Byte] = Some(value)
 //        }
 //
 //        final case class ByteNegate(value: ByteValue) extends ByteValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Byte] = {
-//                value.getValue match {
+//            override def get(implicit mapFrame: MapFrame): Option[Byte] = {
+//                value.get match {
 //                    case Some(v) => Some((-v).toByte)
 //                    case _ => None
 //                }
@@ -819,8 +819,8 @@
 //        }
 //
 //        final case class ByteAdd(value1: ByteValue, value2: ByteValue) extends ByteValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Byte] = {
-//                (value1.getValue, value2.getValue) match {
+//            override def get(implicit mapFrame: MapFrame): Option[Byte] = {
+//                (value1.get, value2.get) match {
 //                    case (Some(v1), Some(v2)) => Some((v1 + v2).toByte)
 //                    case _ => None
 //                }
@@ -828,8 +828,8 @@
 //        }
 //
 //        final case class ByteSubtract(value1: ByteValue, value2: ByteValue) extends ByteValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Byte] = {
-//                (value1.getValue, value2.getValue) match {
+//            override def get(implicit mapFrame: MapFrame): Option[Byte] = {
+//                (value1.get, value2.get) match {
 //                    case (Some(v1), Some(v2)) => Some((v1 - v2).toByte)
 //                    case _ => None
 //                }
@@ -837,8 +837,8 @@
 //        }
 //
 //        final case class ByteMultiply(value1: ByteValue, value2: ByteValue) extends ByteValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Byte] = {
-//                (value1.getValue, value2.getValue) match {
+//            override def get(implicit mapFrame: MapFrame): Option[Byte] = {
+//                (value1.get, value2.get) match {
 //                    case (Some(v1), Some(v2)) => Some((v1 * v2).toByte)
 //                    case _ => None
 //                }
@@ -846,8 +846,8 @@
 //        }
 //
 //        final case class ByteDivide(value1: ByteValue, value2: ByteValue) extends ByteValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Byte] = {
-//                (value1.getValue, value2.getValue) match {
+//            override def get(implicit mapFrame: MapFrame): Option[Byte] = {
+//                (value1.get, value2.get) match {
 //                    case (Some(v1), Some(v2)) => Some((v1 / v2).toByte)
 //                    case _ => None
 //                }
@@ -855,8 +855,8 @@
 //        }
 //
 //        final case class ByteMod(value1: ByteValue, value2: ByteValue) extends ByteValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Byte] = {
-//                (value1.getValue, value2.getValue) match {
+//            override def get(implicit mapFrame: MapFrame): Option[Byte] = {
+//                (value1.get, value2.get) match {
 //                    case (Some(v1), Some(v2)) => Some((v1 % v2).toByte)
 //                    case _ => None
 //                }
@@ -864,8 +864,8 @@
 //        }
 //
 //        final case class NumericToByte(value: NumericValue) extends ByteValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Byte] = {
-//                value.getValue match {
+//            override def get(implicit mapFrame: MapFrame): Option[Byte] = {
+//                value.get match {
 //                    case Some(v: Byte) => Some(v.toByte)
 //                    case Some(v: Short) => Some(v.toByte)
 //                    case Some(v: Int) => Some(v.toByte)
@@ -905,12 +905,12 @@
 //        }
 //
 //        final case class ShortConstant(value: Short) extends ShortValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Short] = Some(value)
+//            override def get(implicit mapFrame: MapFrame): Option[Short] = Some(value)
 //        }
 //
 //        final case class ShortNegate(value: ShortValue) extends ShortValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Short] = {
-//                value.getValue match {
+//            override def get(implicit mapFrame: MapFrame): Option[Short] = {
+//                value.get match {
 //                    case Some(v) => Some((-v).toShort)
 //                    case _ => None
 //                }
@@ -918,8 +918,8 @@
 //        }
 //
 //        final case class ShortAdd(value1: ShortValue, value2: ShortValue) extends ShortValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Short] = {
-//                (value1.getValue, value2.getValue) match {
+//            override def get(implicit mapFrame: MapFrame): Option[Short] = {
+//                (value1.get, value2.get) match {
 //                    case (Some(v1), Some(v2)) => Some((v1 + v2).toShort)
 //                    case _ => None
 //                }
@@ -927,8 +927,8 @@
 //        }
 //
 //        final case class ShortSubtract(value1: ShortValue, value2: ShortValue) extends ShortValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Short] = {
-//                (value1.getValue, value2.getValue) match {
+//            override def get(implicit mapFrame: MapFrame): Option[Short] = {
+//                (value1.get, value2.get) match {
 //                    case (Some(v1), Some(v2)) => Some((v1 - v2).toShort)
 //                    case _ => None
 //                }
@@ -936,8 +936,8 @@
 //        }
 //
 //        final case class ShortMultiply(value1: ShortValue, value2: ShortValue) extends ShortValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Short] = {
-//                (value1.getValue, value2.getValue) match {
+//            override def get(implicit mapFrame: MapFrame): Option[Short] = {
+//                (value1.get, value2.get) match {
 //                    case (Some(v1), Some(v2)) => Some((v1 * v2).toShort)
 //                    case _ => None
 //                }
@@ -945,8 +945,8 @@
 //        }
 //
 //        final case class ShortDivide(value1: ShortValue, value2: ShortValue) extends ShortValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Short] = {
-//                (value1.getValue, value2.getValue) match {
+//            override def get(implicit mapFrame: MapFrame): Option[Short] = {
+//                (value1.get, value2.get) match {
 //                    case (Some(v1), Some(v2)) => Some((v1 / v2).toShort)
 //                    case _ => None
 //                }
@@ -954,8 +954,8 @@
 //        }
 //
 //        final case class ShortMod(value1: ShortValue, value2: ShortValue) extends ShortValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Short] = {
-//                (value1.getValue, value2.getValue) match {
+//            override def get(implicit mapFrame: MapFrame): Option[Short] = {
+//                (value1.get, value2.get) match {
 //                    case (Some(v1), Some(v2)) => Some((v1 % v2).toShort)
 //                    case _ => None
 //                }
@@ -963,8 +963,8 @@
 //        }
 //
 //        final case class NumericToShort(value: NumericValue) extends ShortValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Short] = {
-//                value.getValue match {
+//            override def get(implicit mapFrame: MapFrame): Option[Short] = {
+//                value.get match {
 //                    case Some(v: Byte) => Some(v.toShort)
 //                    case Some(v: Short) => Some(v.toShort)
 //                    case Some(v: Int) => Some(v.toShort)
@@ -1004,12 +1004,12 @@
 //        }
 //
 //        final case class IntConstant(value: Int) extends IntValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Int] = Some(value)
+//            override def get(implicit mapFrame: MapFrame): Option[Int] = Some(value)
 //        }
 //
 //        final case class IntNegate(value: IntValue) extends IntValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Int] = {
-//                value.getValue match {
+//            override def get(implicit mapFrame: MapFrame): Option[Int] = {
+//                value.get match {
 //                    case Some(v) => Some(-v)
 //                    case _ => None
 //                }
@@ -1017,8 +1017,8 @@
 //        }
 //
 //        final case class IntAdd(value1: IntValue, value2: IntValue) extends IntValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Int] = {
-//                (value1.getValue, value2.getValue) match {
+//            override def get(implicit mapFrame: MapFrame): Option[Int] = {
+//                (value1.get, value2.get) match {
 //                    case (Some(v1), Some(v2)) => Some(v1 + v2)
 //                    case _ => None
 //                }
@@ -1026,8 +1026,8 @@
 //        }
 //
 //        final case class IntSubtract(value1: IntValue, value2: IntValue) extends IntValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Int] = {
-//                (value1.getValue, value2.getValue) match {
+//            override def get(implicit mapFrame: MapFrame): Option[Int] = {
+//                (value1.get, value2.get) match {
 //                    case (Some(v1), Some(v2)) => Some(v1 - v2)
 //                    case _ => None
 //                }
@@ -1035,8 +1035,8 @@
 //        }
 //
 //        final case class IntMultiply(value1: IntValue, value2: IntValue) extends IntValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Int] = {
-//                (value1.getValue, value2.getValue) match {
+//            override def get(implicit mapFrame: MapFrame): Option[Int] = {
+//                (value1.get, value2.get) match {
 //                    case (Some(v1), Some(v2)) => Some(v1 * v2)
 //                    case _ => None
 //                }
@@ -1044,8 +1044,8 @@
 //        }
 //
 //        final case class IntDivide(value1: IntValue, value2: IntValue) extends IntValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Int] = {
-//                (value1.getValue, value2.getValue) match {
+//            override def get(implicit mapFrame: MapFrame): Option[Int] = {
+//                (value1.get, value2.get) match {
 //                    case (Some(v1), Some(v2)) => Some(v1 / v2)
 //                    case _ => None
 //                }
@@ -1053,8 +1053,8 @@
 //        }
 //
 //        final case class IntMod(value1: IntValue, value2: IntValue) extends IntValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Int] = {
-//                (value1.getValue, value2.getValue) match {
+//            override def get(implicit mapFrame: MapFrame): Option[Int] = {
+//                (value1.get, value2.get) match {
 //                    case (Some(v1), Some(v2)) => Some(v1 % v2)
 //                    case _ => None
 //                }
@@ -1062,8 +1062,8 @@
 //        }
 //
 //        final case class NumericToInt(value: NumericValue) extends IntValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Int] = {
-//                value.getValue match {
+//            override def get(implicit mapFrame: MapFrame): Option[Int] = {
+//                value.get match {
 //                    case Some(v: Byte) => Some(v.toInt)
 //                    case Some(v: Short) => Some(v.toInt)
 //                    case Some(v: Int) => Some(v.toInt)
@@ -1103,12 +1103,12 @@
 //        }
 //
 //        final case class LongConstant(value: Long) extends LongValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Long] = Some(value)
+//            override def get(implicit mapFrame: MapFrame): Option[Long] = Some(value)
 //        }
 //
 //        final case class LongNegate(value: LongValue) extends LongValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Long] = {
-//                value.getValue match {
+//            override def get(implicit mapFrame: MapFrame): Option[Long] = {
+//                value.get match {
 //                    case Some(v) => Some(-v)
 //                    case _ => None
 //                }
@@ -1116,8 +1116,8 @@
 //        }
 //
 //        final case class LongAdd(value1: LongValue, value2: LongValue) extends LongValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Long] = {
-//                (value1.getValue, value2.getValue) match {
+//            override def get(implicit mapFrame: MapFrame): Option[Long] = {
+//                (value1.get, value2.get) match {
 //                    case (Some(v1), Some(v2)) => Some(v1 + v2)
 //                    case _ => None
 //                }
@@ -1125,8 +1125,8 @@
 //        }
 //
 //        final case class LongSubtract(value1: LongValue, value2: LongValue) extends LongValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Long] = {
-//                (value1.getValue, value2.getValue) match {
+//            override def get(implicit mapFrame: MapFrame): Option[Long] = {
+//                (value1.get, value2.get) match {
 //                    case (Some(v1), Some(v2)) => Some(v1 - v2)
 //                    case _ => None
 //                }
@@ -1134,8 +1134,8 @@
 //        }
 //
 //        final case class LongMultiply(value1: LongValue, value2: LongValue) extends LongValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Long] = {
-//                (value1.getValue, value2.getValue) match {
+//            override def get(implicit mapFrame: MapFrame): Option[Long] = {
+//                (value1.get, value2.get) match {
 //                    case (Some(v1), Some(v2)) => Some(v1 * v2)
 //                    case _ => None
 //                }
@@ -1143,8 +1143,8 @@
 //        }
 //
 //        final case class LongDivide(value1: LongValue, value2: LongValue) extends LongValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Long] = {
-//                (value1.getValue, value2.getValue) match {
+//            override def get(implicit mapFrame: MapFrame): Option[Long] = {
+//                (value1.get, value2.get) match {
 //                    case (Some(v1), Some(v2)) => Some(v1 / v2)
 //                    case _ => None
 //                }
@@ -1152,8 +1152,8 @@
 //        }
 //
 //        final case class LongMod(value1: LongValue, value2: LongValue) extends LongValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Long] = {
-//                (value1.getValue, value2.getValue) match {
+//            override def get(implicit mapFrame: MapFrame): Option[Long] = {
+//                (value1.get, value2.get) match {
 //                    case (Some(v1), Some(v2)) => Some(v1 % v2)
 //                    case _ => None
 //                }
@@ -1161,8 +1161,8 @@
 //        }
 //
 //        final case class NumericToLong(value: NumericValue) extends LongValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Long] = {
-//                value.getValue match {
+//            override def get(implicit mapFrame: MapFrame): Option[Long] = {
+//                value.get match {
 //                    case Some(v: Byte) => Some(v.toLong)
 //                    case Some(v: Short) => Some(v.toLong)
 //                    case Some(v: Int) => Some(v.toLong)
@@ -1202,12 +1202,12 @@
 //        }
 //
 //        final case class FloatConstant(value: Float) extends FloatValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Float] = Some(value)
+//            override def get(implicit mapFrame: MapFrame): Option[Float] = Some(value)
 //        }
 //
 //        final case class FloatNegate(value: FloatValue) extends FloatValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Float] = {
-//                value.getValue match {
+//            override def get(implicit mapFrame: MapFrame): Option[Float] = {
+//                value.get match {
 //                    case Some(v) => Some(-v)
 //                    case _ => None
 //                }
@@ -1215,8 +1215,8 @@
 //        }
 //
 //        final case class FloatAdd(value1: FloatValue, value2: FloatValue) extends FloatValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Float] = {
-//                (value1.getValue, value2.getValue) match {
+//            override def get(implicit mapFrame: MapFrame): Option[Float] = {
+//                (value1.get, value2.get) match {
 //                    case (Some(v1), Some(v2)) => Some(v1 + v2)
 //                    case _ => None
 //                }
@@ -1224,8 +1224,8 @@
 //        }
 //
 //        final case class FloatSubtract(value1: FloatValue, value2: FloatValue) extends FloatValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Float] = {
-//                (value1.getValue, value2.getValue) match {
+//            override def get(implicit mapFrame: MapFrame): Option[Float] = {
+//                (value1.get, value2.get) match {
 //                    case (Some(v1), Some(v2)) => Some(v1 - v2)
 //                    case _ => None
 //                }
@@ -1233,8 +1233,8 @@
 //        }
 //
 //        final case class FloatMultiply(value1: FloatValue, value2: FloatValue) extends FloatValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Float] = {
-//                (value1.getValue, value2.getValue) match {
+//            override def get(implicit mapFrame: MapFrame): Option[Float] = {
+//                (value1.get, value2.get) match {
 //                    case (Some(v1), Some(v2)) => Some(v1 * v2)
 //                    case _ => None
 //                }
@@ -1242,8 +1242,8 @@
 //        }
 //
 //        final case class FloatDivide(value1: FloatValue, value2: FloatValue) extends FloatValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Float] = {
-//                (value1.getValue, value2.getValue) match {
+//            override def get(implicit mapFrame: MapFrame): Option[Float] = {
+//                (value1.get, value2.get) match {
 //                    case (Some(v1), Some(v2)) => Some(v1 / v2)
 //                    case _ => None
 //                }
@@ -1251,8 +1251,8 @@
 //        }
 //
 //        final case class NumericToFloat(value: NumericValue) extends FloatValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Float] = {
-//                value.getValue match {
+//            override def get(implicit mapFrame: MapFrame): Option[Float] = {
+//                value.get match {
 //                    case Some(v: Byte) => Some(v.toFloat)
 //                    case Some(v: Short) => Some(v.toFloat)
 //                    case Some(v: Int) => Some(v.toFloat)
@@ -1292,12 +1292,12 @@
 //        }
 //
 //        final case class DoubleConstant(value: Double) extends DoubleValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Double] = Some(value)
+//            override def get(implicit mapFrame: MapFrame): Option[Double] = Some(value)
 //        }
 //
 //        final case class DoubleNegate(value: DoubleValue) extends DoubleValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Double] = {
-//                value.getValue match {
+//            override def get(implicit mapFrame: MapFrame): Option[Double] = {
+//                value.get match {
 //                    case Some(v) => Some(-v)
 //                    case _ => None
 //                }
@@ -1305,8 +1305,8 @@
 //        }
 //
 //        final case class DoubleAdd(value1: DoubleValue, value2: DoubleValue) extends DoubleValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Double] = {
-//                (value1.getValue, value2.getValue) match {
+//            override def get(implicit mapFrame: MapFrame): Option[Double] = {
+//                (value1.get, value2.get) match {
 //                    case (Some(v1), Some(v2)) => Some(v1 + v2)
 //                    case _ => None
 //                }
@@ -1314,8 +1314,8 @@
 //        }
 //
 //        final case class DoubleSubtract(value1: DoubleValue, value2: DoubleValue) extends DoubleValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Double] = {
-//                (value1.getValue, value2.getValue) match {
+//            override def get(implicit mapFrame: MapFrame): Option[Double] = {
+//                (value1.get, value2.get) match {
 //                    case (Some(v1), Some(v2)) => Some(v1 - v2)
 //                    case _ => None
 //                }
@@ -1323,8 +1323,8 @@
 //        }
 //
 //        final case class DoubleMultiply(value1: DoubleValue, value2: DoubleValue) extends DoubleValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Double] = {
-//                (value1.getValue, value2.getValue) match {
+//            override def get(implicit mapFrame: MapFrame): Option[Double] = {
+//                (value1.get, value2.get) match {
 //                    case (Some(v1), Some(v2)) => Some(v1 * v2)
 //                    case _ => None
 //                }
@@ -1332,8 +1332,8 @@
 //        }
 //
 //        final case class DoubleDivide(value1: DoubleValue, value2: DoubleValue) extends DoubleValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Double] = {
-//                (value1.getValue, value2.getValue) match {
+//            override def get(implicit mapFrame: MapFrame): Option[Double] = {
+//                (value1.get, value2.get) match {
 //                    case (Some(v1), Some(v2)) => Some(v1 / v2)
 //                    case _ => None
 //                }
@@ -1341,8 +1341,8 @@
 //        }
 //
 //        final case class NumericToDouble(value: NumericValue) extends DoubleValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Double] = {
-//                value.getValue match {
+//            override def get(implicit mapFrame: MapFrame): Option[Double] = {
+//                value.get match {
 //                    case Some(v: Byte) => Some(v.toDouble)
 //                    case Some(v: Short) => Some(v.toDouble)
 //                    case Some(v: Int) => Some(v.toDouble)
@@ -1370,7 +1370,7 @@
 //        }
 //
 //        final case class CharConstant(value: Char) extends CharValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Char] = Some(value)
+//            override def get(implicit mapFrame: MapFrame): Option[Char] = Some(value)
 //        }
 //
 //        abstract class CustomCharValue extends CharValue
@@ -1389,12 +1389,12 @@
 //        }
 //
 //        final case class StringConstant(value: String) extends StringValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[String] = Some(value)
+//            override def get(implicit mapFrame: MapFrame): Option[String] = Some(value)
 //        }
 //
 //        final case class Concatenate(value1: StringValue, value2: StringValue) extends StringValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[String] = {
-//                (value1.getValue, value2.getValue) match {
+//            override def get(implicit mapFrame: MapFrame): Option[String] = {
+//                (value1.get, value2.get) match {
 //                    case (Some(v1), Some(v2)) => Some(v1 + v2)
 //                    case _ => None
 //                }
@@ -1402,8 +1402,8 @@
 //        }
 //
 //        final case class Length(value: StringValue) extends IntValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[Int] = {
-//                value.getValue match {
+//            override def get(implicit mapFrame: MapFrame): Option[Int] = {
+//                value.get match {
 //                    case Some(v) => Some(v.length)
 //                    case _ => None
 //                }
@@ -1411,8 +1411,8 @@
 //        }
 //
 //        final case class NumericToString(value: NumericValue) extends StringValue {
-//            override def getValue(implicit mapFrame: MapFrame): Option[String] = {
-//                value.getValue match {
+//            override def get(implicit mapFrame: MapFrame): Option[String] = {
+//                value.get match {
 //                    case Some(v: Byte) => Some(v.toString)
 //                    case Some(v: Short) => Some(v.toString)
 //                    case Some(v: Int) => Some(v.toString)
@@ -1431,7 +1431,7 @@
 //    case object UnitValue extends Value {
 //        override type T = Unit
 //
-//        override def getValue(implicit mapFrame: MapFrame): Option[Unit] = None
+//        override def get(implicit mapFrame: MapFrame): Option[Unit] = None
 //    }
 //
 //    abstract class CustomValue extends Value

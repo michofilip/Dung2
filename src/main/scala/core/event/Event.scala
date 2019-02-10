@@ -5,7 +5,7 @@ import core.entity.properties.state.State
 import core.entity.{Entity, EntityHolder}
 import core.program.Instruction._
 import core.program.Script
-import core.value.Value.CustomValue.LongValue.GetTime
+import core.value.Value.CustomValue.LongValue.{GetTime, GetTurn}
 import json.{JSONParsable, JValue}
 
 import scala.language.implicitConversions
@@ -81,10 +81,7 @@ object Event {
     // state setter
     final case class SetState(override val entityId: String, state: State) extends Event {
         override def applyTo(entity: Entity)(implicit entityHolder: EntityHolder): (Vector[Entity], Vector[Event]) = {
-            val time = GetTime.getValue match {
-                case Some(value) => value
-                case None => 0
-            }
+            val time = GetTime.getOrElse(0)
             (entity, state) match {
                 case (ent: Switchable, st: State.SwitchableState) =>
                     (ent.setSwitchableState(st, time), Vector.empty)
@@ -291,7 +288,7 @@ object Event {
                         case None => (entity, ExecuteScript(entityId, script, lineNo + 1))
                     }
                 case IF(condition) =>
-                    condition.getValue match {
+                    condition.get match {
                         case Some(true) => (entity, ExecuteScript(entityId, script, lineNo + 2))
                         case Some(false) => (entity, ExecuteScript(entityId, script, lineNo + 1))
                         case None => (entity, Vector.empty)
@@ -312,10 +309,7 @@ object Event {
     // time
     final case class DelayTime(override val entityId: String, delay: Long, events: Vector[Event]) extends Event {
         override def applyTo(entity: Entity)(implicit entityHolder: EntityHolder): (Vector[Entity], Vector[Event]) = {
-            val time = GetTime.getValue match {
-                case Some(value) => value
-                case None => 0
-            }
+            val time = GetTime.getOrElse(0)
             (entity, ScheduleTime(entityId, time + delay, events))
         }
         
@@ -332,10 +326,7 @@ object Event {
     
     final case class ScheduleTime(override val entityId: String, timeStamp: Long, events: Vector[Event]) extends Event {
         override def applyTo(entity: Entity)(implicit entityHolder: EntityHolder): (Vector[Entity], Vector[Event]) = {
-            val time = GetTime.getValue match {
-                case Some(value) => value
-                case None => 0
-            }
+            val time = GetTime.getOrElse(0)
             if (time >= timeStamp)
                 (entity, events)
             else
@@ -356,12 +347,8 @@ object Event {
     // turn
     final case class DelayTurns(override val entityId: String, delay: Long, events: Vector[Event]) extends Event {
         override def applyTo(entity: Entity)(implicit entityHolder: EntityHolder): (Vector[Entity], Vector[Event]) = {
-            val time = GetTime.getValue match {
-                case Some(value) => value
-                case None => 0
-            }
-            
-            (entity, ScheduleTurns(entityId, time + delay, events))
+            val turn = GetTurn.getOrElse(0)
+            (entity, ScheduleTurns(entityId, turn + delay, events))
         }
         
         override def toJSON: JValue = {
@@ -377,12 +364,8 @@ object Event {
     
     final case class ScheduleTurns(override val entityId: String, turnStamp: Long, events: Vector[Event]) extends Event {
         override def applyTo(entity: Entity)(implicit entityHolder: EntityHolder): (Vector[Entity], Vector[Event]) = {
-            val time = GetTime.getValue match {
-                case Some(value) => value
-                case None => 0
-            }
-            
-            if (time >= turnStamp)
+            val turn = GetTurn.getOrElse(0)
+            if (turn >= turnStamp)
                 (entity, events)
             else
                 (entity, this)
