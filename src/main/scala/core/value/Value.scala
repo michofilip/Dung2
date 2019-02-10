@@ -1,9 +1,9 @@
 package core.value
 
-import core.entity.Entity.{MultiState, Positioned, TimeCounter, TurnCounter}
-import core.entity.EntityHolder
+import core.entity.Entity._
 import core.entity.properties.position.{Coordinates, Direction}
 import core.entity.properties.state.State
+import core.entity.{Entity, EntityHolder}
 import core.value.Value.BasicValue.BooleanValue._
 import core.value.Value.BasicValue.ByteValue._
 import core.value.Value.BasicValue.CharValue._
@@ -508,8 +508,8 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter" -> value
+                        "type" -> this.getClass.getSimpleName,
+                        "value" -> value
                     )
                 }
             }
@@ -525,8 +525,8 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter" -> value
+                        "type" -> this.getClass.getSimpleName,
+                        "value" -> value
                     )
                 }
             }
@@ -542,9 +542,9 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter1" -> value1,
-                        "parameter2" -> value2
+                        "type" -> this.getClass.getSimpleName,
+                        "value1" -> value1,
+                        "value2" -> value2
                     )
                 }
             }
@@ -560,9 +560,9 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter1" -> value1,
-                        "parameter2" -> value2
+                        "type" -> this.getClass.getSimpleName,
+                        "value1" -> value1,
+                        "value2" -> value2
                     )
                 }
             }
@@ -578,9 +578,9 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter1" -> value1,
-                        "parameter2" -> value2
+                        "type" -> this.getClass.getSimpleName,
+                        "value1" -> value1,
+                        "value2" -> value2
                     )
                 }
             }
@@ -596,9 +596,9 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter1" -> value1,
-                        "parameter2" -> value2
+                        "type" -> this.getClass.getSimpleName,
+                        "value1" -> value1,
+                        "value2" -> value2
                     )
                 }
             }
@@ -614,9 +614,9 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter1" -> value1,
-                        "parameter2" -> value2
+                        "type" -> this.getClass.getSimpleName,
+                        "value1" -> value1,
+                        "value2" -> value2
                     )
                 }
             }
@@ -632,9 +632,9 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter1" -> value1,
-                        "parameter2" -> value2
+                        "type" -> this.getClass.getSimpleName,
+                        "value1" -> value1,
+                        "value2" -> value2
                     )
                 }
             }
@@ -650,9 +650,9 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter1" -> value1,
-                        "parameter2" -> value2
+                        "type" -> this.getClass.getSimpleName,
+                        "value1" -> value1,
+                        "value2" -> value2
                     )
                 }
             }
@@ -668,9 +668,9 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter1" -> value1,
-                        "parameter2" -> value2
+                        "type" -> this.getClass.getSimpleName,
+                        "value1" -> value1,
+                        "value2" -> value2
                     )
                 }
             }
@@ -727,9 +727,9 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter1" -> value1,
-                        "parameter2" -> value2
+                        "type" -> this.getClass.getSimpleName,
+                        "value1" -> value1,
+                        "value2" -> value2
                     )
                 }
             }
@@ -786,9 +786,9 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter1" -> value1,
-                        "parameter2" -> value2
+                        "type" -> this.getClass.getSimpleName,
+                        "value1" -> value1,
+                        "value2" -> value2
                     )
                 }
             }
@@ -845,9 +845,9 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter1" -> value1,
-                        "parameter2" -> value2
+                        "type" -> this.getClass.getSimpleName,
+                        "value1" -> value1,
+                        "value2" -> value2
                     )
                 }
             }
@@ -904,9 +904,9 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter1" -> value1,
-                        "parameter2" -> value2
+                        "type" -> this.getClass.getSimpleName,
+                        "value1" -> value1,
+                        "value2" -> value2
                     )
                 }
             }
@@ -942,8 +942,8 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter" -> value
+                        "type" -> this.getClass.getSimpleName,
+                        "value" -> value
                     )
                 }
             }
@@ -959,8 +959,8 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter" -> value
+                        "type" -> this.getClass.getSimpleName,
+                        "value" -> value
                     )
                 }
             }
@@ -976,9 +976,9 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter1" -> value1,
-                        "parameter2" -> value2
+                        "type" -> this.getClass.getSimpleName,
+                        "value1" -> value1,
+                        "value2" -> value2
                     )
                 }
             }
@@ -994,9 +994,9 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter1" -> value1,
-                        "parameter2" -> value2
+                        "type" -> this.getClass.getSimpleName,
+                        "value1" -> value1,
+                        "value2" -> value2
                     )
                 }
             }
@@ -1012,9 +1012,9 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter1" -> value1,
-                        "parameter2" -> value2
+                        "type" -> this.getClass.getSimpleName,
+                        "value1" -> value1,
+                        "value2" -> value2
                     )
                 }
             }
@@ -1030,9 +1030,9 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter1" -> value1,
-                        "parameter2" -> value2
+                        "type" -> this.getClass.getSimpleName,
+                        "value1" -> value1,
+                        "value2" -> value2
                     )
                 }
             }
@@ -1048,9 +1048,9 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter1" -> value1,
-                        "parameter2" -> value2
+                        "type" -> this.getClass.getSimpleName,
+                        "value1" -> value1,
+                        "value2" -> value2
                     )
                 }
             }
@@ -1071,8 +1071,8 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter" -> value
+                        "type" -> this.getClass.getSimpleName,
+                        "value" -> value
                     )
                 }
             }
@@ -1108,8 +1108,8 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter" -> value
+                        "type" -> this.getClass.getSimpleName,
+                        "value" -> value
                     )
                 }
             }
@@ -1125,8 +1125,8 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter" -> value
+                        "type" -> this.getClass.getSimpleName,
+                        "value" -> value
                     )
                 }
             }
@@ -1142,9 +1142,9 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter1" -> value1,
-                        "parameter2" -> value2
+                        "type" -> this.getClass.getSimpleName,
+                        "value1" -> value1,
+                        "value2" -> value2
                     )
                 }
             }
@@ -1160,9 +1160,9 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter1" -> value1,
-                        "parameter2" -> value2
+                        "type" -> this.getClass.getSimpleName,
+                        "value1" -> value1,
+                        "value2" -> value2
                     )
                 }
             }
@@ -1178,9 +1178,9 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter1" -> value1,
-                        "parameter2" -> value2
+                        "type" -> this.getClass.getSimpleName,
+                        "value1" -> value1,
+                        "value2" -> value2
                     )
                 }
             }
@@ -1196,9 +1196,9 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter1" -> value1,
-                        "parameter2" -> value2
+                        "type" -> this.getClass.getSimpleName,
+                        "value1" -> value1,
+                        "value2" -> value2
                     )
                 }
             }
@@ -1214,9 +1214,9 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter1" -> value1,
-                        "parameter2" -> value2
+                        "type" -> this.getClass.getSimpleName,
+                        "value1" -> value1,
+                        "value2" -> value2
                     )
                 }
             }
@@ -1237,8 +1237,8 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter" -> value
+                        "type" -> this.getClass.getSimpleName,
+                        "value" -> value
                     )
                 }
             }
@@ -1274,8 +1274,8 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter" -> value
+                        "type" -> this.getClass.getSimpleName,
+                        "value" -> value
                     )
                 }
             }
@@ -1291,8 +1291,8 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter" -> value
+                        "type" -> this.getClass.getSimpleName,
+                        "value" -> value
                     )
                 }
             }
@@ -1308,9 +1308,9 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter1" -> value1,
-                        "parameter2" -> value2
+                        "type" -> this.getClass.getSimpleName,
+                        "value1" -> value1,
+                        "value2" -> value2
                     )
                 }
             }
@@ -1326,9 +1326,9 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter1" -> value1,
-                        "parameter2" -> value2
+                        "type" -> this.getClass.getSimpleName,
+                        "value1" -> value1,
+                        "value2" -> value2
                     )
                 }
             }
@@ -1344,9 +1344,9 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter1" -> value1,
-                        "parameter2" -> value2
+                        "type" -> this.getClass.getSimpleName,
+                        "value1" -> value1,
+                        "value2" -> value2
                     )
                 }
             }
@@ -1362,9 +1362,9 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter1" -> value1,
-                        "parameter2" -> value2
+                        "type" -> this.getClass.getSimpleName,
+                        "value1" -> value1,
+                        "value2" -> value2
                     )
                 }
             }
@@ -1380,9 +1380,9 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter1" -> value1,
-                        "parameter2" -> value2
+                        "type" -> this.getClass.getSimpleName,
+                        "value1" -> value1,
+                        "value2" -> value2
                     )
                 }
             }
@@ -1403,8 +1403,8 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter" -> value
+                        "type" -> this.getClass.getSimpleName,
+                        "value" -> value
                     )
                 }
             }
@@ -1440,8 +1440,8 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter" -> value
+                        "type" -> this.getClass.getSimpleName,
+                        "value" -> value
                     )
                 }
             }
@@ -1457,8 +1457,8 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter" -> value
+                        "type" -> this.getClass.getSimpleName,
+                        "value" -> value
                     )
                 }
             }
@@ -1474,9 +1474,9 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter1" -> value1,
-                        "parameter2" -> value2
+                        "type" -> this.getClass.getSimpleName,
+                        "value1" -> value1,
+                        "value2" -> value2
                     )
                 }
             }
@@ -1492,9 +1492,9 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter1" -> value1,
-                        "parameter2" -> value2
+                        "type" -> this.getClass.getSimpleName,
+                        "value1" -> value1,
+                        "value2" -> value2
                     )
                 }
             }
@@ -1510,9 +1510,9 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter1" -> value1,
-                        "parameter2" -> value2
+                        "type" -> this.getClass.getSimpleName,
+                        "value1" -> value1,
+                        "value2" -> value2
                     )
                 }
             }
@@ -1528,9 +1528,9 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter1" -> value1,
-                        "parameter2" -> value2
+                        "type" -> this.getClass.getSimpleName,
+                        "value1" -> value1,
+                        "value2" -> value2
                     )
                 }
             }
@@ -1546,9 +1546,9 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter1" -> value1,
-                        "parameter2" -> value2
+                        "type" -> this.getClass.getSimpleName,
+                        "value1" -> value1,
+                        "value2" -> value2
                     )
                 }
             }
@@ -1569,8 +1569,8 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter" -> value
+                        "type" -> this.getClass.getSimpleName,
+                        "value" -> value
                     )
                 }
             }
@@ -1606,8 +1606,8 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter" -> value
+                        "type" -> this.getClass.getSimpleName,
+                        "value" -> value
                     )
                 }
             }
@@ -1623,8 +1623,8 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter" -> value
+                        "type" -> this.getClass.getSimpleName,
+                        "value" -> value
                     )
                 }
             }
@@ -1640,9 +1640,9 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter1" -> value1,
-                        "parameter2" -> value2
+                        "type" -> this.getClass.getSimpleName,
+                        "value1" -> value1,
+                        "value2" -> value2
                     )
                 }
             }
@@ -1658,9 +1658,9 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter1" -> value1,
-                        "parameter2" -> value2
+                        "type" -> this.getClass.getSimpleName,
+                        "value1" -> value1,
+                        "value2" -> value2
                     )
                 }
             }
@@ -1676,9 +1676,9 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter1" -> value1,
-                        "parameter2" -> value2
+                        "type" -> this.getClass.getSimpleName,
+                        "value1" -> value1,
+                        "value2" -> value2
                     )
                 }
             }
@@ -1694,9 +1694,9 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter1" -> value1,
-                        "parameter2" -> value2
+                        "type" -> this.getClass.getSimpleName,
+                        "value1" -> value1,
+                        "value2" -> value2
                     )
                 }
             }
@@ -1717,8 +1717,8 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter" -> value
+                        "type" -> this.getClass.getSimpleName,
+                        "value" -> value
                     )
                 }
             }
@@ -1754,8 +1754,8 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter" -> value
+                        "type" -> this.getClass.getSimpleName,
+                        "value" -> value
                     )
                 }
             }
@@ -1771,8 +1771,8 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter" -> value
+                        "type" -> this.getClass.getSimpleName,
+                        "value" -> value
                     )
                 }
             }
@@ -1788,9 +1788,9 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter1" -> value1,
-                        "parameter2" -> value2
+                        "type" -> this.getClass.getSimpleName,
+                        "value1" -> value1,
+                        "value2" -> value2
                     )
                 }
             }
@@ -1806,9 +1806,9 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter1" -> value1,
-                        "parameter2" -> value2
+                        "type" -> this.getClass.getSimpleName,
+                        "value1" -> value1,
+                        "value2" -> value2
                     )
                 }
             }
@@ -1824,9 +1824,9 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter1" -> value1,
-                        "parameter2" -> value2
+                        "type" -> this.getClass.getSimpleName,
+                        "value1" -> value1,
+                        "value2" -> value2
                     )
                 }
             }
@@ -1842,9 +1842,9 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter1" -> value1,
-                        "parameter2" -> value2
+                        "type" -> this.getClass.getSimpleName,
+                        "value1" -> value1,
+                        "value2" -> value2
                     )
                 }
             }
@@ -1865,8 +1865,8 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter" -> value
+                        "type" -> this.getClass.getSimpleName,
+                        "value" -> value
                     )
                 }
             }
@@ -1890,8 +1890,8 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter" -> value
+                        "type" -> this.getClass.getSimpleName,
+                        "value" -> value
                     )
                 }
             }
@@ -1915,8 +1915,8 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter" -> value
+                        "type" -> this.getClass.getSimpleName,
+                        "value" -> value
                     )
                 }
             }
@@ -1932,9 +1932,9 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter1" -> value1,
-                        "parameter2" -> value2
+                        "type" -> this.getClass.getSimpleName,
+                        "value1" -> value1,
+                        "value2" -> value2
                     )
                 }
             }
@@ -1950,8 +1950,8 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter" -> value
+                        "type" -> this.getClass.getSimpleName,
+                        "value" -> value
                     )
                 }
             }
@@ -1972,8 +1972,8 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter" -> value
+                        "type" -> this.getClass.getSimpleName,
+                        "value" -> value
                     )
                 }
             }
@@ -1988,7 +1988,7 @@ object Value {
             override def toJSON: JValue = {
                 import json.MyJ._
                 jObject(
-                    "value" -> this.getClass.getSimpleName
+                    "type" -> this.getClass.getSimpleName
                 )
             }
         }
@@ -2016,6 +2016,52 @@ object Value {
             override final type T = Direction
         }
         
+        object BooleanValue {
+            
+            final case class IsSolidAtCoordinates(value: CoordinatesValue) extends BooleanValue {
+                override def getValue(implicit entityHolder: EntityHolder): Option[Boolean] = {
+                    val condition: Entity => Boolean = {
+                        case en: Physical if en.physics.solid => true
+                        case _ => false
+                    }
+                    value.getValue match {
+                        case Some(v) => Some(entityHolder.existsAtCoordinates(v, condition))
+                        case None => None
+                    }
+                }
+                
+                override def toJSON: JValue = {
+                    import json.MyJ._
+                    jObject(
+                        "type" -> this.getClass.getSimpleName,
+                        "value" -> value
+                    )
+                }
+            }
+            
+            final case class IsOpaqueAtCoordinates(value: CoordinatesValue) extends BooleanValue {
+                override def getValue(implicit entityHolder: EntityHolder): Option[Boolean] = {
+                    val condition: Entity => Boolean = {
+                        case en: Physical if en.physics.opaque => true
+                        case _ => false
+                    }
+                    value.getValue match {
+                        case Some(v) => Some(entityHolder.existsAtCoordinates(v, condition))
+                        case None => None
+                    }
+                }
+                
+                override def toJSON: JValue = {
+                    import json.MyJ._
+                    jObject(
+                        "type" -> this.getClass.getSimpleName,
+                        "value" -> value
+                    )
+                }
+            }
+            
+        }
+        
         object LongValue {
             
             final case object GetTime extends LongValue {
@@ -2029,7 +2075,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName
+                        "type" -> this.getClass.getSimpleName
                     )
                 }
             }
@@ -2045,7 +2091,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName
+                        "type" -> this.getClass.getSimpleName
                     )
                 }
             }
@@ -2053,6 +2099,15 @@ object Value {
         }
         
         object StateValue {
+            implicit def state2V(value: State): StateValue = StateConstant(value)
+            
+            implicit class State2V(value: State) {
+                def toValue: StateValue = value
+                
+                def toStateValue: StateValue = value
+                
+                def toStringValue: StringValue = value.toString
+            }
             
             final case class StateConstant(value: State) extends StateValue {
                 override def getValue(implicit entityHolder: EntityHolder): Option[State] = Some(value)
@@ -2060,8 +2115,8 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter" -> value
+                        "type" -> this.getClass.getSimpleName,
+                        "value" -> value
                     )
                 }
             }
@@ -2077,7 +2132,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
+                        "type" -> this.getClass.getSimpleName,
                         "entityId" -> entityId
                     )
                 }
@@ -2086,6 +2141,15 @@ object Value {
         }
         
         object CoordinatesValue {
+            implicit def coordinates2V(value: Coordinates): CoordinatesValue = CoordinatesConstant(value)
+            
+            implicit class Coordinates2V(value: Coordinates) {
+                def toValue: CoordinatesValue = value
+                
+                def toCoordinatesValue: CoordinatesValue = value
+                
+                def toStringValue: StringValue = value.toString
+            }
             
             final case class CoordinatesConstant(value: Coordinates) extends CoordinatesValue {
                 override def getValue(implicit entityHolder: EntityHolder): Option[Coordinates] = Some(value)
@@ -2093,8 +2157,8 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter" -> value
+                        "type" -> this.getClass.getSimpleName,
+                        "value" -> value
                     )
                 }
             }
@@ -2110,7 +2174,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
+                        "type" -> this.getClass.getSimpleName,
                         "entityId" -> entityId
                     )
                 }
@@ -2119,6 +2183,15 @@ object Value {
         }
         
         object DirectionValue {
+            implicit def direction2V(value: Direction): DirectionConstant = DirectionConstant(value)
+            
+            implicit class Direction2V(value: Direction) {
+                def toValue: DirectionValue = value
+                
+                def toCoordinatesValue: DirectionValue = value
+                
+                def toStringValue: StringValue = value.toString
+            }
             
             final case class DirectionConstant(value: Direction) extends DirectionValue {
                 override def getValue(implicit entityHolder: EntityHolder): Option[Direction] = Some(value)
@@ -2126,8 +2199,8 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
-                        "parameter" -> value
+                        "type" -> this.getClass.getSimpleName,
+                        "value" -> value
                     )
                 }
             }
@@ -2143,7 +2216,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "value" -> this.getClass.getSimpleName,
+                        "type" -> this.getClass.getSimpleName,
                         "entityId" -> entityId
                     )
                 }
