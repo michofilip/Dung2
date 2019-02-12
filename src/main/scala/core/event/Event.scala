@@ -307,6 +307,46 @@ object Event {
     }
     
     // time
+    final case object StartTime extends Event {
+        override val entityId: String = "TimeCounter"
+        
+        override def applyTo(entity: Entity)(implicit entityHolder: EntityHolder): (Vector[Entity], Vector[Event]) = {
+            entity match {
+                case en: TimeCounter if !en.isRunning =>
+                    (en.start(), Vector.empty)
+                case _ =>
+                    (entity, Vector.empty)
+            }
+        }
+        
+        override def toJSON: JValue = {
+            import json.MyJ._
+            jObject(
+                "event" -> this.getClass.getSimpleName
+            )
+        }
+    }
+    
+    final case object StopTime extends Event {
+        override val entityId: String = "TimeCounter"
+        
+        override def applyTo(entity: Entity)(implicit entityHolder: EntityHolder): (Vector[Entity], Vector[Event]) = {
+            entity match {
+                case en: TimeCounter if en.isRunning =>
+                    (en.stop(), Vector.empty)
+                case _ =>
+                    (entity, Vector.empty)
+            }
+        }
+        
+        override def toJSON: JValue = {
+            import json.MyJ._
+            jObject(
+                "event" -> this.getClass.getSimpleName
+            )
+        }
+    }
+    
     final case class DelayTime(override val entityId: String, delay: Long, events: Vector[Event]) extends Event {
         override def applyTo(entity: Entity)(implicit entityHolder: EntityHolder): (Vector[Entity], Vector[Event]) = {
             val time = GetTime.getOrElse(0)
@@ -345,6 +385,26 @@ object Event {
     }
     
     // turn
+    final case object NextTurn extends Event {
+        override val entityId: String = "TurnCounter"
+        
+        override def applyTo(entity: Entity)(implicit entityHolder: EntityHolder): (Vector[Entity], Vector[Event]) = {
+            entity match {
+                case en: TurnCounter =>
+                    (en.nextTurn, Vector.empty)
+                case _ =>
+                    (entity, Vector.empty)
+            }
+        }
+        
+        override def toJSON: JValue = {
+            import json.MyJ._
+            jObject(
+                "event" -> this.getClass.getSimpleName
+            )
+        }
+    }
+    
     final case class DelayTurns(override val entityId: String, delay: Long, events: Vector[Event]) extends Event {
         override def applyTo(entity: Entity)(implicit entityHolder: EntityHolder): (Vector[Entity], Vector[Event]) = {
             val turn = GetTurn.getOrElse(0)

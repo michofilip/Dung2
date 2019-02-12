@@ -183,6 +183,21 @@ object Entity {
         override val id: String = "TimeCounter"
         override val timeStamp: Long = timer.getTime
         
+        private def update(timer: Timer = timer): T =
+            new TimeCounter(timer)
+        
+        def start(): TimeCounter = {
+            update(timer.start)
+        }
+        
+        def stop(): TimeCounter = {
+            update(timer.stop)
+        }
+        
+        def isRunning: Boolean = {
+            timer.isRunning
+        }
+        
         override def toJSON: JValue = {
             import json.MyJ._
             jObject(
@@ -198,6 +213,13 @@ object Entity {
         override protected type T = TurnCounter
         override val id: String = "TurnCounter"
         override val timeStamp: Long = 0
+        
+        private def update(turn: Long = turn): T =
+            new TurnCounter(turn)
+        
+        def nextTurn: TurnCounter = {
+            update(turn + 1)
+        }
         
         override def toJSON: JValue = {
             import json.MyJ._
