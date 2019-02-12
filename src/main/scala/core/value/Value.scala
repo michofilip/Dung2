@@ -515,7 +515,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value" -> value
                     )
                 }
@@ -532,7 +532,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value" -> value
                     )
                 }
@@ -549,7 +549,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value1" -> value1,
                         "value2" -> value2
                     )
@@ -567,7 +567,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value1" -> value1,
                         "value2" -> value2
                     )
@@ -585,7 +585,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value1" -> value1,
                         "value2" -> value2
                     )
@@ -603,7 +603,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value1" -> value1,
                         "value2" -> value2
                     )
@@ -621,7 +621,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value1" -> value1,
                         "value2" -> value2
                     )
@@ -639,7 +639,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value1" -> value1,
                         "value2" -> value2
                     )
@@ -657,7 +657,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value1" -> value1,
                         "value2" -> value2
                     )
@@ -675,7 +675,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value1" -> value1,
                         "value2" -> value2
                     )
@@ -734,7 +734,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value1" -> value1,
                         "value2" -> value2
                     )
@@ -793,7 +793,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value1" -> value1,
                         "value2" -> value2
                     )
@@ -852,7 +852,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value1" -> value1,
                         "value2" -> value2
                     )
@@ -911,7 +911,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value1" -> value1,
                         "value2" -> value2
                     )
@@ -949,7 +949,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value" -> value
                     )
                 }
@@ -966,7 +966,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value" -> value
                     )
                 }
@@ -983,7 +983,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value1" -> value1,
                         "value2" -> value2
                     )
@@ -1001,7 +1001,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value1" -> value1,
                         "value2" -> value2
                     )
@@ -1019,7 +1019,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value1" -> value1,
                         "value2" -> value2
                     )
@@ -1037,7 +1037,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value1" -> value1,
                         "value2" -> value2
                     )
@@ -1055,7 +1055,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value1" -> value1,
                         "value2" -> value2
                     )
@@ -1078,7 +1078,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value" -> value
                     )
                 }
@@ -1115,7 +1115,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value" -> value
                     )
                 }
@@ -1132,7 +1132,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value" -> value
                     )
                 }
@@ -1149,7 +1149,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value1" -> value1,
                         "value2" -> value2
                     )
@@ -1167,7 +1167,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value1" -> value1,
                         "value2" -> value2
                     )
@@ -1185,7 +1185,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value1" -> value1,
                         "value2" -> value2
                     )
@@ -1203,7 +1203,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value1" -> value1,
                         "value2" -> value2
                     )
@@ -1221,7 +1221,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value1" -> value1,
                         "value2" -> value2
                     )
@@ -1244,7 +1244,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value" -> value
                     )
                 }
@@ -1281,7 +1281,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value" -> value
                     )
                 }
@@ -1298,7 +1298,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value" -> value
                     )
                 }
@@ -1315,7 +1315,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value1" -> value1,
                         "value2" -> value2
                     )
@@ -1333,7 +1333,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value1" -> value1,
                         "value2" -> value2
                     )
@@ -1351,7 +1351,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value1" -> value1,
                         "value2" -> value2
                     )
@@ -1369,7 +1369,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value1" -> value1,
                         "value2" -> value2
                     )
@@ -1387,7 +1387,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value1" -> value1,
                         "value2" -> value2
                     )
@@ -1410,7 +1410,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value" -> value
                     )
                 }
@@ -1447,7 +1447,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value" -> value
                     )
                 }
@@ -1464,7 +1464,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value" -> value
                     )
                 }
@@ -1481,7 +1481,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value1" -> value1,
                         "value2" -> value2
                     )
@@ -1499,7 +1499,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value1" -> value1,
                         "value2" -> value2
                     )
@@ -1517,7 +1517,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value1" -> value1,
                         "value2" -> value2
                     )
@@ -1535,7 +1535,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value1" -> value1,
                         "value2" -> value2
                     )
@@ -1553,7 +1553,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value1" -> value1,
                         "value2" -> value2
                     )
@@ -1576,7 +1576,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value" -> value
                     )
                 }
@@ -1613,7 +1613,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value" -> value
                     )
                 }
@@ -1630,7 +1630,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value" -> value
                     )
                 }
@@ -1647,7 +1647,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value1" -> value1,
                         "value2" -> value2
                     )
@@ -1665,7 +1665,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value1" -> value1,
                         "value2" -> value2
                     )
@@ -1683,7 +1683,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value1" -> value1,
                         "value2" -> value2
                     )
@@ -1701,7 +1701,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value1" -> value1,
                         "value2" -> value2
                     )
@@ -1724,7 +1724,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value" -> value
                     )
                 }
@@ -1761,7 +1761,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value" -> value
                     )
                 }
@@ -1778,7 +1778,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value" -> value
                     )
                 }
@@ -1795,7 +1795,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value1" -> value1,
                         "value2" -> value2
                     )
@@ -1813,7 +1813,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value1" -> value1,
                         "value2" -> value2
                     )
@@ -1831,7 +1831,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value1" -> value1,
                         "value2" -> value2
                     )
@@ -1849,7 +1849,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value1" -> value1,
                         "value2" -> value2
                     )
@@ -1872,7 +1872,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value" -> value
                     )
                 }
@@ -1897,7 +1897,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value" -> value
                     )
                 }
@@ -1922,7 +1922,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value" -> value
                     )
                 }
@@ -1939,7 +1939,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value1" -> value1,
                         "value2" -> value2
                     )
@@ -1957,7 +1957,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value" -> value
                     )
                 }
@@ -1979,7 +1979,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value" -> value
                     )
                 }
@@ -1995,7 +1995,7 @@ object Value {
             override def toJSON: JValue = {
                 import json.MyJ._
                 jObject(
-                    "type" -> this.getClass.getSimpleName
+                    "class" -> this.getClass.getSimpleName
                 )
             }
         }
@@ -2040,7 +2040,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value" -> value
                     )
                 }
@@ -2061,7 +2061,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value" -> value
                     )
                 }
@@ -2082,7 +2082,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName
+                        "class" -> this.getClass.getSimpleName
                     )
                 }
             }
@@ -2098,7 +2098,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName
+                        "class" -> this.getClass.getSimpleName
                     )
                 }
             }
@@ -2122,7 +2122,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value" -> value
                     )
                 }
@@ -2139,7 +2139,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "entityId" -> entityId
                     )
                 }
@@ -2164,13 +2164,13 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value" -> value
                     )
                 }
             }
             
-            final case class GetConcatenate(entityId: String) extends CoordinatesValue {
+            final case class GetCoordinates(entityId: String) extends CoordinatesValue {
                 override def get(implicit entityHolder: EntityHolder): Option[Coordinates] = {
                     entityHolder.getById(entityId) match {
                         case Some(en: Positioned) => Some(en.position.coordinates)
@@ -2181,7 +2181,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "entityId" -> entityId
                     )
                 }
@@ -2206,7 +2206,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "value" -> value
                     )
                 }
@@ -2223,7 +2223,7 @@ object Value {
                 override def toJSON: JValue = {
                     import json.MyJ._
                     jObject(
-                        "type" -> this.getClass.getSimpleName,
+                        "class" -> this.getClass.getSimpleName,
                         "entityId" -> entityId
                     )
                 }

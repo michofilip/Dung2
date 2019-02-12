@@ -79,6 +79,6 @@ object EntityHolder {
     }
     
     def apply(entities: Seq[Entity]): EntityHolder = {
-        EntityHolder() addAll entities
+        EntityHolder() ++ entities
     }
 }

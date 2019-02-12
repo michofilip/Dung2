@@ -1,40 +1,18 @@
 package core.world
 
-import core.entity.Entity.Physical
-import core.entity.properties.position.Coordinates
 import core.entity.{Entity, EntityHolder}
 import core.event.Event
-import core.timer.Timer
-import json.{JSONParsable, JValue, MyJ}
+import json.MyJ.ToJSON
+import json.{JSONParsable, JValue}
+
+import scala.collection.immutable.ListMap
 
 class WorldFrame(private val entityHolder: EntityHolder,
-                 private val events: Vector[Event],
-                 val clock: Timer, val turn: Long
+                 private val events: Vector[Event]
                 ) extends JSONParsable {
-    
-    def getEntityById(id: String): Option[Entity] = {
-        entityHolder.getById(id)
+    private def update(entityHolder: EntityHolder = entityHolder, events: Vector[Event] = events): WorldFrame = {
+        new WorldFrame(entityHolder, events)
     }
-    
-    def getEntitiesByCoordinates(coordinates: Coordinates): Vector[Entity] = {
-        entityHolder.getByCoordinates(coordinates)
-    }
-    
-//    def isSolidAtCoordinates(coordinates: Coordinates): Boolean = {
-//        val condition: Entity => Boolean = {
-//            case en: Physical if en.physics.solid => true
-//            case _ => false
-//        }
-//        entityHolder.existsAtCoordinates(coordinates, condition)
-//    }
-//
-//    def isOpaqueAtCoordinates(coordinates: Coordinates): Boolean = {
-//        val condition: Entity => Boolean = {
-//            case en: Physical if en.physics.opaque => true
-//            case _ => false
-//        }
-//        entityHolder.existsAtCoordinates(coordinates, condition)
-//    }
     
     def nextFrame(externalEvents: Vector[Event] = Vector.empty): WorldFrame = {
         val (newEntityHolder, newEvents) =
@@ -58,18 +36,17 @@ class WorldFrame(private val entityHolder: EntityHolder,
         update(entityHolder = newEntityHolder, events = newEvents)
     }
     
-    def nextTurn(): WorldFrame = update(turn = turn + 1)
-    
-    private def update(entityHolder: EntityHolder = entityHolder, events: Vector[Event] = events, turn: Long = turn): WorldFrame = {
-        new WorldFrame(entityHolder, events, clock, turn)
-    }
-    
     override def toJSON: JValue = {
-        MyJ.jObject(
-            "time" -> clock.getTime,
-            "turn" -> turn,
+        ListMap(
             "entities" -> entityHolder.getAll,
             "events" -> events
-        )
+        ).toJSON
     }
+}
+
+object WorldFrame {
+    def apply(entities: Vector[Entity], events: Vector[Event]): WorldFrame = {
+        new WorldFrame(EntityHolder(entities), events)
+    }
+    
 }
