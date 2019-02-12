@@ -2028,7 +2028,7 @@ object Value {
             final case class IsSolidAtCoordinates(value: CoordinatesValue) extends BooleanValue {
                 override def get(implicit entityHolder: EntityHolder): Option[Boolean] = {
                     val condition: Entity => Boolean = {
-                        case en: Physical if en.physics.solid => true
+                        case en: PhysicsHolder if en.physics.solid => true
                         case _ => false
                     }
                     value.get match {
@@ -2049,7 +2049,7 @@ object Value {
             final case class IsOpaqueAtCoordinates(value: CoordinatesValue) extends BooleanValue {
                 override def get(implicit entityHolder: EntityHolder): Option[Boolean] = {
                     val condition: Entity => Boolean = {
-                        case en: Physical if en.physics.opaque => true
+                        case en: PhysicsHolder if en.physics.opaque => true
                         case _ => false
                     }
                     value.get match {
@@ -2131,7 +2131,7 @@ object Value {
             final case class GetState(entityId: String) extends StateValue {
                 override def get(implicit entityHolder: EntityHolder): Option[State] = {
                     entityHolder.getById(entityId) match {
-                        case Some(en: MultiState) => Some(en.state)
+                        case Some(en: StateHolder) => Some(en.state)
                         case _ => None
                     }
                 }
@@ -2173,7 +2173,7 @@ object Value {
             final case class GetCoordinates(entityId: String) extends CoordinatesValue {
                 override def get(implicit entityHolder: EntityHolder): Option[Coordinates] = {
                     entityHolder.getById(entityId) match {
-                        case Some(en: Positioned) => Some(en.position.coordinates)
+                        case Some(en: PositionHolder) => Some(en.position.coordinates)
                         case _ => None
                     }
                 }
@@ -2215,7 +2215,7 @@ object Value {
             final case class GetDirection(entityId: String) extends DirectionValue {
                 override def get(implicit entityHolder: EntityHolder): Option[Direction] = {
                     entityHolder.getById(entityId) match {
-                        case Some(en: Positioned) => Some(en.position.direction)
+                        case Some(en: PositionHolder) => Some(en.position.direction)
                         case _ => None
                     }
                 }

@@ -1,6 +1,6 @@
 package core.entity
 
-import core.entity.Entity.Positioned
+import core.entity.Entity.PositionHolder
 import core.entity.properties.position.Coordinates
 
 class EntityHolder private(private val entitiesById: Map[String, Entity],
@@ -9,7 +9,7 @@ class EntityHolder private(private val entitiesById: Map[String, Entity],
     def add(entity: Entity): EntityHolder = {
         val newEntitiesById = entitiesById + (entity.id -> entity)
         val newEntitiesByCoordinates = entity match {
-            case en: Positioned =>
+            case en: PositionHolder =>
                 val coordinates = en.position.coordinates
                 val newEntitiesAtCoordinates = entitiesByCoordinates.getOrElse(coordinates, Map.empty) + (en.id -> en)
                 entitiesByCoordinates + (coordinates -> newEntitiesAtCoordinates)
@@ -30,7 +30,7 @@ class EntityHolder private(private val entitiesById: Map[String, Entity],
     def remove(entity: Entity): EntityHolder = {
         val newEntitiesById = entitiesById - entity.id
         val newEntitiesByCoordinates = entity match {
-            case en: Positioned =>
+            case en: PositionHolder =>
                 val coordinates = en.position.coordinates
                 val newEntitiesAtCoordinates = entitiesByCoordinates.getOrElse(coordinates, Map.empty) - en.id
                 if (newEntitiesAtCoordinates.isEmpty)

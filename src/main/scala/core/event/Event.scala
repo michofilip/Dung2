@@ -39,7 +39,7 @@ object Event {
     final case class MoveTo(override val entityId: String, x: Int, y: Int) extends Event {
         override def applyTo(entity: Entity)(implicit entityHolder: EntityHolder): (Vector[Entity], Vector[Event]) = {
             entity match {
-                case ent: Positioned =>
+                case ent: PositionHolder =>
                     (ent.moveTo(x, y), Vector.empty)
                 case _ =>
                     (entity, Vector.empty)
@@ -60,7 +60,7 @@ object Event {
     final case class MoveBy(override val entityId: String, dx: Int, dy: Int) extends Event {
         override def applyTo(entity: Entity)(implicit entityHolder: EntityHolder): (Vector[Entity], Vector[Event]) = {
             entity match {
-                case ent: Positioned =>
+                case ent: PositionHolder =>
                     (ent.moveBy(dx, dy), Vector.empty)
                 case _ =>
                     (entity, Vector.empty)
@@ -256,7 +256,7 @@ object Event {
     final case class RunScript(override val entityId: String, scriptName: String) extends Event {
         override def applyTo(entity: Entity)(implicit entityHolder: EntityHolder): (Vector[Entity], Vector[Event]) = {
             entity match {
-                case ent: Scripted =>
+                case ent: ScriptHolder =>
                     (entity, ExecuteScript(entityId, ent.getScript(scriptName), 0))
                 case _ =>
                     (entity, Vector.empty)

@@ -19,13 +19,13 @@ sealed abstract class Entity extends JSONParsable {
 object Entity {
     
     // traits
-    sealed trait MultiState extends Entity {
+    sealed trait StateHolder extends Entity {
         val state: State
         
         protected def setState(state: State, timeStamp: Long): T
     }
     
-    sealed trait Positioned extends Entity {
+    sealed trait PositionHolder extends Entity {
         def position: Position
         
         protected def setPosition(position: Position): T
@@ -52,7 +52,7 @@ object Entity {
         }
     }
     
-    sealed trait Physical extends Entity {
+    sealed trait PhysicsHolder extends Entity {
         protected val physicsSelector: PhysicsSelector
         
         def physicsSelectorId: String = {
@@ -61,14 +61,14 @@ object Entity {
         
         def physics: Physics = {
             val stateOpt = this match {
-                case en: MultiState => Some(en.state)
+                case en: StateHolder => Some(en.state)
                 case _ => None
             }
             physicsSelector.getPhysics(stateOpt)
         }
     }
     
-    sealed trait Animated extends Entity {
+    sealed trait AnimationHolder extends Entity {
         protected val animationSelector: AnimationSelector
         
         def animationSelectorId: String = {
@@ -77,11 +77,11 @@ object Entity {
         
         private def animation: Animation = {
             val stateOpt = this match {
-                case en: MultiState => Some(en.state)
+                case en: StateHolder => Some(en.state)
                 case _ => None
             }
             val directionOpt = this match {
-                case en: Positioned => Some(en.position.direction)
+                case en: PositionHolder => Some(en.position.direction)
                 case _ => None
             }
             animationSelector.getAnimation(stateOpt, directionOpt)
@@ -92,7 +92,7 @@ object Entity {
         }
     }
     
-    sealed trait Scripted extends Entity {
+    sealed trait ScriptHolder extends Entity {
         protected val scripts: Map[String, Script]
         
         def getScript(name: String): Script = scripts.getOrElse(name, Script.emptyScript)
@@ -104,10 +104,7 @@ object Entity {
     //    }
     
     // abstract classes
-    sealed abstract class Switchable extends Entity with MultiState {
-        //        def starClosing():T
-        
-        
+    sealed abstract class Switchable extends Entity with StateHolder {
         def setSwitchableState(switchableState: SwitchableState, timeStamp: Long): T = {
             (state, switchableState) match {
                 case (Off, SwitchingOn) => setState(switchableState, timeStamp)
@@ -120,7 +117,7 @@ object Entity {
         }
     }
     
-    sealed abstract class Openable extends Entity with MultiState {
+    sealed abstract class Openable extends Entity with StateHolder {
         val lockCode: Long
         
         def setOpenableState(openableState: OpenableState, timeStamp: Long): T = {
@@ -140,7 +137,7 @@ object Entity {
         }
     }
     
-    sealed abstract class Character extends Entity with MultiState {
+    sealed abstract class Character extends Entity with StateHolder {
         // TODO basic template
         def setCharacterState(characterState: CharacterState, timeStamp: Long): T =
             if (characterState != state)
@@ -237,7 +234,7 @@ object Entity {
                        override val position: Position,
                        override protected val physicsSelector: PhysicsSelector,
                        override protected val animationSelector: AnimationSelector)
-            extends Entity with Positioned with Physical with Animated {
+            extends Entity with PositionHolder with PhysicsHolder with AnimationHolder {
         
         override protected type T = Static
         
@@ -266,7 +263,7 @@ object Entity {
                        override val position: Position,
                        override protected val physicsSelector: PhysicsSelector,
                        override protected val animationSelector: AnimationSelector)
-            extends Switchable with Positioned with Physical with Animated {
+            extends Switchable with PositionHolder with PhysicsHolder with AnimationHolder {
         
         override protected type T = Switch
         
@@ -300,7 +297,7 @@ object Entity {
                      override val lockCode: Long,
                      override protected val physicsSelector: PhysicsSelector,
                      override protected val animationSelector: AnimationSelector)
-            extends Openable with Positioned with Physical with Animated {
+            extends Openable with PositionHolder with PhysicsHolder with AnimationHolder {
         
         override protected type T = Door
         
@@ -333,7 +330,7 @@ object Entity {
                        override val position: Position,
                        override protected val physicsSelector: PhysicsSelector,
                        override protected val animationSelector: AnimationSelector)
-            extends Character with Positioned with Physical with Animated {
+            extends Character with PositionHolder with PhysicsHolder with AnimationHolder {
         
         override protected type T = Player
         
