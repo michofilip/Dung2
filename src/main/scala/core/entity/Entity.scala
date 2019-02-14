@@ -98,6 +98,30 @@ object Entity {
         def getScript(name: String): Script = scripts.getOrElse(name, Script.emptyScript)
     }
     
+    sealed trait TimeCounterHolder extends Entity {
+        protected val timer: Timer
+        
+        def getTime: Long = {
+            timer.getTime
+        }
+        
+        def isRunning: Boolean = {
+            timer.isRunning
+        }
+        
+        def start(): T
+        
+        def stop(): T
+    }
+    
+    sealed trait TurnCounterHolder extends Entity {
+        val turn: Long
+        
+        def nextTurn: T
+    }
+    
+    sealed trait CreatorHolder extends Entity
+    
     //todo experimental
     //    sealed trait InventoryHolder extends Entity {
     //        //        val inventory
@@ -147,6 +171,38 @@ object Entity {
     }
     
     // final classes
+    final class Controller(override val id: String,
+                           override val timeStamp: Long,
+                           override protected val timer: Timer,
+                           override val turn: Long)
+            extends Entity with CreatorHolder with TimeCounterHolder with TurnCounterHolder {
+        override protected type T = Controller
+        
+        private def update(timeStamp: Long = timeStamp, timer: Timer = timer, turn: Long = turn): T =
+            new Controller(id, timeStamp, timer, turn)
+        
+        def start(): T = {
+            update(timer = timer.start)
+        }
+        
+        def stop(): T = {
+            update(timer = timer.stop)
+        }
+        
+        override def nextTurn: T = {
+            update(turn = turn + 1)
+        }
+        
+        override def toJSON: JValue = {
+            import json.MyJ._
+            jObject(
+                "entity" -> this.getClass.getSimpleName,
+                "id" -> id,
+                "timeStamp" -> timeStamp
+            )
+        }
+    }
+    
     final class EntityCreator(override val timeStamp: Long) extends Entity {
         override protected type T = EntityCreator
         override val id: String = "EntityCreator"
@@ -175,36 +231,36 @@ object Entity {
         }
     }
     
-    final class TimeCounter(val timer: Timer) extends Entity {
-        override protected type T = TimeCounter
-        override val id: String = "TimeCounter"
-        override val timeStamp: Long = timer.getTime
-        
-        private def update(timer: Timer = timer): T =
-            new TimeCounter(timer)
-        
-        def start(): TimeCounter = {
-            update(timer.start)
-        }
-        
-        def stop(): TimeCounter = {
-            update(timer.stop)
-        }
-        
-        def isRunning: Boolean = {
-            timer.isRunning
-        }
-        
-        override def toJSON: JValue = {
-            import json.MyJ._
-            jObject(
-                "entity" -> "TimeCounter",
-                "id" -> id,
-                "timeStamp" -> timeStamp,
-                "timer" -> timer.getTime
-            )
-        }
-    }
+    //    final class TimeCounter(val timer: Timer) extends Entity {
+    //        override protected type T = TimeCounter
+    //        override val id: String = "TimeCounter"
+    //        override val timeStamp: Long = timer.getTime
+    //
+    //        private def update(timer: Timer = timer): T =
+    //            new TimeCounter(timer)
+    //
+    //        def start(): TimeCounter = {
+    //            update(timer.start)
+    //        }
+    //
+    //        def stop(): TimeCounter = {
+    //            update(timer.stop)
+    //        }
+    //
+    //        def isRunning: Boolean = {
+    //            timer.isRunning
+    //        }
+    //
+    //        override def toJSON: JValue = {
+    //            import json.MyJ._
+    //            jObject(
+    //                "entity" -> "TimeCounter",
+    //                "id" -> id,
+    //                "timeStamp" -> timeStamp,
+    //                "timer" -> timer.getTime
+    //            )
+    //        }
+    //    }
     
     final class TurnCounter(val turn: Long) extends Entity {
         override protected type T = TurnCounter

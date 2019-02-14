@@ -1,7 +1,7 @@
 package core.program
 
 import core.event.Event
-import core.value.Value.BasicValue.BooleanValue
+import core.value.basic.BooleanValue
 
 sealed abstract class Instruction
 
