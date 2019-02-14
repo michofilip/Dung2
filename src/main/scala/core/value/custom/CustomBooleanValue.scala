@@ -5,7 +5,7 @@ import core.entity.{Entity, EntityHolder}
 import core.value.basic.BooleanValue
 import json.JValue
 
-object BooleanValue {
+object CustomBooleanValue {
     
     final case class IsSolidAtCoordinates(value: CoordinatesValue) extends BooleanValue {
         override def get(implicit entityHolder: EntityHolder): Option[Boolean] = {

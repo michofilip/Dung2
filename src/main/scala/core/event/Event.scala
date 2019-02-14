@@ -5,7 +5,7 @@ import core.entity.properties.state.State
 import core.entity.{Entity, EntityHolder}
 import core.program.Instruction._
 import core.program.Script
-import core.value.custom.LongValue.{GetTime, GetTurn}
+import core.value.custom.CustomLongValue.{GetTime, GetTurn}
 import json.{JSONParsable, JValue}
 
 import scala.language.implicitConversions

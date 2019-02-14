@@ -5,7 +5,7 @@ import core.entity.EntityHolder
 import core.value.basic.LongValue
 import json.JValue
 
-object LongValue {
+object CustomLongValue {
     
     final case class GetTime() extends LongValue {
         override def get(implicit entityHolder: EntityHolder): Option[Long] = {
