@@ -3,7 +3,7 @@ package core.program
 import core.event.Event
 import core.program.Instruction._
 import core.value.Value
-import core.value.Value.BasicValue.BooleanValue
+import core.value.basic.BooleanValue
 
 import scala.language.implicitConversions
 
