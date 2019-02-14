@@ -90,6 +90,19 @@ object DoubleValue {
         def toStringValue: StringValue = value.toString
     }
     
+    final case object DoubleNull extends DoubleValue {
+        override def get(implicit entityHolder: EntityHolder): Option[Double] = {
+            None
+        }
+        
+        override def toJSON: JValue = {
+            import json.MyJ._
+            jObject(
+                "class" -> this.getClass.getSimpleName
+            )
+        }
+    }
+    
     final case class DoubleConstant(value: Double) extends DoubleValue {
         override def get(implicit entityHolder: EntityHolder): Option[Double] = {
             Some(value)

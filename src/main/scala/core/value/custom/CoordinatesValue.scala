@@ -22,6 +22,19 @@ object CoordinatesValue {
         def toStringValue: StringValue = value.toString
     }
     
+    final case object CoordinatesNull extends CoordinatesValue {
+        override def get(implicit entityHolder: EntityHolder): Option[Coordinates] = {
+            None
+        }
+        
+        override def toJSON: JValue = {
+            import json.MyJ._
+            jObject(
+                "class" -> this.getClass.getSimpleName
+            )
+        }
+    }
+    
     final case class CoordinatesConstant(value: Coordinates) extends CoordinatesValue {
         override def get(implicit entityHolder: EntityHolder): Option[Coordinates] = {
             Some(value)

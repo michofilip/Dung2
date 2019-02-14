@@ -91,6 +91,19 @@ object FloatValue {
         def toStringValue: StringValue = value.toString
     }
     
+    final case object FloatNull extends FloatValue {
+        override def get(implicit entityHolder: EntityHolder): Option[Float] = {
+            None
+        }
+        
+        override def toJSON: JValue = {
+            import json.MyJ._
+            jObject(
+                "class" -> this.getClass.getSimpleName
+            )
+        }
+    }
+    
     final case class FloatConstant(value: Float) extends FloatValue {
         override def get(implicit entityHolder: EntityHolder): Option[Float] = {
             Some(value)

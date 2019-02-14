@@ -103,6 +103,19 @@ object ShortValue {
         def toStringValue: StringValue = value.toString
     }
     
+    final case object ShortNull extends ShortValue {
+        override def get(implicit entityHolder: EntityHolder): Option[Short] = {
+            None
+        }
+        
+        override def toJSON: JValue = {
+            import json.MyJ._
+            jObject(
+                "class" -> this.getClass.getSimpleName
+            )
+        }
+    }
+    
     final case class ShortConstant(value: Short) extends ShortValue {
         override def get(implicit entityHolder: EntityHolder): Option[Short] = {
             Some(value)

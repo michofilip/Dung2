@@ -104,6 +104,19 @@ object ByteValue {
         def toStringValue: StringValue = value.toString
     }
     
+    final case object ByteNull extends ByteValue {
+        override def get(implicit entityHolder: EntityHolder): Option[Byte] = {
+            None
+        }
+        
+        override def toJSON: JValue = {
+            import json.MyJ._
+            jObject(
+                "class" -> this.getClass.getSimpleName
+            )
+        }
+    }
+    
     final case class ByteConstant(value: Byte) extends ByteValue {
         override def get(implicit entityHolder: EntityHolder): Option[Byte] = {
             Some(value)

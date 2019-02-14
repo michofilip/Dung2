@@ -102,6 +102,19 @@ object LongValue {
         def toStringValue: StringValue = value.toString
     }
     
+    final case object LongNull extends LongValue {
+        override def get(implicit entityHolder: EntityHolder): Option[Long] = {
+            None
+        }
+        
+        override def toJSON: JValue = {
+            import json.MyJ._
+            jObject(
+                "class" -> this.getClass.getSimpleName
+            )
+        }
+    }
+    
     final case class LongConstant(value: Long) extends LongValue {
         override def get(implicit entityHolder: EntityHolder): Option[Long] = {
             Some(value)

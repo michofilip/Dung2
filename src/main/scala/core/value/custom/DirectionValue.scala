@@ -22,6 +22,19 @@ object DirectionValue {
         def toStringValue: StringValue = value.toString
     }
     
+    final case object DirectionNull extends DirectionValue {
+        override def get(implicit entityHolder: EntityHolder): Option[Direction] = {
+            None
+        }
+        
+        override def toJSON: JValue = {
+            import json.MyJ._
+            jObject(
+                "class" -> this.getClass.getSimpleName
+            )
+        }
+    }
+    
     final case class DirectionConstant(value: Direction) extends DirectionValue {
         override def get(implicit entityHolder: EntityHolder): Option[Direction] = {
             Some(value)

@@ -22,6 +22,19 @@ object StateValue {
         def toStringValue: StringValue = value.toString
     }
     
+    final case object StateNull extends StateValue {
+        override def get(implicit entityHolder: EntityHolder): Option[State] = {
+            None
+        }
+        
+        override def toJSON: JValue = {
+            import json.MyJ._
+            jObject(
+                "class" -> this.getClass.getSimpleName
+            )
+        }
+    }
+    
     final case class StateConstant(value: State) extends StateValue {
         override def get(implicit entityHolder: EntityHolder): Option[State] = {
             Some(value)

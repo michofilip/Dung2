@@ -102,6 +102,19 @@ object IntValue {
         def toStringValue: StringValue = value.toString
     }
     
+    final case object IntNull extends IntValue {
+        override def get(implicit entityHolder: EntityHolder): Option[Int] = {
+            None
+        }
+        
+        override def toJSON: JValue = {
+            import json.MyJ._
+            jObject(
+                "class" -> this.getClass.getSimpleName
+            )
+        }
+    }
+    
     final case class IntConstant(value: Int) extends IntValue {
         override def get(implicit entityHolder: EntityHolder): Option[Int] = {
             Some(value)
