@@ -224,7 +224,7 @@ object BooleanValue {
         }
     }
     
-    final case class Less(value1: OrderedValue, value2: OrderedValue) extends BooleanValue {
+    final case class Less(value1: ComparableValue, value2: ComparableValue) extends BooleanValue {
         override def get(implicit entityHolder: EntityHolder): Option[Boolean] = {
             (value1.get, value2.get) match {
                 case (Some(v1: Byte), Some(v2: Byte)) => Some(v1 < v2)
@@ -283,7 +283,7 @@ object BooleanValue {
         }
     }
     
-    final case class LessEqual(value1: OrderedValue, value2: OrderedValue) extends BooleanValue {
+    final case class LessEqual(value1: ComparableValue, value2: ComparableValue) extends BooleanValue {
         override def get(implicit entityHolder: EntityHolder): Option[Boolean] = {
             (value1.get, value2.get) match {
                 case (Some(v1: Byte), Some(v2: Byte)) => Some(v1 <= v2)
@@ -342,7 +342,7 @@ object BooleanValue {
         }
     }
     
-    final case class Greater(value1: OrderedValue, value2: OrderedValue) extends BooleanValue {
+    final case class Greater(value1: ComparableValue, value2: ComparableValue) extends BooleanValue {
         override def get(implicit entityHolder: EntityHolder): Option[Boolean] = {
             (value1.get, value2.get) match {
                 case (Some(v1: Byte), Some(v2: Byte)) => Some(v1 > v2)
@@ -401,7 +401,7 @@ object BooleanValue {
         }
     }
     
-    final case class GreaterEqual(value1: OrderedValue, value2: OrderedValue) extends BooleanValue {
+    final case class GreaterEqual(value1: ComparableValue, value2: ComparableValue) extends BooleanValue {
         override def get(implicit entityHolder: EntityHolder): Option[Boolean] = {
             (value1.get, value2.get) match {
                 case (Some(v1: Byte), Some(v2: Byte)) => Some(v1 >= v2)

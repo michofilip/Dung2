@@ -8,7 +8,7 @@ import core.value.basic.IntValue.NumericToInt
 import core.value.basic.LongValue.NumericToLong
 import core.value.basic.ShortValue.NumericToShort
 
-trait NumericValue extends Value with OrderedValue {
+trait NumericValue extends Value with ComparableValue {
     def toByteValue: ByteValue = NumericToByte(this)
     
     def toShortValue: ShortValue = NumericToShort(this)
