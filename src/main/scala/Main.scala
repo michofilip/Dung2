@@ -12,13 +12,13 @@ object Main extends App {
     
     val entities = Vector[Entity](
         ent,
-//        new entity.Entity.TimeCounter(timeCounter),
-        //        new entity.Entity.TurnCounter(0),
-        //        new entity.Entity.ScriptRunner(0),
+        new entity.Entity.TimeCounter(timeCounter),
+        new entity.Entity.TurnCounter(0),
+        new entity.Entity.ScriptRunner(0),
     )
     val events = Vector[Event](
         SwitchOn("1000"),
-//        StopTime
+        //        StopTime
     )
     
     var mapFrame = WorldFrame(entities, events)

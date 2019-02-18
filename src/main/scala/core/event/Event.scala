@@ -312,7 +312,7 @@ object Event {
         
         override def applyTo(entity: Entity)(implicit entityHolder: EntityHolder): (Vector[Entity], Vector[Event]) = {
             entity match {
-                case en: TimeCounterHolder if !en.isRunning =>
+                case en: TimeHolder if !en.isRunning =>
                     (en.start(), Vector.empty)
                 case _ =>
                     (entity, Vector.empty)
@@ -332,7 +332,7 @@ object Event {
         
         override def applyTo(entity: Entity)(implicit entityHolder: EntityHolder): (Vector[Entity], Vector[Event]) = {
             entity match {
-                case en: TimeCounterHolder if en.isRunning =>
+                case en: TimeHolder if en.isRunning =>
                     (en.stop(), Vector.empty)
                 case _ =>
                     (entity, Vector.empty)
