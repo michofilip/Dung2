@@ -1,13 +1,9 @@
 package core.entity
 
-import core.entity.properties.graphics.{Animation, Frame}
-import core.entity.properties.physics.Physics
-import core.entity.properties.position.{Coordinates, Position}
+import core.entity.properties.position.Position
 import core.entity.properties.state.State
-import core.entity.properties.state.State._
 import core.entity.selectors.{AnimationSelector, PhysicsSelector}
 import core.entity.traits._
-import core.program.Script
 import core.timer.Timer
 import core.value.Value
 import json.{JSONParsable, JValue, MyJ}
@@ -19,21 +15,6 @@ abstract class Entity extends JSONParsable {
 }
 
 object Entity {
-    
-    //todo experimental
-    //    sealed trait InventoryHolder extends Entity {
-    //        //        val inventory
-    //    }
-    
-    
-//    abstract class Character extends MapEntity with StateHolder {
-//        // TODO basic template
-//        def setCharacterState(characterState: CharacterState, timeStamp: Long): T =
-//            if (characterState != state)
-//                setState(characterState, timeStamp)
-//            else
-//                setState(state, timeStamp)
-//    }
     
     // Control classes
     final class EntityCreator(override val timeStamp: Long) extends Entity {
@@ -172,8 +153,8 @@ object Entity {
                        _timeStamp: Long,
                        _position: Position,
                        _physicsSelector: PhysicsSelector,
-                       _animationSelector: AnimationSelector
-                      ) extends MapEntity {
+                       _animationSelector: AnimationSelector)
+            extends MapEntity {
         override protected type T = Static
         override val id: String = _id
         override val timeStamp: Long = _timeStamp
@@ -201,24 +182,32 @@ object Entity {
         }
     }
     
-    final class Switch(override val id: String,
-                       override val timeStamp: Long,
-                       override val state: State,
-                       override val position: Position,
-                       override protected val physicsSelector: PhysicsSelector,
-                       override protected val animationSelector: AnimationSelector)
-            extends Switchable with PositionHolder with PhysicsHolder with AnimationHolder {
-        
+    final class Switch(_id: String,
+                       _timeStamp: Long,
+                       _state: State,
+                       _position: Position,
+                       _physicsSelector: PhysicsSelector,
+                       _animationSelector: AnimationSelector)
+            extends Switchable {
         override protected type T = Switch
+        override val id: String = _id
+        override val timeStamp: Long = _timeStamp
+        override val state: State = _state
+        override val position: Position = _position
+        override protected val physicsSelector: PhysicsSelector = _physicsSelector
+        override protected val animationSelector: AnimationSelector = _animationSelector
         
-        override protected def setState(state: State, timeStamp: Long): T =
-            update(state = state, timeStamp = timeStamp)
-        
-        override def setPosition(position: Position): T =
-            update(position = position)
-        
-        private def update(timeStamp: Long = timeStamp, state: State = state, position: Position = position): T =
+        private def update(timeStamp: Long = timeStamp, state: State = state, position: Position = position): T = {
             new Switch(id, timeStamp, state, position, physicsSelector, animationSelector)
+        }
+        
+        override protected def setState(state: State, timeStamp: Long): T = {
+            update(state = state, timeStamp = timeStamp)
+        }
+        
+        override def setPosition(position: Position): T = {
+            update(position = position)
+        }
         
         override def toJSON: JValue = {
             import json.MyJ._
@@ -241,7 +230,7 @@ object Entity {
                      override val lockCode: Long,
                      override protected val physicsSelector: PhysicsSelector,
                      override protected val animationSelector: AnimationSelector)
-            extends Openable with PositionHolder with PhysicsHolder with AnimationHolder {
+            extends Openable {
         
         override protected type T = Door
         
@@ -274,7 +263,7 @@ object Entity {
                        override val position: Position,
                        override protected val physicsSelector: PhysicsSelector,
                        override protected val animationSelector: AnimationSelector)
-            extends Character with PositionHolder with PhysicsHolder with AnimationHolder {
+            extends Character {
         
         override protected type T = Player
         
