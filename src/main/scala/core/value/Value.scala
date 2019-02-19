@@ -12,7 +12,7 @@ abstract class Value extends JSONParsable {
     
     def get(implicit entityHolder: EntityHolder): Option[T]
     
-    def getOrElse(default: T)(implicit entityHolder: EntityHolder): T = {
+    def getOrElse(default: => T)(implicit entityHolder: EntityHolder): T = {
         get match {
             case Some(value) => value
             case None => default
