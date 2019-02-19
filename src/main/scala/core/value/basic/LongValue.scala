@@ -4,6 +4,7 @@ import core.entity.EntityHolder
 import core.value.Value
 import core.value.basic.DoubleValue._
 import core.value.basic.FloatValue._
+import core.value.basic.Implicits._
 import core.value.basic.LongValue._
 import json.JValue
 
@@ -80,27 +81,6 @@ abstract class LongValue extends Value with NumericValue {
 }
 
 object LongValue {
-    implicit def num2l(value: NumericValue): LongValue = NumericToLong(value)
-    
-    implicit def l2V(value: Long): LongValue = LongConstant(value)
-    
-    implicit class L2V(value: Long) {
-        def toValue: LongValue = value
-        
-        def toByteValue: ByteValue = value.toByte
-        
-        def toShortValue: ShortValue = value.toShort
-        
-        def toIntValue: IntValue = value.toInt
-        
-        def toLongValue: LongValue = value.toLong
-        
-        def toFloatValue: FloatValue = value.toFloat
-        
-        def toDoubleValue: DoubleValue = value.toDouble
-        
-        def toStringValue: StringValue = value.toString
-    }
     
     final case object LongNull extends LongValue {
         override def get(implicit entityHolder: EntityHolder): Option[Long] = {

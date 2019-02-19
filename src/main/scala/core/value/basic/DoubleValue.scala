@@ -3,6 +3,7 @@ package core.value.basic
 import core.entity.EntityHolder
 import core.value.Value
 import core.value.basic.DoubleValue._
+import core.value.basic.Implicits._
 import json.JValue
 
 import scala.language.implicitConversions
@@ -68,27 +69,6 @@ abstract class DoubleValue extends Value with NumericValue {
 }
 
 object DoubleValue {
-    implicit def num2d(value: NumericValue): DoubleValue = NumericToDouble(value)
-    
-    implicit def d2V(value: Double): DoubleValue = DoubleConstant(value)
-    
-    implicit class D2V(value: Double) {
-        def toValue: DoubleValue = value
-        
-        def toByteValue: ByteValue = value.toByte
-        
-        def toShortValue: ShortValue = value.toShort
-        
-        def toIntValue: IntValue = value.toInt
-        
-        def toLongValue: LongValue = value.toLong
-        
-        def toFloatValue: FloatValue = value.toFloat
-        
-        def toDoubleValue: DoubleValue = value.toDouble
-        
-        def toStringValue: StringValue = value.toString
-    }
     
     final case object DoubleNull extends DoubleValue {
         override def get(implicit entityHolder: EntityHolder): Option[Double] = {

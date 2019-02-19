@@ -2,7 +2,7 @@ package core.program
 
 import core.event.Event
 import core.program.Statement._
-import core.value.Value
+import core.value.basic.Implicits._
 
 // TODO test class, remove later
 object TestProg extends App {
@@ -33,8 +33,8 @@ object TestProg extends App {
         )
     
     val stWhen =
-        when(Value(true))(
-            when(Value(2) === Value(1))(
+        when(true)(
+            when(2 === 1)(
                 Event.Close("0")
             )(
                 Event.MoveBy("0", 2, 3)
@@ -45,21 +45,21 @@ object TestProg extends App {
         )
     
     val stLoop =
-        loop(Value(true))(
+        loop(true)(
             Event.Open("0"),
             Event.Delete("0"),
             stWhen
         )
     
     val stChoose =
-        choose(Value(2))(
-            variant(Value(1))(
+        choose(2)(
+            variant(1)(
                 Event.Delete("1")
             ),
-            variant(Value(2))(
+            variant(2)(
                 Event.Delete("2")
             ),
-            variant(Value(3))(
+            variant(3)(
                 Event.Delete("3")
             )
         )(

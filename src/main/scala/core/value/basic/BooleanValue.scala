@@ -26,15 +26,6 @@ abstract class BooleanValue extends Value {
 }
 
 object BooleanValue {
-    implicit def bool2V(value: Boolean): BooleanValue = BooleanConstant(value)
-    
-    implicit class Bool2V(value: Boolean) {
-        def toValue: BooleanValue = value
-        
-        def toBooleanValue: BooleanValue = value
-        
-        def toStringValue: StringValue = value.toString
-    }
     
     final case object BooleanNull extends BooleanValue {
         override def get(implicit entityHolder: EntityHolder): Option[Boolean] = {

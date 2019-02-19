@@ -4,6 +4,7 @@ import core.entity.EntityHolder
 import core.value.Value
 import core.value.basic.DoubleValue._
 import core.value.basic.FloatValue._
+import core.value.basic.Implicits._
 import core.value.basic.IntValue._
 import core.value.basic.LongValue._
 import json.JValue
@@ -80,27 +81,6 @@ abstract class IntValue extends Value with NumericValue {
 }
 
 object IntValue {
-    implicit def num2i(value: NumericValue): IntValue = NumericToInt(value)
-    
-    implicit def i2V(value: Int): IntValue = IntConstant(value)
-    
-    implicit class I2V(value: Int) {
-        def toValue: IntValue = value
-        
-        def toByteValue: ByteValue = value.toByte
-        
-        def toShortValue: ShortValue = value.toShort
-        
-        def toIntValue: IntValue = value.toInt
-        
-        def toLongValue: LongValue = value.toLong
-        
-        def toFloatValue: FloatValue = value.toFloat
-        
-        def toDoubleValue: DoubleValue = value.toDouble
-        
-        def toStringValue: StringValue = value.toString
-    }
     
     final case object IntNull extends IntValue {
         override def get(implicit entityHolder: EntityHolder): Option[Int] = {

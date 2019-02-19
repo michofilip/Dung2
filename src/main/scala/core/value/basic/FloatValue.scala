@@ -4,6 +4,7 @@ import core.entity.EntityHolder
 import core.value.Value
 import core.value.basic.DoubleValue._
 import core.value.basic.FloatValue._
+import core.value.basic.Implicits._
 import json.JValue
 
 import scala.language.implicitConversions
@@ -69,27 +70,6 @@ abstract class FloatValue extends Value with NumericValue {
 }
 
 object FloatValue {
-    implicit def num2f(value: NumericValue): FloatValue = NumericToFloat(value)
-    
-    implicit def f2V(value: Float): FloatValue = FloatConstant(value)
-    
-    implicit class F2V(value: Float) {
-        def toValue: FloatValue = value
-        
-        def toByteValue: ByteValue = value.toByte
-        
-        def toShortValue: ShortValue = value.toShort
-        
-        def toIntValue: IntValue = value.toInt
-        
-        def toLongValue: LongValue = value.toLong
-        
-        def toFloatValue: FloatValue = value.toFloat
-        
-        def toDoubleValue: DoubleValue = value.toDouble
-        
-        def toStringValue: StringValue = value.toString
-    }
     
     final case object FloatNull extends FloatValue {
         override def get(implicit entityHolder: EntityHolder): Option[Float] = {

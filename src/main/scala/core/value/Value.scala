@@ -41,31 +41,31 @@ abstract class Value extends JSONParsable {
     }
 }
 
-object Value {
-    // basic values
-    def apply(value: Boolean): BooleanConstant = BooleanConstant(value)
-    
-    def apply(value: Byte): ByteConstant = ByteConstant(value)
-    
-    def apply(value: Short): ShortConstant = ShortConstant(value)
-    
-    def apply(value: Int): IntConstant = IntConstant(value)
-    
-    def apply(value: Long): LongConstant = LongConstant(value)
-    
-    def apply(value: Float): FloatConstant = FloatConstant(value)
-    
-    def apply(value: Double): DoubleConstant = DoubleConstant(value)
-    
-    def apply(value: Char): CharConstant = CharConstant(value)
-    
-    def apply(value: String): StringConstant = StringConstant(value)
-    
-    // custom values
-    def apply(value: State): StateConstant = StateConstant(value)
-    
-    def apply(value: Coordinates): CoordinatesConstant = CoordinatesConstant(value)
-    
-    def apply(value: Direction): DirectionConstant = DirectionConstant(value)
-    
-}
+//object Value {
+//    // basic values
+//    def apply(value: Boolean): BooleanConstant = BooleanConstant(value)
+//
+//    def apply(value: Byte): ByteConstant = ByteConstant(value)
+//
+//    def apply(value: Short): ShortConstant = ShortConstant(value)
+//
+//    def apply(value: Int): IntConstant = IntConstant(value)
+//
+//    def apply(value: Long): LongConstant = LongConstant(value)
+//
+//    def apply(value: Float): FloatConstant = FloatConstant(value)
+//
+//    def apply(value: Double): DoubleConstant = DoubleConstant(value)
+//
+//    def apply(value: Char): CharConstant = CharConstant(value)
+//
+//    def apply(value: String): StringConstant = StringConstant(value)
+//
+//    // custom values
+//    def apply(value: State): StateConstant = StateConstant(value)
+//
+//    def apply(value: Coordinates): CoordinatesConstant = CoordinatesConstant(value)
+//
+//    def apply(value: Direction): DirectionConstant = DirectionConstant(value)
+//
+//}

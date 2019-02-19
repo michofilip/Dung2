@@ -11,15 +11,6 @@ abstract class CharValue extends Value {
 }
 
 object CharValue {
-    implicit def char2V(value: Char): CharValue = CharConstant(value)
-    
-    implicit class Char2V(value: Char) {
-        def toValue: CharValue = value
-        
-        def toCharValue: CharValue = value
-        
-        def toStringValue: StringValue = value.toString
-    }
     
     final case object CharNull extends CharValue {
         override def get(implicit entityHolder: EntityHolder): Option[Char] = {

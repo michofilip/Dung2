@@ -14,15 +14,6 @@ abstract class StringValue extends Value {
 }
 
 object StringValue {
-    implicit def num2str(value: NumericValue): StringValue = NumericToString(value)
-    
-    implicit def str2V(value: String): StringValue = StringConstant(value)
-    
-    implicit class String2V(value: String) {
-        def toValue: StringValue = value
-        
-        def toStringValue: StringValue = value
-    }
     
     final case object StringNull extends StringValue {
         override def get(implicit entityHolder: EntityHolder): Option[String] = {

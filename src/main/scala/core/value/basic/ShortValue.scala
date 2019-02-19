@@ -4,6 +4,7 @@ import core.entity.EntityHolder
 import core.value.Value
 import core.value.basic.DoubleValue._
 import core.value.basic.FloatValue._
+import core.value.basic.Implicits._
 import core.value.basic.IntValue._
 import core.value.basic.LongValue._
 import core.value.basic.ShortValue._
@@ -81,27 +82,6 @@ abstract class ShortValue extends Value with NumericValue {
 }
 
 object ShortValue {
-    implicit def num2s(value: NumericValue): ShortValue = NumericToShort(value)
-    
-    implicit def s2V(value: Short): ShortValue = ShortConstant(value)
-    
-    implicit class S2V(value: Short) {
-        def toValue: ShortValue = value
-        
-        def toByteValue: ByteValue = value.toByte
-        
-        def toShortValue: ShortValue = value.toShort
-        
-        def toIntValue: IntValue = value.toInt
-        
-        def toLongValue: LongValue = value.toLong
-        
-        def toFloatValue: FloatValue = value.toFloat
-        
-        def toDoubleValue: DoubleValue = value.toDouble
-        
-        def toStringValue: StringValue = value.toString
-    }
     
     final case object ShortNull extends ShortValue {
         override def get(implicit entityHolder: EntityHolder): Option[Short] = {
