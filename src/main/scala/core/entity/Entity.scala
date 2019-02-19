@@ -9,7 +9,7 @@ import core.entity.selectors.{AnimationSelector, PhysicsSelector}
 import core.program.Script
 import core.timer.Timer
 import core.value.Value
-import json.{JSONParsable, JValue}
+import json.{JSONParsable, JValue, MyJ}
 
 sealed abstract class Entity extends JSONParsable {
     protected type T <: Entity
@@ -27,7 +27,7 @@ object Entity {
     }
     
     sealed trait PositionHolder extends Entity {
-        def position: Position
+        val position: Position
         
         protected def setPosition(position: Position): T
         
@@ -133,7 +133,9 @@ object Entity {
     //    }
     
     // abstract classes
-    sealed abstract class Switchable extends Entity with StateHolder {
+    abstract class MapEntity extends Entity with PositionHolder with PhysicsHolder with AnimationHolder
+    
+    abstract class Switchable extends MapEntity with StateHolder {
         def setSwitchableState(switchableState: SwitchableState, timeStamp: Long): T = {
             (state, switchableState) match {
                 case (Off, SwitchingOn) => setState(switchableState, timeStamp)
@@ -146,7 +148,7 @@ object Entity {
         }
     }
     
-    sealed abstract class Openable extends Entity with StateHolder {
+    abstract class Openable extends MapEntity with StateHolder {
         val lockCode: Long
         
         def setOpenableState(openableState: OpenableState, timeStamp: Long): T = {
@@ -166,7 +168,7 @@ object Entity {
         }
     }
     
-    sealed abstract class Character extends Entity with StateHolder {
+    abstract class Character extends MapEntity with StateHolder {
         // TODO basic template
         def setCharacterState(characterState: CharacterState, timeStamp: Long): T =
             if (characterState != state)
@@ -280,28 +282,61 @@ object Entity {
     }
     
     // Physical classes
-    final class Static(override val id: String,
-                       override val timeStamp: Long,
-                       override val position: Position,
-                       override protected val physicsSelector: PhysicsSelector,
-                       override protected val animationSelector: AnimationSelector)
-            extends Entity with PositionHolder with PhysicsHolder with AnimationHolder {
-        
+    //    final class Static(override val id: String,
+    //                       override val timeStamp: Long,
+    //                       override val position: Position,
+    //                       override protected val physicsSelector: PhysicsSelector,
+    //                       override protected val animationSelector: AnimationSelector)
+    //            extends Entity with PositionHolder with PhysicsHolder with AnimationHolder {
+    //
+    //        override protected type T = Static
+    //
+    //        override def setPosition(position: Position): Static =
+    //            update(position = position)
+    //
+    //        private def update(position: Position = position): T =
+    //            new Static(id, timeStamp, position, physicsSelector, animationSelector)
+    //
+    //        override def toJSON: JValue = {
+    //            import json.MyJ._
+    //            jObject(
+    //                "entity" -> "Static",
+    //                "id" -> id,
+    //                "timeStamp" -> timeStamp,
+    //                "position" -> position.toJSON,
+    //                "physicsSelector" -> physicsSelector.id,
+    //                "animationSelector" -> animationSelector.id
+    //            )
+    //        }
+    //    }
+    
+    final class Static(_id: String,
+                       _timeStamp: Long,
+                       _position: Position,
+                       _physicsSelector: PhysicsSelector,
+                       _animationSelector: AnimationSelector
+                      ) extends MapEntity {
         override protected type T = Static
+        override val id: String = _id
+        override val timeStamp: Long = _timeStamp
+        override val position: Position = _position
+        override protected val physicsSelector: PhysicsSelector = _physicsSelector
+        override protected val animationSelector: AnimationSelector = _animationSelector
         
-        override def setPosition(position: Position): Static =
-            update(position = position)
-        
-        private def update(position: Position = position): T =
+        private def update(position: Position = position): Static = {
             new Static(id, timeStamp, position, physicsSelector, animationSelector)
+        }
+        
+        override protected def setPosition(position: Position): Static = {
+            update(position = position)
+        }
         
         override def toJSON: JValue = {
-            import json.MyJ._
-            jObject(
+            MyJ.jObject(
                 "entity" -> "Static",
                 "id" -> id,
                 "timeStamp" -> timeStamp,
-                "position" -> position.toJSON,
+                "position" -> position,
                 "physicsSelector" -> physicsSelector.id,
                 "animationSelector" -> animationSelector.id
             )
