@@ -2,7 +2,8 @@ package core.event
 
 import core.entity.Entity._
 import core.entity.properties.state.State
-import core.entity.{Entity, EntityHolder}
+import core.entity.traits.{PositionHolder, ScriptHolder, TimeHolder}
+import core.entity.{Character, Entity, EntityHolder, Openable, Switchable}
 import core.program.Instruction._
 import core.program.Script
 import core.value.custom.CustomLongValue.{GetTime, GetTurn}

@@ -1,11 +1,9 @@
 package core.value.custom
 
-import core.entity.Entity.PositionHolder
 import core.entity.EntityHolder
 import core.entity.properties.position.Coordinates
+import core.entity.traits.PositionHolder
 import core.value.Value
-import core.value.basic.Implicits._
-import core.value.basic.StringValue
 import json.JValue
 
 abstract class CoordinatesValue extends Value {
@@ -13,15 +11,6 @@ abstract class CoordinatesValue extends Value {
 }
 
 object CoordinatesValue {
-//    implicit def coordinates2V(value: Coordinates): CoordinatesValue = CoordinatesConstant(value)
-//
-//    implicit class Coordinates2V(value: Coordinates) {
-//        def toValue: CoordinatesValue = value
-//
-//        def toCoordinatesValue: CoordinatesValue = value
-//
-//        def toStringValue: StringValue = value.toString
-//    }
     
     final case object CoordinatesNull extends CoordinatesValue {
         override def get(implicit entityHolder: EntityHolder): Option[Coordinates] = {

@@ -1,7 +1,7 @@
 package core.entity
 
-import core.entity.Entity.PositionHolder
 import core.entity.properties.position.Coordinates
+import core.entity.traits.PositionHolder
 
 class EntityHolder private(private val entitiesById: Map[String, Entity],
                            private val entitiesByCoordinates: Map[Coordinates, Map[String, Entity]]) {

@@ -6,6 +6,7 @@ import core.entity.properties.position.{Coordinates, Position}
 import core.entity.properties.state.State
 import core.entity.properties.state.State._
 import core.entity.selectors.{AnimationSelector, PhysicsSelector}
+import core.entity.traits._
 import core.program.Script
 import core.timer.Timer
 import core.value.Value
@@ -19,163 +20,20 @@ abstract class Entity extends JSONParsable {
 
 object Entity {
     
-    // traits
-//    sealed trait StateHolder extends Entity {
-//        val state: State
-//
-//        protected def setState(state: State, timeStamp: Long): T
-//    }
-    
-//     trait PositionHolder extends Entity {
-//        val position: Position
-//
-//        protected def setPosition(position: Position): T
-//
-//        def moveTo(x: Int = position.coordinates.x, y: Int = position.coordinates.y): T = {
-//            setPosition(Position(Coordinates(x, y), position.direction))
-//        }
-//
-//        def moveBy(dx: Int = 0, dy: Int = 0): T = {
-//            moveTo(position.coordinates.x + dx, position.coordinates.y + dy)
-//        }
-//
-//        def turnClockwise90: T = {
-//            setPosition(Position(position.coordinates, position.direction.turnClockwise90))
-//        }
-//
-//        def turnCounterClockwise90: T = {
-//            setPosition(Position(position.coordinates, position.direction.turnCounterClockwise90))
-//
-//        }
-//
-//        def turn180: T = {
-//            setPosition(Position(position.coordinates, position.direction.turn180))
-//        }
-//    }
-    
-//     trait PhysicsHolder extends Entity {
-//        protected val physicsSelector: PhysicsSelector
-//
-//        def physicsSelectorId: String = {
-//            physicsSelector.id
-//        }
-//
-//        def physics: Physics = {
-//            val stateOpt = this match {
-//                case en: StateHolder => Some(en.state)
-//                case _ => None
-//            }
-//            physicsSelector.getPhysics(stateOpt)
-//        }
-//    }
-    
-//     trait AnimationHolder extends Entity {
-//        protected val animationSelector: AnimationSelector
-//
-//        def animationSelectorId: String = {
-//            animationSelector.id
-//        }
-//
-//        private def animation: Animation = {
-//            val stateOpt = this match {
-//                case en: StateHolder => Some(en.state)
-//                case _ => None
-//            }
-//            val directionOpt = this match {
-//                case en: PositionHolder => Some(en.position.direction)
-//                case _ => None
-//            }
-//            animationSelector.getAnimation(stateOpt, directionOpt)
-//        }
-//
-//        def getFrame(implicit timer: Timer): Frame = {
-//            animation.getFrame(timer.getTime - timeStamp)
-//        }
-//    }
-    
-//     trait ScriptHolder extends Entity {
-//        protected val scripts: Map[String, Script]
-//
-//        def getScript(name: String): Script = scripts.getOrElse(name, Script.emptyScript)
-//    }
-    
-//     trait TimeHolder extends Entity {
-//        protected val timer: Timer
-//
-//        def getTime: Long = {
-//            timer.getTime
-//        }
-//
-//        def isRunning: Boolean = {
-//            timer.isRunning
-//        }
-//
-//        def start(): T
-//
-//        def stop(): T
-//    }
-    
-//     trait TurnHolder extends Entity {
-//        val turn: Long
-//
-//        def nextTurn: T
-//    }
-    
-//     trait ValueHolder extends Entity {
-//        val value: Value
-//
-//        def setValue(value: Value): T
-//    }
-    
     //todo experimental
     //    sealed trait InventoryHolder extends Entity {
     //        //        val inventory
     //    }
     
-    // abstract classes
-    abstract class MapEntity extends Entity with PositionHolder with PhysicsHolder with AnimationHolder
     
-    abstract class Switchable extends MapEntity with StateHolder {
-        def setSwitchableState(switchableState: SwitchableState, timeStamp: Long): T = {
-            (state, switchableState) match {
-                case (Off, SwitchingOn) => setState(switchableState, timeStamp)
-                case (SwitchingOn, On) => setState(switchableState, timeStamp)
-                case (On, SwitchingOff) => setState(switchableState, timeStamp)
-                case (SwitchingOff, Off) => setState(switchableState, timeStamp)
-                
-                case _ => setState(state, this.timeStamp)
-            }
-        }
-    }
-    
-    abstract class Openable extends MapEntity with StateHolder {
-        val lockCode: Long
-        
-        def setOpenableState(openableState: OpenableState, timeStamp: Long): T = {
-            (state, openableState) match {
-                case (Open, Closing) => setState(openableState, timeStamp)
-                case (Closing, Close) => setState(openableState, timeStamp)
-                case (Close, Opening) => setState(openableState, timeStamp)
-                case (Opening, Open) => setState(openableState, timeStamp)
-                
-                case (Close, Locking) => setState(openableState, timeStamp)
-                case (Locking, Locked) => setState(openableState, timeStamp)
-                case (Locked, Unlocking) => setState(openableState, timeStamp)
-                case (Unlocking, Close) => setState(openableState, timeStamp)
-                
-                case _ => setState(state, this.timeStamp)
-            }
-        }
-    }
-    
-    abstract class Character extends MapEntity with StateHolder {
-        // TODO basic template
-        def setCharacterState(characterState: CharacterState, timeStamp: Long): T =
-            if (characterState != state)
-                setState(characterState, timeStamp)
-            else
-                setState(state, timeStamp)
-    }
+//    abstract class Character extends MapEntity with StateHolder {
+//        // TODO basic template
+//        def setCharacterState(characterState: CharacterState, timeStamp: Long): T =
+//            if (characterState != state)
+//                setState(characterState, timeStamp)
+//            else
+//                setState(state, timeStamp)
+//    }
     
     // Control classes
     final class EntityCreator(override val timeStamp: Long) extends Entity {

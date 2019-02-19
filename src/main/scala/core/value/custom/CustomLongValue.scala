@@ -1,7 +1,7 @@
 package core.value.custom
 
-import core.entity.Entity.{TimeHolder, TurnCounter}
 import core.entity.EntityHolder
+import core.entity.traits.{TimeHolder, TurnHolder}
 import core.value.basic.LongValue
 import json.JValue
 
@@ -26,7 +26,7 @@ object CustomLongValue {
     final case class GetTurn() extends LongValue {
         override def get(implicit entityHolder: EntityHolder): Option[Long] = {
             entityHolder.getById("TurnCounter") match {
-                case Some(en: TurnCounter) => Some(en.turn)
+                case Some(en: TurnHolder) => Some(en.turn)
                 case _ => None
             }
         }

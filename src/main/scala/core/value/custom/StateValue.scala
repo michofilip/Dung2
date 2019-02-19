@@ -1,11 +1,9 @@
 package core.value.custom
 
-import core.entity.Entity.StateHolder
 import core.entity.EntityHolder
 import core.entity.properties.state.State
+import core.entity.traits.StateHolder
 import core.value.Value
-import core.value.basic.Implicits._
-import core.value.basic.StringValue
 import json.JValue
 
 sealed abstract class StateValue extends Value {
@@ -13,15 +11,6 @@ sealed abstract class StateValue extends Value {
 }
 
 object StateValue {
-//    implicit def state2V(value: State): StateValue = StateConstant(value)
-//
-//    implicit class State2V(value: State) {
-//        def toValue: StateValue = value
-//
-//        def toStateValue: StateValue = value
-//
-//        def toStringValue: StringValue = value.toString
-//    }
     
     final case object StateNull extends StateValue {
         override def get(implicit entityHolder: EntityHolder): Option[State] = {

@@ -1,11 +1,9 @@
 package core.value.custom
 
-import core.entity.Entity.PositionHolder
 import core.entity.EntityHolder
 import core.entity.properties.position.Direction
+import core.entity.traits.PositionHolder
 import core.value.Value
-import core.value.basic.Implicits._
-import core.value.basic.StringValue
 import json.JValue
 
 abstract class DirectionValue extends Value {
@@ -13,15 +11,6 @@ abstract class DirectionValue extends Value {
 }
 
 object DirectionValue {
-//    implicit def direction2V(value: Direction): DirectionConstant = DirectionConstant(value)
-//
-//    implicit class Direction2V(value: Direction) {
-//        def toValue: DirectionValue = value
-//
-//        def toCoordinatesValue: DirectionValue = value
-//
-//        def toStringValue: StringValue = value.toString
-//    }
     
     final case object DirectionNull extends DirectionValue {
         override def get(implicit entityHolder: EntityHolder): Option[Direction] = {

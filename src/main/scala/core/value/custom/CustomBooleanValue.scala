@@ -1,6 +1,6 @@
 package core.value.custom
 
-import core.entity.Entity.PhysicsHolder
+import core.entity.traits.PhysicsHolder
 import core.entity.{Entity, EntityHolder}
 import core.value.basic.BooleanValue
 import json.JValue
