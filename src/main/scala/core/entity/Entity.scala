@@ -11,7 +11,7 @@ import core.timer.Timer
 import core.value.Value
 import json.{JSONParsable, JValue, MyJ}
 
-sealed abstract class Entity extends JSONParsable {
+abstract class Entity extends JSONParsable {
     protected type T <: Entity
     val id: String
     val timeStamp: Long
@@ -20,112 +20,112 @@ sealed abstract class Entity extends JSONParsable {
 object Entity {
     
     // traits
-    sealed trait StateHolder extends Entity {
-        val state: State
-        
-        protected def setState(state: State, timeStamp: Long): T
-    }
+//    sealed trait StateHolder extends Entity {
+//        val state: State
+//
+//        protected def setState(state: State, timeStamp: Long): T
+//    }
     
-    sealed trait PositionHolder extends Entity {
-        val position: Position
-        
-        protected def setPosition(position: Position): T
-        
-        def moveTo(x: Int = position.coordinates.x, y: Int = position.coordinates.y): T = {
-            setPosition(Position(Coordinates(x, y), position.direction))
-        }
-        
-        def moveBy(dx: Int = 0, dy: Int = 0): T = {
-            moveTo(position.coordinates.x + dx, position.coordinates.y + dy)
-        }
-        
-        def turnClockwise90: T = {
-            setPosition(Position(position.coordinates, position.direction.turnClockwise90))
-        }
-        
-        def turnCounterClockwise90: T = {
-            setPosition(Position(position.coordinates, position.direction.turnCounterClockwise90))
-            
-        }
-        
-        def turn180: T = {
-            setPosition(Position(position.coordinates, position.direction.turn180))
-        }
-    }
+//     trait PositionHolder extends Entity {
+//        val position: Position
+//
+//        protected def setPosition(position: Position): T
+//
+//        def moveTo(x: Int = position.coordinates.x, y: Int = position.coordinates.y): T = {
+//            setPosition(Position(Coordinates(x, y), position.direction))
+//        }
+//
+//        def moveBy(dx: Int = 0, dy: Int = 0): T = {
+//            moveTo(position.coordinates.x + dx, position.coordinates.y + dy)
+//        }
+//
+//        def turnClockwise90: T = {
+//            setPosition(Position(position.coordinates, position.direction.turnClockwise90))
+//        }
+//
+//        def turnCounterClockwise90: T = {
+//            setPosition(Position(position.coordinates, position.direction.turnCounterClockwise90))
+//
+//        }
+//
+//        def turn180: T = {
+//            setPosition(Position(position.coordinates, position.direction.turn180))
+//        }
+//    }
     
-    sealed trait PhysicsHolder extends Entity {
-        protected val physicsSelector: PhysicsSelector
-        
-        def physicsSelectorId: String = {
-            physicsSelector.id
-        }
-        
-        def physics: Physics = {
-            val stateOpt = this match {
-                case en: StateHolder => Some(en.state)
-                case _ => None
-            }
-            physicsSelector.getPhysics(stateOpt)
-        }
-    }
+//     trait PhysicsHolder extends Entity {
+//        protected val physicsSelector: PhysicsSelector
+//
+//        def physicsSelectorId: String = {
+//            physicsSelector.id
+//        }
+//
+//        def physics: Physics = {
+//            val stateOpt = this match {
+//                case en: StateHolder => Some(en.state)
+//                case _ => None
+//            }
+//            physicsSelector.getPhysics(stateOpt)
+//        }
+//    }
     
-    sealed trait AnimationHolder extends Entity {
-        protected val animationSelector: AnimationSelector
-        
-        def animationSelectorId: String = {
-            animationSelector.id
-        }
-        
-        private def animation: Animation = {
-            val stateOpt = this match {
-                case en: StateHolder => Some(en.state)
-                case _ => None
-            }
-            val directionOpt = this match {
-                case en: PositionHolder => Some(en.position.direction)
-                case _ => None
-            }
-            animationSelector.getAnimation(stateOpt, directionOpt)
-        }
-        
-        def getFrame(implicit timer: Timer): Frame = {
-            animation.getFrame(timer.getTime - timeStamp)
-        }
-    }
+//     trait AnimationHolder extends Entity {
+//        protected val animationSelector: AnimationSelector
+//
+//        def animationSelectorId: String = {
+//            animationSelector.id
+//        }
+//
+//        private def animation: Animation = {
+//            val stateOpt = this match {
+//                case en: StateHolder => Some(en.state)
+//                case _ => None
+//            }
+//            val directionOpt = this match {
+//                case en: PositionHolder => Some(en.position.direction)
+//                case _ => None
+//            }
+//            animationSelector.getAnimation(stateOpt, directionOpt)
+//        }
+//
+//        def getFrame(implicit timer: Timer): Frame = {
+//            animation.getFrame(timer.getTime - timeStamp)
+//        }
+//    }
     
-    sealed trait ScriptHolder extends Entity {
-        protected val scripts: Map[String, Script]
-        
-        def getScript(name: String): Script = scripts.getOrElse(name, Script.emptyScript)
-    }
+//     trait ScriptHolder extends Entity {
+//        protected val scripts: Map[String, Script]
+//
+//        def getScript(name: String): Script = scripts.getOrElse(name, Script.emptyScript)
+//    }
     
-    sealed trait TimeHolder extends Entity {
-        protected val timer: Timer
-        
-        def getTime: Long = {
-            timer.getTime
-        }
-        
-        def isRunning: Boolean = {
-            timer.isRunning
-        }
-        
-        def start(): T
-        
-        def stop(): T
-    }
+//     trait TimeHolder extends Entity {
+//        protected val timer: Timer
+//
+//        def getTime: Long = {
+//            timer.getTime
+//        }
+//
+//        def isRunning: Boolean = {
+//            timer.isRunning
+//        }
+//
+//        def start(): T
+//
+//        def stop(): T
+//    }
     
-    sealed trait TurnHolder extends Entity {
-        val turn: Long
-        
-        def nextTurn: T
-    }
+//     trait TurnHolder extends Entity {
+//        val turn: Long
+//
+//        def nextTurn: T
+//    }
     
-    sealed trait ValueHolder extends Entity {
-        val value: Value
-        
-        def setValue(value: Value): T
-    }
+//     trait ValueHolder extends Entity {
+//        val value: Value
+//
+//        def setValue(value: Value): T
+//    }
     
     //todo experimental
     //    sealed trait InventoryHolder extends Entity {
