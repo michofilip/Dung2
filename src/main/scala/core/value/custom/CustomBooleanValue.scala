@@ -7,6 +7,20 @@ import json.JValue
 
 object CustomBooleanValue {
     
+    final case class Exists(entityId: String) extends BooleanValue {
+        override def get(implicit entityHolder: EntityHolder): Option[Boolean] = {
+            Some(entityHolder.contains(entityId))
+        }
+    
+        override def toJSON: JValue = {
+            import json.MyJ._
+            jObject(
+                "class" -> this.getClass.getSimpleName,
+                "entityId" -> entityId
+            )
+        }
+    }
+    
     final case class IsSolidAtCoordinates(value: CoordinatesValue) extends BooleanValue {
         override def get(implicit entityHolder: EntityHolder): Option[Boolean] = {
             val condition: Entity => Boolean = {

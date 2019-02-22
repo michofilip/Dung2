@@ -1,12 +1,16 @@
 package core.event
 
-import core.entity.Entity._
+import core.entity.properties.position.{Coordinates, Direction}
 import core.entity.properties.state.State
-import core.entity.traits.{PositionHolder, ScriptHolder, TimeHolder}
+import core.entity.traits._
 import core.entity.{Character, Entity, EntityHolder, Openable, Switchable}
 import core.program.Instruction._
 import core.program.Script
+import core.value.Value
+import core.value.basic.Implicits._
+import core.value.basic.UnitValue
 import core.value.custom.CustomLongValue.{GetTime, GetTurn}
+import core.value.custom.Implicits._
 import json.{JSONParsable, JValue}
 
 import scala.language.implicitConversions
@@ -79,7 +83,7 @@ object Event {
         }
     }
     
-    // state setter
+    // state
     final case class SetState(override val entityId: String, state: State) extends Event {
         override def applyTo(entity: Entity)(implicit entityHolder: EntityHolder): (Vector[Entity], Vector[Event]) = {
             val time = GetTime().getOrElse(0)
@@ -253,12 +257,80 @@ object Event {
         }
     }
     
+    // value
+    final case class SetValue(override val entityId: String, value: Value) extends Event {
+        override def applyTo(entity: Entity)(implicit entityHolder: EntityHolder): (Vector[Entity], Vector[Event]) = {
+            entity match {
+                case en: ValueHolder =>
+                    (en.setValue(value), Vector.empty)
+                case _ =>
+                    (entity, Vector.empty)
+            }
+        }
+        
+        override def toJSON: JValue = {
+            import json.MyJ._
+            jObject(
+                "event" -> this.getClass.getSimpleName,
+                "value" -> value
+            )
+        }
+    }
+    
+    final case class SetCalculatedValue(override val entityId: String, value: Value) extends Event {
+        override def applyTo(entity: Entity)(implicit entityHolder: EntityHolder): (Vector[Entity], Vector[Event]) = {
+            entity match {
+                case en: ValueHolder =>
+                    value.get match {
+                        case Some(v: Boolean) =>
+                            (en.setValue(v), Vector.empty)
+                        case Some(v: Byte) =>
+                            (en.setValue(v), Vector.empty)
+                        case Some(v: Short) =>
+                            (en.setValue(v), Vector.empty)
+                        case Some(v: Int) =>
+                            (en.setValue(v), Vector.empty)
+                        case Some(v: Long) =>
+                            (en.setValue(v), Vector.empty)
+                        case Some(v: Float) =>
+                            (en.setValue(v), Vector.empty)
+                        case Some(v: Double) =>
+                            (en.setValue(v), Vector.empty)
+                        case Some(v: Char) =>
+                            (en.setValue(v), Vector.empty)
+                        case Some(v: String) =>
+                            (en.setValue(v), Vector.empty)
+                        
+                        case Some(v: Coordinates) =>
+                            (en.setValue(v), Vector.empty)
+                        case Some(v: Direction) =>
+                            (en.setValue(v), Vector.empty)
+                        case Some(v: State) =>
+                            (en.setValue(v), Vector.empty)
+                        
+                        case None =>
+                            (en.setValue(UnitValue), Vector.empty)
+                    }
+                case _ =>
+                    (entity, Vector.empty)
+            }
+        }
+        
+        override def toJSON: JValue = {
+            import json.MyJ._
+            jObject(
+                "event" -> this.getClass.getSimpleName,
+                "value" -> value
+            )
+        }
+    }
+    
     // script
     final case class RunScript(override val entityId: String, scriptName: String) extends Event {
         override def applyTo(entity: Entity)(implicit entityHolder: EntityHolder): (Vector[Entity], Vector[Event]) = {
             entity match {
                 case ent: ScriptHolder =>
-                    (entity, ExecuteScript(entityId, ent.getScript(scriptName), 0))
+                    (entity, ExecuteScriptLine(entityId, ent.getScript(scriptName), 0))
                 case _ =>
                     (entity, Vector.empty)
             }
@@ -274,24 +346,24 @@ object Event {
         }
     }
     
-    final case class ExecuteScript(override val entityId: String, script: Script, lineNo: Int) extends Event {
+    final case class ExecuteScriptLine(override val entityId: String, script: Script, lineNo: Int) extends Event {
         override def applyTo(entity: Entity)(implicit entityHolder: EntityHolder): (Vector[Entity], Vector[Event]) = {
             script.getInstruction(lineNo) match {
                 case EX =>
                     (entity, Vector.empty)
                 case DO(events) =>
-                    (entity, ExecuteScript(entityId, script, lineNo + 1) ++ events)
+                    (entity, ExecuteScriptLine(entityId, script, lineNo + 1) ++ events)
                 case LB(_) =>
-                    (entity, ExecuteScript(entityId, script, lineNo + 1))
+                    (entity, ExecuteScriptLine(entityId, script, lineNo + 1))
                 case GT(labelId) =>
                     script.labelMap.get(labelId) match {
-                        case Some(labelLineNo) => (entity, ExecuteScript(entityId, script, labelLineNo + 1))
-                        case None => (entity, ExecuteScript(entityId, script, lineNo + 1))
+                        case Some(labelLineNo) => (entity, ExecuteScriptLine(entityId, script, labelLineNo + 1))
+                        case None => (entity, ExecuteScriptLine(entityId, script, lineNo + 1))
                     }
                 case IF(condition) =>
                     condition.get match {
-                        case Some(true) => (entity, ExecuteScript(entityId, script, lineNo + 2))
-                        case Some(false) => (entity, ExecuteScript(entityId, script, lineNo + 1))
+                        case Some(true) => (entity, ExecuteScriptLine(entityId, script, lineNo + 2))
+                        case Some(false) => (entity, ExecuteScriptLine(entityId, script, lineNo + 1))
                         case None => (entity, Vector.empty)
                     }
             }
@@ -391,7 +463,7 @@ object Event {
         
         override def applyTo(entity: Entity)(implicit entityHolder: EntityHolder): (Vector[Entity], Vector[Event]) = {
             entity match {
-                case en: TurnCounter =>
+                case en: TurnHolder =>
                     (en.nextTurn, Vector.empty)
                 case _ =>
                     (entity, Vector.empty)

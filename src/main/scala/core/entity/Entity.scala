@@ -31,6 +31,7 @@ object Entity {
         }
     }
     
+    // todo remove
     final class ScriptRunner(override val timeStamp: Long) extends Entity {
         override protected type T = ScriptRunner
         override val id: String = "ScriptRunner"
@@ -223,25 +224,34 @@ object Entity {
         }
     }
     
-    final class Door(override val id: String,
-                     override val timeStamp: Long,
-                     override val state: State,
-                     override val position: Position,
-                     override val lockCode: Long,
-                     override protected val physicsSelector: PhysicsSelector,
-                     override protected val animationSelector: AnimationSelector)
+    final class Door(_id: String,
+                     _timeStamp: Long,
+                     _state: State,
+                     _position: Position,
+                     _lockCode: Long,
+                     _physicsSelector: PhysicsSelector,
+                     _animationSelector: AnimationSelector)
             extends Openable {
-        
         override protected type T = Door
+        override val id: String = _id
+        override val timeStamp: Long = _timeStamp
+        override val state: State = _state
+        override val position: Position = _position
+        override val lockCode: Long = _lockCode
+        override protected val physicsSelector: PhysicsSelector = _physicsSelector
+        override protected val animationSelector: AnimationSelector = _animationSelector
         
-        override protected def setState(state: State, timeStamp: Long): T =
-            update(state = state, timeStamp = timeStamp)
-        
-        override def setPosition(position: Position): T =
-            update(position = position)
-        
-        private def update(timeStamp: Long = timeStamp, state: State = state, position: Position = position): T =
+        private def update(timeStamp: Long = timeStamp, state: State = state, position: Position = position): T = {
             new Door(id, timeStamp, state, position, lockCode, physicsSelector, animationSelector)
+        }
+        
+        override protected def setState(state: State, timeStamp: Long): T = {
+            update(state = state, timeStamp = timeStamp)
+        }
+        
+        override def setPosition(position: Position): T = {
+            update(position = position)
+        }
         
         override def toJSON: JValue = {
             import json.MyJ._
@@ -258,23 +268,32 @@ object Entity {
         }
     }
     
-    final class Player(override val id: String, override val timeStamp: Long,
-                       override val state: State,
-                       override val position: Position,
-                       override protected val physicsSelector: PhysicsSelector,
-                       override protected val animationSelector: AnimationSelector)
+    final class Player(_id: String,
+                       _timeStamp: Long,
+                       _state: State,
+                       _position: Position,
+                       _physicsSelector: PhysicsSelector,
+                       _animationSelector: AnimationSelector)
             extends Character {
-        
         override protected type T = Player
+        override val id: String = _id
+        override val timeStamp: Long = _timeStamp
+        override val state: State = _state
+        override val position: Position = _position
+        override protected val physicsSelector: PhysicsSelector = _physicsSelector
+        override protected val animationSelector: AnimationSelector = _animationSelector
         
-        override protected def setState(state: State, timeStamp: Long): T =
+        override protected def setState(state: State, timeStamp: Long): T = {
             update(state = state, timeStamp = timeStamp)
+        }
         
-        override def setPosition(position: Position): T =
+        override def setPosition(position: Position): T = {
             update(position = position)
+        }
         
-        private def update(timeStamp: Long = timeStamp, state: State = state, position: Position = position): T =
+        private def update(timeStamp: Long = timeStamp, state: State = state, position: Position = position): T = {
             new Player(id, timeStamp, state, position, physicsSelector, animationSelector)
+        }
         
         override def toJSON: JValue = {
             import json.MyJ._

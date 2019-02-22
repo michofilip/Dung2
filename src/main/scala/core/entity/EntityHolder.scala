@@ -23,9 +23,13 @@ class EntityHolder private(private val entitiesById: Map[String, Entity],
         entities.foldLeft(this)((entityHolder, entity) => entityHolder add entity)
     }
     
-    def +(entity: Entity): EntityHolder = add(entity)
+    def +(entity: Entity): EntityHolder = {
+        add(entity)
+    }
     
-    def ++(entities: Seq[Entity]): EntityHolder = addAll(entities)
+    def ++(entities: Seq[Entity]): EntityHolder = {
+        addAll(entities)
+    }
     
     def remove(entity: Entity): EntityHolder = {
         val newEntitiesById = entitiesById - entity.id
@@ -47,9 +51,17 @@ class EntityHolder private(private val entitiesById: Map[String, Entity],
         entities.foldLeft(this)((entityHolder, entity) => entityHolder remove entity)
     }
     
-    def -(entity: Entity): EntityHolder = remove(entity)
+    def -(entity: Entity): EntityHolder = {
+        remove(entity)
+    }
     
-    def --(entities: Seq[Entity]): EntityHolder = removeAll(entities)
+    def --(entities: Seq[Entity]): EntityHolder = {
+        removeAll(entities)
+    }
+    
+    def contains(id: String): Boolean = {
+        entitiesById.contains(id)
+    }
     
     def getAll: Vector[Entity] = {
         entitiesById.values.toVector
