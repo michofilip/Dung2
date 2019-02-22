@@ -22,7 +22,6 @@ trait PositionHolder extends Entity {
     
     def turnCounterClockwise90: T = {
         setPosition(Position(position.coordinates, position.direction.turnCounterClockwise90))
-        
     }
     
     def turn180: T = {
