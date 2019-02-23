@@ -2,7 +2,7 @@ package core.event
 
 import core.entity.properties.position.{Coordinates, Direction}
 import core.entity.properties.state.State
-import core.entity.traits._
+import core.entity.properties._
 import core.entity.{Character, Entity, EntityHolder, Openable, Switchable}
 import core.program.Instruction._
 import core.program.Script
@@ -308,7 +308,7 @@ object Event {
                         case Some(v: State) =>
                             (en.setValue(v), Vector.empty)
                         
-                        case None =>
+                        case _ =>
                             (en.setValue(UnitValue), Vector.empty)
                     }
                 case _ =>

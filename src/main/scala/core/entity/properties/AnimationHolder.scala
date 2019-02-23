@@ -1,4 +1,4 @@
-package core.entity.traits
+package core.entity.properties
 
 import core.entity.Entity
 import core.entity.properties.graphics.{Animation, Frame}

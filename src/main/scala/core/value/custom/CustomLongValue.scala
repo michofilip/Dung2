@@ -1,7 +1,7 @@
 package core.value.custom
 
 import core.entity.EntityHolder
-import core.entity.traits.{TimeHolder, TurnHolder}
+import core.entity.properties.{TimeHolder, TurnHolder}
 import core.value.basic.LongValue
 import json.JValue
 

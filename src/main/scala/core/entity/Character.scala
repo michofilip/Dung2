@@ -1,7 +1,7 @@
 package core.entity
 
 import core.entity.properties.state.State.CharacterState
-import core.entity.traits.StateHolder
+import core.entity.properties.StateHolder
 
 abstract class Character extends MapEntity with StateHolder {
     // TODO basic template

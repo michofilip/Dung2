@@ -2,7 +2,7 @@ package core.value.custom
 
 import core.entity.EntityHolder
 import core.entity.properties.state.State
-import core.entity.traits.StateHolder
+import core.entity.properties.StateHolder
 import core.value.Value
 import json.JValue
 

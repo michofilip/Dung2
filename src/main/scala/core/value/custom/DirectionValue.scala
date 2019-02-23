@@ -2,7 +2,7 @@ package core.value.custom
 
 import core.entity.EntityHolder
 import core.entity.properties.position.Direction
-import core.entity.traits.PositionHolder
+import core.entity.properties.PositionHolder
 import core.value.Value
 import json.JValue
 

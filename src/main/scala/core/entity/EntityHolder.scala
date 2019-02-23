@@ -1,7 +1,7 @@
 package core.entity
 
+import core.entity.properties.PositionHolder
 import core.entity.properties.position.Coordinates
-import core.entity.traits.PositionHolder
 
 class EntityHolder private(private val entitiesById: Map[String, Entity],
                            private val entitiesByCoordinates: Map[Coordinates, Map[String, Entity]]) {
@@ -19,12 +19,12 @@ class EntityHolder private(private val entitiesById: Map[String, Entity],
         new EntityHolder(newEntitiesById, newEntitiesByCoordinates)
     }
     
-    def addAll(entities: Seq[Entity]): EntityHolder = {
-        entities.foldLeft(this)((entityHolder, entity) => entityHolder add entity)
-    }
-    
     def +(entity: Entity): EntityHolder = {
         add(entity)
+    }
+    
+    def addAll(entities: Seq[Entity]): EntityHolder = {
+        entities.foldLeft(this)((entityHolder, entity) => entityHolder + entity)
     }
     
     def ++(entities: Seq[Entity]): EntityHolder = {
@@ -47,12 +47,12 @@ class EntityHolder private(private val entitiesById: Map[String, Entity],
         new EntityHolder(newEntitiesById, newEntitiesByCoordinates)
     }
     
-    def removeAll(entities: Seq[Entity]): EntityHolder = {
-        entities.foldLeft(this)((entityHolder, entity) => entityHolder remove entity)
-    }
-    
     def -(entity: Entity): EntityHolder = {
         remove(entity)
+    }
+    
+    def removeAll(entities: Seq[Entity]): EntityHolder = {
+        entities.foldLeft(this)((entityHolder, entity) => entityHolder - entity)
     }
     
     def --(entities: Seq[Entity]): EntityHolder = {

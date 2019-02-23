@@ -3,7 +3,7 @@ package core.entity
 import core.entity.properties.position.Position
 import core.entity.properties.state.State
 import core.entity.selectors.{AnimationSelector, PhysicsSelector}
-import core.entity.traits._
+import core.entity.properties._
 import core.timer.Timer
 import core.value.Value
 import json.{JSONParsable, JValue, MyJ}
