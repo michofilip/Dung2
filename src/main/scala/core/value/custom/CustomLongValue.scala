@@ -1,14 +1,14 @@
 package core.value.custom
 
-import core.entity.EntityHolder
 import core.entity.properties.{TimeHolder, TurnHolder}
+import core.entity.repositoy.EntityRepository
 import core.value.basic.LongValue
 import json.JValue
 
 object CustomLongValue {
     
     final case class GetTime() extends LongValue {
-        override def get(implicit entityHolder: EntityHolder): Option[Long] = {
+        override def get(implicit entityHolder: EntityRepository): Option[Long] = {
             entityHolder.getById("TimeCounter") match {
                 case Some(en: TimeHolder) => Some(en.getTime)
                 case _ => None
@@ -24,7 +24,7 @@ object CustomLongValue {
     }
     
     final case class GetTurn() extends LongValue {
-        override def get(implicit entityHolder: EntityHolder): Option[Long] = {
+        override def get(implicit entityHolder: EntityRepository): Option[Long] = {
             entityHolder.getById("TurnCounter") match {
                 case Some(en: TurnHolder) => Some(en.turn)
                 case _ => None

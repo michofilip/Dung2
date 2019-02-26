@@ -1,6 +1,6 @@
 package core.value.basic
 
-import core.entity.EntityHolder
+import core.entity.repositoy.EntityRepository
 import core.value.Value
 import core.value.basic.ByteValue._
 import core.value.basic.DoubleValue._
@@ -85,7 +85,7 @@ abstract class ByteValue extends Value with NumericValue {
 object ByteValue {
     
     final case object ByteNull extends ByteValue {
-        override def get(implicit entityHolder: EntityHolder): Option[Byte] = {
+        override def get(implicit entityHolder: EntityRepository): Option[Byte] = {
             None
         }
         
@@ -98,7 +98,7 @@ object ByteValue {
     }
     
     final case class ByteConstant(value: Byte) extends ByteValue {
-        override def get(implicit entityHolder: EntityHolder): Option[Byte] = {
+        override def get(implicit entityHolder: EntityRepository): Option[Byte] = {
             Some(value)
         }
         
@@ -112,7 +112,7 @@ object ByteValue {
     }
     
     final case class ByteNegate(value: ByteValue) extends ByteValue {
-        override def get(implicit entityHolder: EntityHolder): Option[Byte] = {
+        override def get(implicit entityHolder: EntityRepository): Option[Byte] = {
             value.get match {
                 case Some(v) => Some((-v).toByte)
                 case _ => None
@@ -129,7 +129,7 @@ object ByteValue {
     }
     
     final case class ByteAdd(value1: ByteValue, value2: ByteValue) extends ByteValue {
-        override def get(implicit entityHolder: EntityHolder): Option[Byte] = {
+        override def get(implicit entityHolder: EntityRepository): Option[Byte] = {
             (value1.get, value2.get) match {
                 case (Some(v1), Some(v2)) => Some((v1 + v2).toByte)
                 case _ => None
@@ -147,7 +147,7 @@ object ByteValue {
     }
     
     final case class ByteSubtract(value1: ByteValue, value2: ByteValue) extends ByteValue {
-        override def get(implicit entityHolder: EntityHolder): Option[Byte] = {
+        override def get(implicit entityHolder: EntityRepository): Option[Byte] = {
             (value1.get, value2.get) match {
                 case (Some(v1), Some(v2)) => Some((v1 - v2).toByte)
                 case _ => None
@@ -165,7 +165,7 @@ object ByteValue {
     }
     
     final case class ByteMultiply(value1: ByteValue, value2: ByteValue) extends ByteValue {
-        override def get(implicit entityHolder: EntityHolder): Option[Byte] = {
+        override def get(implicit entityHolder: EntityRepository): Option[Byte] = {
             (value1.get, value2.get) match {
                 case (Some(v1), Some(v2)) => Some((v1 * v2).toByte)
                 case _ => None
@@ -183,7 +183,7 @@ object ByteValue {
     }
     
     final case class ByteDivide(value1: ByteValue, value2: ByteValue) extends ByteValue {
-        override def get(implicit entityHolder: EntityHolder): Option[Byte] = {
+        override def get(implicit entityHolder: EntityRepository): Option[Byte] = {
             (value1.get, value2.get) match {
                 case (Some(v1), Some(v2)) => Some((v1 / v2).toByte)
                 case _ => None
@@ -201,7 +201,7 @@ object ByteValue {
     }
     
     final case class ByteMod(value1: ByteValue, value2: ByteValue) extends ByteValue {
-        override def get(implicit entityHolder: EntityHolder): Option[Byte] = {
+        override def get(implicit entityHolder: EntityRepository): Option[Byte] = {
             (value1.get, value2.get) match {
                 case (Some(v1), Some(v2)) => Some((v1 % v2).toByte)
                 case _ => None
@@ -219,7 +219,7 @@ object ByteValue {
     }
     
     final case class NumericToByte(value: NumericValue) extends ByteValue {
-        override def get(implicit entityHolder: EntityHolder): Option[Byte] = {
+        override def get(implicit entityHolder: EntityRepository): Option[Byte] = {
             value.get match {
                 case Some(v: Byte) => Some(v.toByte)
                 case Some(v: Short) => Some(v.toByte)

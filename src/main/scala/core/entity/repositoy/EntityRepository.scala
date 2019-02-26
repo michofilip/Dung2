@@ -1,12 +1,13 @@
-package core.entity
+package core.entity.repositoy
 
+import core.entity.Entity
 import core.entity.properties.PositionHolder
 import core.entity.properties.position.Coordinates
 
-class EntityHolder private(private val entitiesById: Map[String, Entity],
-                           private val entitiesByCoordinates: Map[Coordinates, Map[String, Entity]]) {
+class EntityRepository private(private val entitiesById: Map[String, Entity],
+                               private val entitiesByCoordinates: Map[Coordinates, Map[String, Entity]]) {
     
-    def add(entity: Entity): EntityHolder = {
+    def add(entity: Entity): EntityRepository = {
         val newEntitiesById = entitiesById + (entity.id -> entity)
         val newEntitiesByCoordinates = entity match {
             case en: PositionHolder =>
@@ -16,22 +17,22 @@ class EntityHolder private(private val entitiesById: Map[String, Entity],
             case _ =>
                 entitiesByCoordinates
         }
-        new EntityHolder(newEntitiesById, newEntitiesByCoordinates)
+        new EntityRepository(newEntitiesById, newEntitiesByCoordinates)
     }
     
-    def +(entity: Entity): EntityHolder = {
+    def +(entity: Entity): EntityRepository = {
         add(entity)
     }
     
-    def addAll(entities: Seq[Entity]): EntityHolder = {
+    def addAll(entities: Seq[Entity]): EntityRepository = {
         entities.foldLeft(this)((entityHolder, entity) => entityHolder + entity)
     }
     
-    def ++(entities: Seq[Entity]): EntityHolder = {
+    def ++(entities: Seq[Entity]): EntityRepository = {
         addAll(entities)
     }
     
-    def remove(entity: Entity): EntityHolder = {
+    def remove(entity: Entity): EntityRepository = {
         val newEntitiesById = entitiesById - entity.id
         val newEntitiesByCoordinates = entity match {
             case en: PositionHolder =>
@@ -44,18 +45,18 @@ class EntityHolder private(private val entitiesById: Map[String, Entity],
             case _ =>
                 entitiesByCoordinates
         }
-        new EntityHolder(newEntitiesById, newEntitiesByCoordinates)
+        new EntityRepository(newEntitiesById, newEntitiesByCoordinates)
     }
     
-    def -(entity: Entity): EntityHolder = {
+    def -(entity: Entity): EntityRepository = {
         remove(entity)
     }
     
-    def removeAll(entities: Seq[Entity]): EntityHolder = {
+    def removeAll(entities: Seq[Entity]): EntityRepository = {
         entities.foldLeft(this)((entityHolder, entity) => entityHolder - entity)
     }
     
-    def --(entities: Seq[Entity]): EntityHolder = {
+    def --(entities: Seq[Entity]): EntityRepository = {
         removeAll(entities)
     }
     
@@ -85,12 +86,12 @@ class EntityHolder private(private val entitiesById: Map[String, Entity],
     
 }
 
-object EntityHolder {
-    def apply(): EntityHolder = {
-        new EntityHolder(Map.empty, Map.empty)
+object EntityRepository {
+    def apply(): EntityRepository = {
+        new EntityRepository(Map.empty, Map.empty)
     }
     
-    def apply(entities: Seq[Entity]): EntityHolder = {
-        EntityHolder() ++ entities
+    def apply(entities: Seq[Entity]): EntityRepository = {
+        EntityRepository() ++ entities
     }
 }

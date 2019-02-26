@@ -7,6 +7,7 @@ import core.timer.Timer
 
 trait AnimationHolder extends Entity {
     protected val animationSelector: AnimationSelector
+    protected val animationStartTime: Long
     
     def animationSelectorId: String = {
         animationSelector.id
@@ -25,6 +26,6 @@ trait AnimationHolder extends Entity {
     }
     
     def getFrame(implicit timer: Timer): Frame = {
-        animation.getFrame(timer.getTime - timeStamp)
+        animation.getFrame(timer.getTime - animationStartTime)
     }
 }

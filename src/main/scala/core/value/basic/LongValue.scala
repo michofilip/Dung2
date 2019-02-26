@@ -1,6 +1,6 @@
 package core.value.basic
 
-import core.entity.EntityHolder
+import core.entity.repositoy.EntityRepository
 import core.value.Value
 import core.value.basic.DoubleValue._
 import core.value.basic.FloatValue._
@@ -83,7 +83,7 @@ abstract class LongValue extends Value with NumericValue {
 object LongValue {
     
     final case object LongNull extends LongValue {
-        override def get(implicit entityHolder: EntityHolder): Option[Long] = {
+        override def get(implicit entityHolder: EntityRepository): Option[Long] = {
             None
         }
         
@@ -96,7 +96,7 @@ object LongValue {
     }
     
     final case class LongConstant(value: Long) extends LongValue {
-        override def get(implicit entityHolder: EntityHolder): Option[Long] = {
+        override def get(implicit entityHolder: EntityRepository): Option[Long] = {
             Some(value)
         }
         
@@ -110,7 +110,7 @@ object LongValue {
     }
     
     final case class LongNegate(value: LongValue) extends LongValue {
-        override def get(implicit entityHolder: EntityHolder): Option[Long] = {
+        override def get(implicit entityHolder: EntityRepository): Option[Long] = {
             value.get match {
                 case Some(v) => Some(-v)
                 case _ => None
@@ -127,7 +127,7 @@ object LongValue {
     }
     
     final case class LongAdd(value1: LongValue, value2: LongValue) extends LongValue {
-        override def get(implicit entityHolder: EntityHolder): Option[Long] = {
+        override def get(implicit entityHolder: EntityRepository): Option[Long] = {
             (value1.get, value2.get) match {
                 case (Some(v1), Some(v2)) => Some(v1 + v2)
                 case _ => None
@@ -145,7 +145,7 @@ object LongValue {
     }
     
     final case class LongSubtract(value1: LongValue, value2: LongValue) extends LongValue {
-        override def get(implicit entityHolder: EntityHolder): Option[Long] = {
+        override def get(implicit entityHolder: EntityRepository): Option[Long] = {
             (value1.get, value2.get) match {
                 case (Some(v1), Some(v2)) => Some(v1 - v2)
                 case _ => None
@@ -163,7 +163,7 @@ object LongValue {
     }
     
     final case class LongMultiply(value1: LongValue, value2: LongValue) extends LongValue {
-        override def get(implicit entityHolder: EntityHolder): Option[Long] = {
+        override def get(implicit entityHolder: EntityRepository): Option[Long] = {
             (value1.get, value2.get) match {
                 case (Some(v1), Some(v2)) => Some(v1 * v2)
                 case _ => None
@@ -181,7 +181,7 @@ object LongValue {
     }
     
     final case class LongDivide(value1: LongValue, value2: LongValue) extends LongValue {
-        override def get(implicit entityHolder: EntityHolder): Option[Long] = {
+        override def get(implicit entityHolder: EntityRepository): Option[Long] = {
             (value1.get, value2.get) match {
                 case (Some(v1), Some(v2)) => Some(v1 / v2)
                 case _ => None
@@ -199,7 +199,7 @@ object LongValue {
     }
     
     final case class LongMod(value1: LongValue, value2: LongValue) extends LongValue {
-        override def get(implicit entityHolder: EntityHolder): Option[Long] = {
+        override def get(implicit entityHolder: EntityRepository): Option[Long] = {
             (value1.get, value2.get) match {
                 case (Some(v1), Some(v2)) => Some(v1 % v2)
                 case _ => None
@@ -217,7 +217,7 @@ object LongValue {
     }
     
     final case class NumericToLong(value: NumericValue) extends LongValue {
-        override def get(implicit entityHolder: EntityHolder): Option[Long] = {
+        override def get(implicit entityHolder: EntityRepository): Option[Long] = {
             value.get match {
                 case Some(v: Byte) => Some(v.toLong)
                 case Some(v: Short) => Some(v.toLong)

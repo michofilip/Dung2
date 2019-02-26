@@ -1,6 +1,6 @@
 package core.value.basic
 
-import core.entity.EntityHolder
+import core.entity.repositoy.EntityRepository
 import core.value.Value
 import json.JValue
 
@@ -13,7 +13,7 @@ abstract class CharValue extends Value {
 object CharValue {
     
     final case object CharNull extends CharValue {
-        override def get(implicit entityHolder: EntityHolder): Option[Char] = {
+        override def get(implicit entityHolder: EntityRepository): Option[Char] = {
             None
         }
         
@@ -26,7 +26,7 @@ object CharValue {
     }
     
     final case class CharConstant(value: Char) extends CharValue {
-        override def get(implicit entityHolder: EntityHolder): Option[Char] = Some(value)
+        override def get(implicit entityHolder: EntityRepository): Option[Char] = Some(value)
         
         override def toJSON: JValue = {
             import json.MyJ._

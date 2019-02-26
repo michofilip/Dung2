@@ -1,6 +1,6 @@
 package core.value.basic
 
-import core.entity.EntityHolder
+import core.entity.repositoy.EntityRepository
 import core.value.Value
 import core.value.basic.DoubleValue._
 import core.value.basic.FloatValue._
@@ -84,7 +84,7 @@ abstract class ShortValue extends Value with NumericValue {
 object ShortValue {
     
     final case object ShortNull extends ShortValue {
-        override def get(implicit entityHolder: EntityHolder): Option[Short] = {
+        override def get(implicit entityHolder: EntityRepository): Option[Short] = {
             None
         }
         
@@ -97,7 +97,7 @@ object ShortValue {
     }
     
     final case class ShortConstant(value: Short) extends ShortValue {
-        override def get(implicit entityHolder: EntityHolder): Option[Short] = {
+        override def get(implicit entityHolder: EntityRepository): Option[Short] = {
             Some(value)
         }
         
@@ -111,7 +111,7 @@ object ShortValue {
     }
     
     final case class ShortNegate(value: ShortValue) extends ShortValue {
-        override def get(implicit entityHolder: EntityHolder): Option[Short] = {
+        override def get(implicit entityHolder: EntityRepository): Option[Short] = {
             value.get match {
                 case Some(v) => Some((-v).toShort)
                 case _ => None
@@ -128,7 +128,7 @@ object ShortValue {
     }
     
     final case class ShortAdd(value1: ShortValue, value2: ShortValue) extends ShortValue {
-        override def get(implicit entityHolder: EntityHolder): Option[Short] = {
+        override def get(implicit entityHolder: EntityRepository): Option[Short] = {
             (value1.get, value2.get) match {
                 case (Some(v1), Some(v2)) => Some((v1 + v2).toShort)
                 case _ => None
@@ -146,7 +146,7 @@ object ShortValue {
     }
     
     final case class ShortSubtract(value1: ShortValue, value2: ShortValue) extends ShortValue {
-        override def get(implicit entityHolder: EntityHolder): Option[Short] = {
+        override def get(implicit entityHolder: EntityRepository): Option[Short] = {
             (value1.get, value2.get) match {
                 case (Some(v1), Some(v2)) => Some((v1 - v2).toShort)
                 case _ => None
@@ -164,7 +164,7 @@ object ShortValue {
     }
     
     final case class ShortMultiply(value1: ShortValue, value2: ShortValue) extends ShortValue {
-        override def get(implicit entityHolder: EntityHolder): Option[Short] = {
+        override def get(implicit entityHolder: EntityRepository): Option[Short] = {
             (value1.get, value2.get) match {
                 case (Some(v1), Some(v2)) => Some((v1 * v2).toShort)
                 case _ => None
@@ -182,7 +182,7 @@ object ShortValue {
     }
     
     final case class ShortDivide(value1: ShortValue, value2: ShortValue) extends ShortValue {
-        override def get(implicit entityHolder: EntityHolder): Option[Short] = {
+        override def get(implicit entityHolder: EntityRepository): Option[Short] = {
             (value1.get, value2.get) match {
                 case (Some(v1), Some(v2)) => Some((v1 / v2).toShort)
                 case _ => None
@@ -200,7 +200,7 @@ object ShortValue {
     }
     
     final case class ShortMod(value1: ShortValue, value2: ShortValue) extends ShortValue {
-        override def get(implicit entityHolder: EntityHolder): Option[Short] = {
+        override def get(implicit entityHolder: EntityRepository): Option[Short] = {
             (value1.get, value2.get) match {
                 case (Some(v1), Some(v2)) => Some((v1 % v2).toShort)
                 case _ => None
@@ -218,7 +218,7 @@ object ShortValue {
     }
     
     final case class NumericToShort(value: NumericValue) extends ShortValue {
-        override def get(implicit entityHolder: EntityHolder): Option[Short] = {
+        override def get(implicit entityHolder: EntityRepository): Option[Short] = {
             value.get match {
                 case Some(v: Byte) => Some(v.toShort)
                 case Some(v: Short) => Some(v.toShort)

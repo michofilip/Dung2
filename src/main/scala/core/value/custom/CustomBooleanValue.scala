@@ -1,14 +1,15 @@
 package core.value.custom
 
 import core.entity.properties.PhysicsHolder
-import core.entity.{Entity, EntityHolder}
+import core.entity.Entity
+import core.entity.repositoy.EntityRepository
 import core.value.basic.BooleanValue
 import json.JValue
 
 object CustomBooleanValue {
     
     final case class Exists(entityId: String) extends BooleanValue {
-        override def get(implicit entityHolder: EntityHolder): Option[Boolean] = {
+        override def get(implicit entityHolder: EntityRepository): Option[Boolean] = {
             Some(entityHolder.contains(entityId))
         }
     
@@ -22,7 +23,7 @@ object CustomBooleanValue {
     }
     
     final case class IsSolidAtCoordinates(value: CoordinatesValue) extends BooleanValue {
-        override def get(implicit entityHolder: EntityHolder): Option[Boolean] = {
+        override def get(implicit entityHolder: EntityRepository): Option[Boolean] = {
             val condition: Entity => Boolean = {
                 case en: PhysicsHolder if en.physics.solid => true
                 case _ => false
@@ -43,7 +44,7 @@ object CustomBooleanValue {
     }
     
     final case class IsOpaqueAtCoordinates(value: CoordinatesValue) extends BooleanValue {
-        override def get(implicit entityHolder: EntityHolder): Option[Boolean] = {
+        override def get(implicit entityHolder: EntityRepository): Option[Boolean] = {
             val condition: Entity => Boolean = {
                 case en: PhysicsHolder if en.physics.opaque => true
                 case _ => false

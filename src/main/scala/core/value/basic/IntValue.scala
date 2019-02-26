@@ -1,6 +1,6 @@
 package core.value.basic
 
-import core.entity.EntityHolder
+import core.entity.repositoy.EntityRepository
 import core.value.Value
 import core.value.basic.DoubleValue._
 import core.value.basic.FloatValue._
@@ -83,7 +83,7 @@ abstract class IntValue extends Value with NumericValue {
 object IntValue {
     
     final case object IntNull extends IntValue {
-        override def get(implicit entityHolder: EntityHolder): Option[Int] = {
+        override def get(implicit entityHolder: EntityRepository): Option[Int] = {
             None
         }
         
@@ -96,7 +96,7 @@ object IntValue {
     }
     
     final case class IntConstant(value: Int) extends IntValue {
-        override def get(implicit entityHolder: EntityHolder): Option[Int] = {
+        override def get(implicit entityHolder: EntityRepository): Option[Int] = {
             Some(value)
         }
         
@@ -110,7 +110,7 @@ object IntValue {
     }
     
     final case class IntNegate(value: IntValue) extends IntValue {
-        override def get(implicit entityHolder: EntityHolder): Option[Int] = {
+        override def get(implicit entityHolder: EntityRepository): Option[Int] = {
             value.get match {
                 case Some(v) => Some(-v)
                 case _ => None
@@ -127,7 +127,7 @@ object IntValue {
     }
     
     final case class IntAdd(value1: IntValue, value2: IntValue) extends IntValue {
-        override def get(implicit entityHolder: EntityHolder): Option[Int] = {
+        override def get(implicit entityHolder: EntityRepository): Option[Int] = {
             (value1.get, value2.get) match {
                 case (Some(v1), Some(v2)) => Some(v1 + v2)
                 case _ => None
@@ -145,7 +145,7 @@ object IntValue {
     }
     
     final case class IntSubtract(value1: IntValue, value2: IntValue) extends IntValue {
-        override def get(implicit entityHolder: EntityHolder): Option[Int] = {
+        override def get(implicit entityHolder: EntityRepository): Option[Int] = {
             (value1.get, value2.get) match {
                 case (Some(v1), Some(v2)) => Some(v1 - v2)
                 case _ => None
@@ -163,7 +163,7 @@ object IntValue {
     }
     
     final case class IntMultiply(value1: IntValue, value2: IntValue) extends IntValue {
-        override def get(implicit entityHolder: EntityHolder): Option[Int] = {
+        override def get(implicit entityHolder: EntityRepository): Option[Int] = {
             (value1.get, value2.get) match {
                 case (Some(v1), Some(v2)) => Some(v1 * v2)
                 case _ => None
@@ -181,7 +181,7 @@ object IntValue {
     }
     
     final case class IntDivide(value1: IntValue, value2: IntValue) extends IntValue {
-        override def get(implicit entityHolder: EntityHolder): Option[Int] = {
+        override def get(implicit entityHolder: EntityRepository): Option[Int] = {
             (value1.get, value2.get) match {
                 case (Some(v1), Some(v2)) => Some(v1 / v2)
                 case _ => None
@@ -199,7 +199,7 @@ object IntValue {
     }
     
     final case class IntMod(value1: IntValue, value2: IntValue) extends IntValue {
-        override def get(implicit entityHolder: EntityHolder): Option[Int] = {
+        override def get(implicit entityHolder: EntityRepository): Option[Int] = {
             (value1.get, value2.get) match {
                 case (Some(v1), Some(v2)) => Some(v1 % v2)
                 case _ => None
@@ -217,7 +217,7 @@ object IntValue {
     }
     
     final case class NumericToInt(value: NumericValue) extends IntValue {
-        override def get(implicit entityHolder: EntityHolder): Option[Int] = {
+        override def get(implicit entityHolder: EntityRepository): Option[Int] = {
             value.get match {
                 case Some(v: Byte) => Some(v.toInt)
                 case Some(v: Short) => Some(v.toInt)

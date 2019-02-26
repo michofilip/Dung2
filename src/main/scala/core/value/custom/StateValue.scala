@@ -1,8 +1,8 @@
 package core.value.custom
 
-import core.entity.EntityHolder
 import core.entity.properties.state.State
 import core.entity.properties.StateHolder
+import core.entity.repositoy.EntityRepository
 import core.value.Value
 import json.JValue
 
@@ -13,7 +13,7 @@ sealed abstract class StateValue extends Value {
 object StateValue {
     
     final case object StateNull extends StateValue {
-        override def get(implicit entityHolder: EntityHolder): Option[State] = {
+        override def get(implicit entityHolder: EntityRepository): Option[State] = {
             None
         }
         
@@ -26,7 +26,7 @@ object StateValue {
     }
     
     final case class StateConstant(value: State) extends StateValue {
-        override def get(implicit entityHolder: EntityHolder): Option[State] = {
+        override def get(implicit entityHolder: EntityRepository): Option[State] = {
             Some(value)
         }
         
@@ -40,7 +40,7 @@ object StateValue {
     }
     
     final case class GetState(entityId: String) extends StateValue {
-        override def get(implicit entityHolder: EntityHolder): Option[State] = {
+        override def get(implicit entityHolder: EntityRepository): Option[State] = {
             entityHolder.getById(entityId) match {
                 case Some(en: StateHolder) => Some(en.state)
                 case _ => None

@@ -1,6 +1,6 @@
 package core.value.basic
 
-import core.entity.EntityHolder
+import core.entity.repositoy.EntityRepository
 import core.value.Value
 import json.JValue
 
@@ -8,7 +8,7 @@ import json.JValue
 object UnitValue extends Value {
     override type T = this.type
     
-    override def get(implicit entityHolder: EntityHolder): Option[UnitValue.type] = {
+    override def get(implicit entityHolder: EntityRepository): Option[UnitValue.type] = {
         None
     }
     

@@ -2,4 +2,4 @@ package core.entity.properties
 
 import core.entity.Entity
 
-trait EntityCreator extends Entity
+trait ScriptRunnerHolder extends Entity

@@ -1,9 +1,10 @@
 package core.event
 
+import core.entity.properties._
 import core.entity.properties.position.{Coordinates, Direction}
 import core.entity.properties.state.State
-import core.entity.properties._
-import core.entity.{Character, Entity, EntityHolder, Openable, Switchable}
+import core.entity.repositoy.EntityRepository
+import core.entity._
 import core.program.Instruction._
 import core.program.Script
 import core.value.Value
@@ -18,7 +19,7 @@ import scala.language.implicitConversions
 sealed abstract class Event extends JSONParsable {
     val entityId: String
     
-    def applyTo(entity: Entity)(implicit entityHolder: EntityHolder): (Vector[Entity], Vector[Event])
+    def applyTo(entity: Entity)(implicit entityHolder: EntityRepository): (Vector[Entity], Vector[Event])
 }
 
 object Event {
@@ -27,7 +28,7 @@ object Event {
     implicit def en2Vector(entity: Entity): Vector[Entity] = Vector(entity)
     
     final case class Delete(override val entityId: String) extends Event {
-        override def applyTo(entity: Entity)(implicit entityHolder: EntityHolder): (Vector[Entity], Vector[Event]) = {
+        override def applyTo(entity: Entity)(implicit entityHolder: EntityRepository): (Vector[Entity], Vector[Event]) = {
             (Vector.empty, Vector.empty)
         }
         
@@ -42,7 +43,7 @@ object Event {
     
     // position
     final case class MoveTo(override val entityId: String, x: Int, y: Int) extends Event {
-        override def applyTo(entity: Entity)(implicit entityHolder: EntityHolder): (Vector[Entity], Vector[Event]) = {
+        override def applyTo(entity: Entity)(implicit entityHolder: EntityRepository): (Vector[Entity], Vector[Event]) = {
             entity match {
                 case ent: PositionHolder =>
                     (ent.moveTo(x, y), Vector.empty)
@@ -63,7 +64,7 @@ object Event {
     }
     
     final case class MoveBy(override val entityId: String, dx: Int, dy: Int) extends Event {
-        override def applyTo(entity: Entity)(implicit entityHolder: EntityHolder): (Vector[Entity], Vector[Event]) = {
+        override def applyTo(entity: Entity)(implicit entityHolder: EntityRepository): (Vector[Entity], Vector[Event]) = {
             entity match {
                 case ent: PositionHolder =>
                     (ent.moveBy(dx, dy), Vector.empty)
@@ -84,42 +85,40 @@ object Event {
     }
     
     // state
-    final case class SetState(override val entityId: String, state: State) extends Event {
-        override def applyTo(entity: Entity)(implicit entityHolder: EntityHolder): (Vector[Entity], Vector[Event]) = {
-            val time = GetTime().getOrElse(0)
-            (entity, state) match {
-                case (ent: Switchable, st: State.SwitchableState) =>
-                    (ent.setSwitchableState(st, time), Vector.empty)
-                case (ent: Openable, st: State.OpenableState) =>
-                    (ent.setOpenableState(st, time), Vector.empty)
-                case (ent: Character, st: State.CharacterState) =>
-                    (ent.setCharacterState(st, time), Vector.empty)
-                case _ =>
-                    (entity, Vector.empty)
-            }
-        }
-        
-        override def toJSON: JValue = {
-            import json.MyJ._
-            jObject(
-                "event" -> this.getClass.getSimpleName,
-                "entityId" -> entityId,
-                "state" -> state
-            )
-        }
-    }
+//    @Deprecated
+//    final case class SetState(override val entityId: String, state: State) extends Event {
+//        override def applyTo(entity: Entity)(implicit entityHolder: EntityRepository): (Vector[Entity], Vector[Event]) = {
+//            val time = GetTime().getOrElse(0)
+//            (entity, state) match {
+//                case (ent: Switchable, st: State.SwitchableState) =>
+//                    (ent.setSwitchableState(st, time), Vector.empty)
+//                case (ent: Openable, st: State.OpenableState) =>
+//                    (ent.setOpenableState(st, time), Vector.empty)
+//                case (ent: Character, st: State.CharacterState) =>
+//                    (ent.setCharacterState(st, time), Vector.empty)
+//                case _ =>
+//                    (entity, Vector.empty)
+//            }
+//        }
+//
+//        override def toJSON: JValue = {
+//            import json.MyJ._
+//            jObject(
+//                "event" -> this.getClass.getSimpleName,
+//                "entityId" -> entityId,
+//                "state" -> state
+//            )
+//        }
+//    }
     
     // switchable
     final case class SwitchOff(override val entityId: String) extends Event {
-        override def applyTo(entity: Entity)(implicit entityHolder: EntityHolder): (Vector[Entity], Vector[Event]) = {
+        override def applyTo(entity: Entity)(implicit entityHolder: EntityRepository): (Vector[Entity], Vector[Event]) = {
             entity match {
-                case ent: Switchable if ent.state == State.On =>
-                    val delay = 1000
-                    val events = Vector(
-                        SetState(entityId, State.SwitchingOff),
-                        DelayTime(entityId, delay, SetState(entityId, State.Off))
-                    )
-                    (entity, events)
+                case ent: Switch if ent.state == State.On =>
+                    (ent.beginSwitchingOff(GetTime().getOrElse(0)), DelayTime(entityId, ent.switchingOffLength, SwitchOff(entityId)))
+                case ent: Switch if ent.state == State.SwitchingOff =>
+                    (ent.finishSwitchingOff(GetTime().getOrElse(0)), Vector.empty)
                 case _ =>
                     (entity, Vector.empty)
             }
@@ -135,15 +134,12 @@ object Event {
     }
     
     final case class SwitchOn(override val entityId: String) extends Event {
-        override def applyTo(entity: Entity)(implicit entityHolder: EntityHolder): (Vector[Entity], Vector[Event]) = {
+        override def applyTo(entity: Entity)(implicit entityHolder: EntityRepository): (Vector[Entity], Vector[Event]) = {
             entity match {
-                case ent: Switchable if ent.state == State.Off =>
-                    val delay = 1000
-                    val events = Vector(
-                        SetState(entityId, State.SwitchingOn),
-                        DelayTime(entityId, delay, SetState(entityId, State.On))
-                    )
-                    (entity, events)
+                case ent: Switch if ent.state == State.Off =>
+                    (ent.beginSwitchingOn(GetTime().getOrElse(0)), DelayTime(entityId, ent.switchingOnLength, SwitchOn(entityId)))
+                case ent: Switch if ent.state == State.SwitchingOn =>
+                    (ent.finishSwitchingOn(GetTime().getOrElse(0)), Vector.empty)
                 case _ =>
                     (entity, Vector.empty)
             }
@@ -159,107 +155,95 @@ object Event {
     }
     
     // openable
-    final case class Open(override val entityId: String) extends Event {
-        override def applyTo(entity: Entity)(implicit entityHolder: EntityHolder): (Vector[Entity], Vector[Event]) = {
-            entity match {
-                case ent: Openable if ent.state == State.Close =>
-                    val delay = 1000
-                    val events = Vector(
-                        SetState(entityId, State.Opening),
-                        DelayTime(entityId, delay, SetState(entityId, State.Open))
-                    )
-                    (entity, events)
-                case _ =>
-                    (entity, Vector.empty)
-            }
-        }
-        
-        override def toJSON: JValue = {
-            import json.MyJ._
-            jObject(
-                "event" -> this.getClass.getSimpleName,
-                "entityId" -> entityId
-            )
-        }
-    }
-    
-    final case class Close(override val entityId: String) extends Event {
-        override def applyTo(entity: Entity)(implicit entityHolder: EntityHolder): (Vector[Entity], Vector[Event]) = {
-            entity match {
-                case ent: Openable if ent.state == State.Open =>
-                    val delay = 1000
-                    val events = Vector(
-                        SetState(entityId, State.Closing),
-                        DelayTime(entityId, delay, SetState(entityId, State.Close))
-                    )
-                    (entity, events)
-                case _ =>
-                    (entity, Vector.empty)
-            }
-        }
-        
-        override def toJSON: JValue = {
-            import json.MyJ._
-            jObject(
-                "event" -> this.getClass.getSimpleName,
-                "entityId" -> entityId
-            )
-        }
-    }
-    
-    final case class Unlock(override val entityId: String, keys: Set[Long]) extends Event {
-        override def applyTo(entity: Entity)(implicit entityHolder: EntityHolder): (Vector[Entity], Vector[Event]) = {
-            entity match {
-                case ent: Openable if ent.state == State.Locked && keys.contains(ent.lockCode) =>
-                    val delay = 1000
-                    val events = Vector(
-                        SetState(entityId, State.Unlocking),
-                        DelayTime(entityId, delay, SetState(entityId, State.Close))
-                    )
-                    (entity, events)
-                case _ =>
-                    (entity, Vector.empty)
-            }
-        }
-        
-        override def toJSON: JValue = {
-            import json.MyJ._
-            jObject(
-                "event" -> this.getClass.getSimpleName,
-                "entityId" -> entityId,
-                "keys" -> keys.toSeq
-            )
-        }
-    }
-    
-    final case class Lock(override val entityId: String, keys: Set[Long]) extends Event {
-        override def applyTo(entity: Entity)(implicit entityHolder: EntityHolder): (Vector[Entity], Vector[Event]) = {
-            entity match {
-                case ent: Openable if ent.state == State.Close && keys.contains(ent.lockCode) =>
-                    val delay = 1000
-                    val events = Vector(
-                        SetState(entityId, State.Locking),
-                        DelayTime(entityId, delay, SetState(entityId, State.Locked))
-                    )
-                    (entity, events)
-                case _ =>
-                    (entity, Vector.empty)
-            }
-        }
-        
-        override def toJSON: JValue = {
-            import json.MyJ._
-            jObject(
-                "event" -> this.getClass.getSimpleName,
-                "entityId" -> entityId,
-                "keys" -> keys.toSeq
-            )
-        }
-    }
+//    final case class Open(override val entityId: String) extends Event {
+//        override def applyTo(entity: Entity)(implicit entityHolder: EntityRepository): (Vector[Entity], Vector[Event]) = {
+//            entity match {
+//                case ent: Openable if ent.state == State.Close =>
+//                    (ent.beginOpening(GetTime().getOrElse(0)), DelayTime(entityId, ent.openingLength, Open(entityId)))
+//                case ent: Openable if ent.state == State.Opening =>
+//                    (ent.finishOpening(GetTime().getOrElse(0)), Vector.empty)
+//                case _ =>
+//                    (entity, Vector.empty)
+//            }
+//        }
+//
+//        override def toJSON: JValue = {
+//            import json.MyJ._
+//            jObject(
+//                "event" -> this.getClass.getSimpleName,
+//                "entityId" -> entityId
+//            )
+//        }
+//    }
+//
+//    final case class Close(override val entityId: String) extends Event {
+//        override def applyTo(entity: Entity)(implicit entityHolder: EntityRepository): (Vector[Entity], Vector[Event]) = {
+//            entity match {
+//                case ent: Openable if ent.state == State.Open =>
+//                    (ent.beginClosing(GetTime().getOrElse(0)), DelayTime(entityId, ent.closingLength, Close(entityId)))
+//                case ent: Openable if ent.state == State.Closing =>
+//                    (ent.finishClosing(GetTime().getOrElse(0)), Vector.empty)
+//                case _ =>
+//                    (entity, Vector.empty)
+//            }
+//        }
+//
+//        override def toJSON: JValue = {
+//            import json.MyJ._
+//            jObject(
+//                "event" -> this.getClass.getSimpleName,
+//                "entityId" -> entityId
+//            )
+//        }
+//    }
+//
+//    final case class Unlock(override val entityId: String, keys: Set[Long]) extends Event {
+//        override def applyTo(entity: Entity)(implicit entityHolder: EntityRepository): (Vector[Entity], Vector[Event]) = {
+//            entity match {
+//                case ent: Openable if ent.state == State.Locked =>
+//                    (ent.beginUnlocking(GetTime().getOrElse(0)), DelayTime(entityId, ent.unlockingLength, Unlock(entityId, keys)))
+//                case ent: Openable if ent.state == State.Closing =>
+//                    (ent.finishUnlocking(GetTime().getOrElse(0)), Vector.empty)
+//                case _ =>
+//                    (entity, Vector.empty)
+//            }
+//        }
+//
+//        override def toJSON: JValue = {
+//            import json.MyJ._
+//            jObject(
+//                "event" -> this.getClass.getSimpleName,
+//                "entityId" -> entityId,
+//                "keys" -> keys.toSeq
+//            )
+//        }
+//    }
+//
+//    final case class Lock(override val entityId: String, keys: Set[Long]) extends Event {
+//        override def applyTo(entity: Entity)(implicit entityHolder: EntityRepository): (Vector[Entity], Vector[Event]) = {
+//            entity match {
+//                case ent: Openable if ent.state == State.Close =>
+//                    (ent.beginLocking(GetTime().getOrElse(0)), DelayTime(entityId, ent.lockingLength, Lock(entityId, keys)))
+//                case ent: Openable if ent.state == State.Locking =>
+//                    (ent.finishLocking(GetTime().getOrElse(0)), Vector.empty)
+//                case _ =>
+//                    (entity, Vector.empty)
+//            }
+//        }
+//
+//        override def toJSON: JValue = {
+//            import json.MyJ._
+//            jObject(
+//                "event" -> this.getClass.getSimpleName,
+//                "entityId" -> entityId,
+//                "keys" -> keys.toSeq
+//            )
+//        }
+//    }
     
     // value
     final case class SetValue(override val entityId: String, value: Value) extends Event {
-        override def applyTo(entity: Entity)(implicit entityHolder: EntityHolder): (Vector[Entity], Vector[Event]) = {
+        override def applyTo(entity: Entity)(implicit entityHolder: EntityRepository): (Vector[Entity], Vector[Event]) = {
             entity match {
                 case en: ValueHolder =>
                     (en.setValue(value), Vector.empty)
@@ -278,7 +262,7 @@ object Event {
     }
     
     final case class SetCalculatedValue(override val entityId: String, value: Value) extends Event {
-        override def applyTo(entity: Entity)(implicit entityHolder: EntityHolder): (Vector[Entity], Vector[Event]) = {
+        override def applyTo(entity: Entity)(implicit entityHolder: EntityRepository): (Vector[Entity], Vector[Event]) = {
             entity match {
                 case en: ValueHolder =>
                     value.get match {
@@ -327,7 +311,7 @@ object Event {
     
     // script
     final case class RunScript(override val entityId: String, scriptName: String) extends Event {
-        override def applyTo(entity: Entity)(implicit entityHolder: EntityHolder): (Vector[Entity], Vector[Event]) = {
+        override def applyTo(entity: Entity)(implicit entityHolder: EntityRepository): (Vector[Entity], Vector[Event]) = {
             entity match {
                 case ent: ScriptHolder =>
                     (entity, ExecuteScriptLine(entityId, ent.getScript(scriptName), 0))
@@ -347,7 +331,7 @@ object Event {
     }
     
     final case class ExecuteScriptLine(override val entityId: String, script: Script, lineNo: Int) extends Event {
-        override def applyTo(entity: Entity)(implicit entityHolder: EntityHolder): (Vector[Entity], Vector[Event]) = {
+        override def applyTo(entity: Entity)(implicit entityHolder: EntityRepository): (Vector[Entity], Vector[Event]) = {
             script.getInstruction(lineNo) match {
                 case EX =>
                     (entity, Vector.empty)
@@ -383,7 +367,7 @@ object Event {
     final case object StartTime extends Event {
         override val entityId: String = "TimeCounter"
         
-        override def applyTo(entity: Entity)(implicit entityHolder: EntityHolder): (Vector[Entity], Vector[Event]) = {
+        override def applyTo(entity: Entity)(implicit entityHolder: EntityRepository): (Vector[Entity], Vector[Event]) = {
             entity match {
                 case en: TimeHolder if !en.isRunning =>
                     (en.start(), Vector.empty)
@@ -403,7 +387,7 @@ object Event {
     final case object StopTime extends Event {
         override val entityId: String = "TimeCounter"
         
-        override def applyTo(entity: Entity)(implicit entityHolder: EntityHolder): (Vector[Entity], Vector[Event]) = {
+        override def applyTo(entity: Entity)(implicit entityHolder: EntityRepository): (Vector[Entity], Vector[Event]) = {
             entity match {
                 case en: TimeHolder if en.isRunning =>
                     (en.stop(), Vector.empty)
@@ -421,7 +405,7 @@ object Event {
     }
     
     final case class DelayTime(override val entityId: String, delay: Long, events: Vector[Event]) extends Event {
-        override def applyTo(entity: Entity)(implicit entityHolder: EntityHolder): (Vector[Entity], Vector[Event]) = {
+        override def applyTo(entity: Entity)(implicit entityHolder: EntityRepository): (Vector[Entity], Vector[Event]) = {
             val time = GetTime().getOrElse(0)
             (entity, ScheduleTime(entityId, time + delay, events))
         }
@@ -438,7 +422,7 @@ object Event {
     }
     
     final case class ScheduleTime(override val entityId: String, timeStamp: Long, events: Vector[Event]) extends Event {
-        override def applyTo(entity: Entity)(implicit entityHolder: EntityHolder): (Vector[Entity], Vector[Event]) = {
+        override def applyTo(entity: Entity)(implicit entityHolder: EntityRepository): (Vector[Entity], Vector[Event]) = {
             val time = GetTime().getOrElse(0)
             if (time >= timeStamp)
                 (entity, events)
@@ -461,7 +445,7 @@ object Event {
     final case object NextTurn extends Event {
         override val entityId: String = "TurnCounter"
         
-        override def applyTo(entity: Entity)(implicit entityHolder: EntityHolder): (Vector[Entity], Vector[Event]) = {
+        override def applyTo(entity: Entity)(implicit entityHolder: EntityRepository): (Vector[Entity], Vector[Event]) = {
             entity match {
                 case en: TurnHolder =>
                     (en.nextTurn, Vector.empty)
@@ -479,7 +463,7 @@ object Event {
     }
     
     final case class DelayTurns(override val entityId: String, delay: Long, events: Vector[Event]) extends Event {
-        override def applyTo(entity: Entity)(implicit entityHolder: EntityHolder): (Vector[Entity], Vector[Event]) = {
+        override def applyTo(entity: Entity)(implicit entityHolder: EntityRepository): (Vector[Entity], Vector[Event]) = {
             val turn = GetTurn().getOrElse(0)
             (entity, ScheduleTurns(entityId, turn + delay, events))
         }
@@ -496,7 +480,7 @@ object Event {
     }
     
     final case class ScheduleTurns(override val entityId: String, turnStamp: Long, events: Vector[Event]) extends Event {
-        override def applyTo(entity: Entity)(implicit entityHolder: EntityHolder): (Vector[Entity], Vector[Event]) = {
+        override def applyTo(entity: Entity)(implicit entityHolder: EntityRepository): (Vector[Entity], Vector[Event]) = {
             val turn = GetTurn().getOrElse(0)
             if (turn >= turnStamp)
                 (entity, events)
