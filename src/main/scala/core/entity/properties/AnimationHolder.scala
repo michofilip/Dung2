@@ -9,6 +9,8 @@ trait AnimationHolder extends Entity {
     protected val animationSelector: AnimationSelector
     protected val animationStartTime: Long
     
+    protected def setAnimationStartTime(animationStartTime: Long): T
+    
     def animationSelectorId: String = {
         animationSelector.id
     }

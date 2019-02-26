@@ -5,19 +5,19 @@ import core.entity.properties.{AnimationHolder, PhysicsHolder, PositionHolder}
 import core.entity.selectors.{AnimationSelector, PhysicsSelector}
 import json.{JValue, MyJ}
 
-final class Static(_id: String,
-                   _position: Position,
-                   _physicsSelector: PhysicsSelector,
-                   _animationSelector: AnimationSelector,
-                   _animationStartTime: Long)
-        extends Entity with PositionHolder with PhysicsHolder with AnimationHolder {
+final class Static(override val id: String,
+                   override val position: Position,
+                   override protected val physicsSelector: PhysicsSelector,
+                   override protected val animationSelector: AnimationSelector,
+                   override protected val animationStartTime: Long
+                  ) extends Entity with PositionHolder with PhysicsHolder with AnimationHolder {
     
     override protected type T = Static
-    override val id: String = _id
-    override val position: Position = _position
-    override protected val physicsSelector: PhysicsSelector = _physicsSelector
-    override protected val animationSelector: AnimationSelector = _animationSelector
-    override protected val animationStartTime: Long = _animationStartTime
+    //    override val id: String = _id
+    //    override val position: Position = _position
+    //    override protected val physicsSelector: PhysicsSelector = _physicsSelector
+    //    override protected val animationSelector: AnimationSelector = _animationSelector
+    //    override protected val animationStartTime: Long = _animationStartTime
     
     private def update(position: Position = position): T = {
         new Static(id, position, physicsSelector, animationSelector, animationStartTime)
@@ -37,4 +37,6 @@ final class Static(_id: String,
             "animationStartTime" -> animationStartTime
         )
     }
+    
+    override protected def setAnimationStartTime(animationStartTime: Long): Static = ???
 }

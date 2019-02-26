@@ -5,4 +5,6 @@ import core.entity.properties.state.State
 
 trait StateHolder extends Entity {
     val state: State
+    
+    protected def setState(state: State): T
 }

@@ -2,31 +2,23 @@ package core.entity
 
 import core.entity.properties.position.Position
 import core.entity.properties.state.State
-import core.entity.properties.state.State.{Off, On, SwitchingOff, SwitchingOn}
-import core.entity.properties.{AnimationHolder, PhysicsHolder, PositionHolder, StateHolder}
 import core.entity.selectors.{AnimationSelector, PhysicsSelector}
 import json.{JValue, MyJ}
 
-final class Switch(_id: String,
-                   _position: Position,
-                   _physicsSelector: PhysicsSelector,
-                   _animationSelector: AnimationSelector,
-                   _animationStartTime: Long,
-                   _state: State)
-        extends Entity with PositionHolder with PhysicsHolder with AnimationHolder with StateHolder {
+final class Switch(override val id: String,
+                   override val position: Position,
+                   override protected val physicsSelector: PhysicsSelector,
+                   override protected val animationSelector: AnimationSelector,
+                   override protected val animationStartTime: Long,
+                   override val state: State
+                  ) extends Switchable {
     
-    override protected type T = Switch
-    override val id: String = _id
-    override val position: Position = _position
-    override protected val physicsSelector: PhysicsSelector = _physicsSelector
-    override protected val animationSelector: AnimationSelector = _animationSelector
-    override protected val animationStartTime: Long = _animationStartTime
-    override val state: State = _state
+    override protected type T >: Switch
     
     val switchingOffLength = 1000
     val switchingOnLength = 1000
     
-    private def update(position: Position = position, animationStartTime: Long = animationStartTime, state: State = state): T = {
+    private def update(position: Position = position, animationStartTime: Long = animationStartTime, state: State = state): Switch = {
         new Switch(id, position, physicsSelector, animationSelector, animationStartTime, state)
     }
     
@@ -34,20 +26,12 @@ final class Switch(_id: String,
         update(position = position)
     }
     
-    def beginSwitchingOff(time: Long): T = {
-        update(animationStartTime = time, state = SwitchingOff)
+    override protected def setState(state: State): Switch = {
+        update(state = state)
     }
     
-    def finishSwitchingOff(time: Long): T = {
-        update(animationStartTime = time, state = Off)
-    }
-    
-    def beginSwitchingOn(time: Long): T = {
-        update(animationStartTime = time, state = SwitchingOn)
-    }
-    
-    def finishSwitchingOn(time: Long): T = {
-        update(animationStartTime = time, state = On)
+    override protected def setAnimationStartTime(animationStartTime: Long): Switch = {
+        update(animationStartTime = animationStartTime)
     }
     
     override def toJSON: JValue = {
