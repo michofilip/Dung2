@@ -1,7 +1,7 @@
 package core.entity.properties
 
 import core.entity.Entity
-import core.program.Script
+import core.parts.program.Script
 
 trait ScriptHolder extends Entity {
     protected val scripts: Map[String, Script]

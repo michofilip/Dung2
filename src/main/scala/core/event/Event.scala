@@ -1,17 +1,17 @@
 package core.event
 
 import core.entity.properties._
-import core.entity.properties.position.{Coordinates, Direction}
-import core.entity.properties.state.State
+import core.parts.position.{Coordinates, Direction}
+import core.parts.state.State
 import core.entity.repositoy.EntityRepository
 import core.entity._
-import core.program.Instruction._
-import core.program.Script
-import core.value.Value
-import core.value.basic.Implicits._
-import core.value.basic.UnitValue
-import core.value.custom.CustomLongValue.{GetTime, GetTurn}
-import core.value.custom.Implicits._
+import core.parts.program.Instruction._
+import core.parts.program.Script
+import core.parts.value.Value
+import core.parts.value.basic.Implicits._
+import core.parts.value.basic.UnitValue
+import core.parts.value.custom.CustomLongValue.{GetTime, GetTurn}
+import core.parts.value.custom.Implicits._
 import json.{JSONParsable, JValue}
 
 import scala.language.implicitConversions

@@ -1,7 +1,7 @@
 package core.entity
 
 import core.entity.properties.TimeHolder
-import core.timer.Timer
+import core.parts.timer.Timer
 import json.{JValue, MyJ}
 
 final class TimeCounter(_id: String, _timer: Timer) extends Entity with TimeHolder {

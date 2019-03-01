@@ -1,7 +1,7 @@
 package core.entity.properties
 
 import core.entity.Entity
-import core.timer.Timer
+import core.parts.timer.Timer
 
 trait TimeHolder extends Entity {
     override protected type T <: TimeHolder

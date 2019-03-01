@@ -1,11 +1,11 @@
 package core.entity
 
-import core.entity.properties.position.Direction.North
-import core.entity.properties.position.{Coordinates, Position}
-import core.entity.properties.state.State._
+import core.parts.position.Direction.North
+import core.parts.position.{Coordinates, Position}
+import core.parts.state.State._
 import core.entity.selectors.AnimationSelector._
 import core.entity.selectors.PhysicsSelector._
-import core.timer.Timer
+import core.parts.timer.Timer
 
 class EntityFactory(private val clock: Timer) {
     // todo redo it

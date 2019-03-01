@@ -1,7 +1,7 @@
 import core.entity.{Entity, EntityFactory, TimeCounter}
 import core.event.Event
 import core.event.Event._
-import core.timer.Timer
+import core.parts.timer.Timer
 import core.world.WorldFrame
 
 object Main extends App {
