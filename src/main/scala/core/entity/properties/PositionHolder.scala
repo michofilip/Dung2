@@ -3,7 +3,7 @@ package core.entity.properties
 import core.entity.Entity
 import core.parts.position.{Coordinates, Position}
 
-trait PositionHolder extends Entity {
+trait PositionHolder[T <: PhysicsHolder[T]] extends Entity[T] {
     val position: Position
     
     protected def setPosition(position: Position): T

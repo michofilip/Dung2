@@ -3,9 +3,7 @@ package core.entity.properties
 import core.entity.Entity
 import core.parts.timer.Timer
 
-trait TimeHolder extends Entity {
-    override protected type T <: TimeHolder
-    
+trait TimeHolder[T <: TimeHolder[T]] extends Entity[T] {
     protected val timer: Timer
     
     def getTime: Long = {

@@ -1,5 +1,7 @@
 package core.entity.properties
 
-trait InventoryHolder {
+import core.entity.Entity
+
+trait InventoryHolder[T <: InventoryHolder[T]] extends Entity[T] {
     // todo complete it
 }

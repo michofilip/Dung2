@@ -1,11 +1,11 @@
 package core.entity.properties
 
 import core.entity.Entity
-import core.parts.graphics.{Animation, Frame}
 import core.entity.selectors.AnimationSelector
+import core.parts.graphics.{Animation, Frame}
 import core.parts.timer.Timer
 
-trait AnimationHolder extends Entity {
+trait AnimationHolder[T <: AnimationHolder[T]] extends Entity[T] {
     protected val animationSelector: AnimationSelector
     protected val animationStartTime: Long
     

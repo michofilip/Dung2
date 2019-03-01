@@ -2,10 +2,8 @@ package core.entity
 
 import json.JSONParsable
 
-abstract class Entity extends JSONParsable {
-    protected type T <: Entity
+abstract class Entity[T <: Entity[T]] extends JSONParsable {
     val id: String
-    //    val timeStamp: Long
 }
 
 object Entity {
@@ -40,7 +38,7 @@ object Entity {
     //        }
     //    }
     //
-  
+    
     //
     //    final class TurnCounter(val turn: Long) extends Entity with TurnHolder {
     //        override protected type T = TurnCounter
@@ -87,33 +85,33 @@ object Entity {
     //    }
     
     // Physical classes
-//        final class Static(override val id: String,
-//                           override val timeStamp: Long,
-//                           override val position: Position,
-//                           override protected val physicsSelector: PhysicsSelector,
-//                           override protected val animationSelector: AnimationSelector)
-//                extends Entity with PositionHolder with PhysicsHolder with AnimationHolder {
-//
-//            override protected type T = Static
-//
-//            override def setPosition(position: Position): Static =
-//                update(position = position)
-//
-//            private def update(position: Position = position): T =
-//                new Static(id, timeStamp, position, physicsSelector, animationSelector)
-//
-//            override def toJSON: JValue = {
-//                import json.MyJ._
-//                jObject(
-//                    "entity" -> "Static",
-//                    "id" -> id,
-//                    "timeStamp" -> timeStamp,
-//                    "position" -> position.toJSON,
-//                    "physicsSelector" -> physicsSelector.id,
-//                    "animationSelector" -> animationSelector.id
-//                )
-//            }
-//        }
+    //        final class Static(override val id: String,
+    //                           override val timeStamp: Long,
+    //                           override val position: Position,
+    //                           override protected val physicsSelector: PhysicsSelector,
+    //                           override protected val animationSelector: AnimationSelector)
+    //                extends Entity with PositionHolder with PhysicsHolder with AnimationHolder {
+    //
+    //            override protected type T = Static
+    //
+    //            override def setPosition(position: Position): Static =
+    //                update(position = position)
+    //
+    //            private def update(position: Position = position): T =
+    //                new Static(id, timeStamp, position, physicsSelector, animationSelector)
+    //
+    //            override def toJSON: JValue = {
+    //                import json.MyJ._
+    //                jObject(
+    //                    "entity" -> "Static",
+    //                    "id" -> id,
+    //                    "timeStamp" -> timeStamp,
+    //                    "position" -> position.toJSON,
+    //                    "physicsSelector" -> physicsSelector.id,
+    //                    "animationSelector" -> animationSelector.id
+    //                )
+    //            }
+    //        }
     
     //    final class Static(_id: String,
     //                       _timeStamp: Long,
