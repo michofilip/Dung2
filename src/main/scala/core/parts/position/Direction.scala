@@ -1,6 +1,6 @@
-package core.entity.properties.position
+package core.parts.position
 
-import core.entity.properties.position.Direction._
+import core.parts.position.Direction._
 
 sealed abstract class Direction {
     val azimuth: Int

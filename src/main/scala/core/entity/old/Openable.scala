@@ -1,7 +1,7 @@
 //package core.entity
 //
 //import core.entity.properties.StateHolder
-//import core.entity.properties.state.State._
+//import core.parts.state.State._
 //
 //abstract class Openable extends MapEntity with StateHolder {
 //    val lockCode: Long

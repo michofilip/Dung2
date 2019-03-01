@@ -1,4 +1,4 @@
-package core.entity.properties.position
+package core.parts.position
 
 import json.MyJ.jObject
 import json.{JSONParsable, JValue}

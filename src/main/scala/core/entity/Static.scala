@@ -1,6 +1,6 @@
 package core.entity
 
-import core.entity.properties.position.Position
+import core.parts.position.Position
 import core.entity.properties.{AnimationHolder, PhysicsHolder, PositionHolder}
 import core.entity.selectors.{AnimationSelector, PhysicsSelector}
 import json.{JValue, MyJ}

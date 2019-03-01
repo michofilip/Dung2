@@ -1,4 +1,4 @@
-package core.entity.properties.state
+package core.parts.state
 
 sealed abstract class State
 

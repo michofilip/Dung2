@@ -1,4 +1,4 @@
-package core.entity.properties.inventory
+package core.parts.inventory
 
 import core.entity.Entity
 

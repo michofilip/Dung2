@@ -1,4 +1,4 @@
-package core.entity.properties.graphics
+package core.parts.graphics
 
 class Animation(private val frames: Vector[Frame], private val length: Int, private val looped: Boolean) {
     def getFrame(time: Long): Frame = {

@@ -1,6 +1,6 @@
 package core.entity
 
-import core.entity.properties.state.State.{Off, On, SwitchingOff, SwitchingOn}
+import core.parts.state.State.{Off, On, SwitchingOff, SwitchingOn}
 import core.entity.properties.{AnimationHolder, PhysicsHolder, PositionHolder, StateHolder}
 
 abstract class Switchable extends Entity with PositionHolder with PhysicsHolder with AnimationHolder with StateHolder {

@@ -1,3 +1,3 @@
-package core.entity.properties.physics
+package core.parts.physics
 
 case class Physics(solid: Boolean, opaque: Boolean)

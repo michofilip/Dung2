@@ -1,8 +1,8 @@
 package core.entity
 
-import core.entity.properties.position.Position
-import core.entity.properties.state.State
-import core.entity.properties.state.State._
+import core.parts.position.Position
+import core.parts.state.State
+import core.parts.state.State._
 import core.entity.properties.{AnimationHolder, PhysicsHolder, PositionHolder, StateHolder}
 import core.entity.selectors.{AnimationSelector, PhysicsSelector}
 import json.{JValue, MyJ}

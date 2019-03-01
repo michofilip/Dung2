@@ -1,7 +1,7 @@
 package core.entity.properties
 
 import core.entity.Entity
-import core.entity.properties.position.{Coordinates, Position}
+import core.parts.position.{Coordinates, Position}
 
 trait PositionHolder extends Entity {
     val position: Position

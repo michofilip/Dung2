@@ -1,8 +1,8 @@
 package core.entity.selectors
 
-import core.entity.properties.physics.Physics
-import core.entity.properties.state.State
-import core.entity.properties.state.State._
+import core.parts.physics.Physics
+import core.parts.state.State
+import core.parts.state.State._
 
 sealed abstract class PhysicsSelector {
     val id: String

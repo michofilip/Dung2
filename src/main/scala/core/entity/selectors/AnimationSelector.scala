@@ -1,9 +1,9 @@
 package core.entity.selectors
 
-import core.entity.properties.graphics.{Animation, Frame}
-import core.entity.properties.position.Direction
-import core.entity.properties.state.State
-import core.entity.properties.state.State._
+import core.parts.graphics.{Animation, Frame}
+import core.parts.position.Direction
+import core.parts.state.State
+import core.parts.state.State._
 
 sealed abstract class AnimationSelector {
     val id: String

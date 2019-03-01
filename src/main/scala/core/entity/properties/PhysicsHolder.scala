@@ -1,7 +1,7 @@
 package core.entity.properties
 
 import core.entity.Entity
-import core.entity.properties.physics.Physics
+import core.parts.physics.Physics
 import core.entity.selectors.PhysicsSelector
 
 trait PhysicsHolder extends Entity {

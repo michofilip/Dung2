@@ -1,4 +1,4 @@
-package core.entity.properties.inventory
+package core.parts.inventory
 
 sealed abstract class Slot {
     

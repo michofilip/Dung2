@@ -1,6 +1,6 @@
 //package core.entity
 //
-//import core.entity.properties.state.State.CharacterState
+//import core.parts.state.State.CharacterState
 //import core.entity.properties.StateHolder
 //
 //abstract class Character extends MapEntity with StateHolder {
