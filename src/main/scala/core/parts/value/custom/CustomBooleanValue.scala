@@ -1,8 +1,8 @@
 package core.parts.value.custom
 
-import core.entity.properties.PhysicsHolder
-import core.entity.Entity
-import core.entity.repositoy.EntityRepository
+import core.entities.properties.PhysicsHolder
+import core.entities.Entity
+import core.entities.repositoy.EntityRepository
 import core.parts.value.basic.BooleanValue
 import json.JValue
 

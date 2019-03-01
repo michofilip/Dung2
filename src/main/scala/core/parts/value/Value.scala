@@ -1,6 +1,6 @@
 package core.parts.value
 
-import core.entity.repositoy.EntityRepository
+import core.entities.repositoy.EntityRepository
 import core.parts.value.basic.BooleanValue
 import core.parts.value.basic.BooleanValue.{Equals, Unequals}
 import json.JSONParsable

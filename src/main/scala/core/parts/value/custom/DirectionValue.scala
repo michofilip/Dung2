@@ -1,8 +1,8 @@
 package core.parts.value.custom
 
 import core.parts.position.Direction
-import core.entity.properties.PositionHolder
-import core.entity.repositoy.EntityRepository
+import core.entities.properties.PositionHolder
+import core.entities.repositoy.EntityRepository
 import core.parts.value.Value
 import json.JValue
 

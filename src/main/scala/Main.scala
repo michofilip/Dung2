@@ -1,4 +1,5 @@
-import core.entity.{Entity, EntityFactory, TimeCounter}
+import core.entities.finals.TimeCounter
+import core.entities.{Entity, EntityFactory}
 import core.event.Event
 import core.event.Event._
 import core.parts.timer.Timer

@@ -1,8 +1,8 @@
 package core.parts.value.custom
 
 import core.parts.state.State
-import core.entity.properties.StateHolder
-import core.entity.repositoy.EntityRepository
+import core.entities.properties.StateHolder
+import core.entities.repositoy.EntityRepository
 import core.parts.value.Value
 import json.JValue
 

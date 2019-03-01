@@ -1,10 +1,11 @@
 package core.event
 
-import core.entity.properties._
+import core.entities.properties._
 import core.parts.position.{Coordinates, Direction}
 import core.parts.state.State
-import core.entity.repositoy.EntityRepository
-import core.entity._
+import core.entities.repositoy.EntityRepository
+import core.entities._
+import core.entities.finals.Switch
 import core.parts.program.Instruction._
 import core.parts.program.Script
 import core.parts.value.Value
@@ -369,7 +370,7 @@ object Event {
         
         override def applyTo(entity: Entity)(implicit entityHolder: EntityRepository): (Vector[Entity], Vector[Event]) = {
             entity match {
-                case en: TimeHolder if !en.isRunning =>
+                case en: TimeCounterHolder if !en.isRunning =>
                     (en.start(), Vector.empty)
                 case _ =>
                     (entity, Vector.empty)
@@ -389,7 +390,7 @@ object Event {
         
         override def applyTo(entity: Entity)(implicit entityHolder: EntityRepository): (Vector[Entity], Vector[Event]) = {
             entity match {
-                case en: TimeHolder if en.isRunning =>
+                case en: TimeCounterHolder if en.isRunning =>
                     (en.stop(), Vector.empty)
                 case _ =>
                     (entity, Vector.empty)
@@ -447,7 +448,7 @@ object Event {
         
         override def applyTo(entity: Entity)(implicit entityHolder: EntityRepository): (Vector[Entity], Vector[Event]) = {
             entity match {
-                case en: TurnHolder =>
+                case en: TurnCounterHolder =>
                     (en.nextTurn, Vector.empty)
                 case _ =>
                     (entity, Vector.empty)
