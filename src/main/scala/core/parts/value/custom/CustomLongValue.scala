@@ -7,10 +7,10 @@ import json.JValue
 
 object CustomLongValue {
     
-    final case class GetTime() extends LongValue {
+    final case class GetTime(entityId: String) extends LongValue {
         override def get(implicit entityHolder: EntityRepository): Option[Long] = {
-            entityHolder.getById("TimeCounter") match {
-                case Some(en: TimeCounterHolder) => Some(en.getTime)
+            entityHolder.getById(entityId) match {
+                case Some(en: TimeCounterHolder[_]) => Some(en.getTime)
                 case _ => None
             }
         }
@@ -23,10 +23,10 @@ object CustomLongValue {
         }
     }
     
-    final case class GetTurn() extends LongValue {
+    final case class GetTurn(entityId: String) extends LongValue {
         override def get(implicit entityHolder: EntityRepository): Option[Long] = {
-            entityHolder.getById("TurnCounter") match {
-                case Some(en: TurnCounterHolder) => Some(en.turn)
+            entityHolder.getById(entityId) match {
+                case Some(en: TurnCounterHolder[_]) => Some(en.turn)
                 case _ => None
             }
         }

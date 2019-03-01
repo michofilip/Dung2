@@ -10,7 +10,7 @@ object Main extends App {
     val entityFactory = new EntityFactory(timeCounter)
     var ent = entityFactory.create("lever").get
     
-    val entities = Vector[Entity](
+    val entities = Vector[Entity[_]](
         ent,
         new TimeCounter("TimeCounter", timeCounter),
         //        new entity.Entity.TurnCounter(0),

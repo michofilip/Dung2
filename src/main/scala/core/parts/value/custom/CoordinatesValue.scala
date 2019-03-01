@@ -42,7 +42,7 @@ object CoordinatesValue {
     final case class GetCoordinates(entityId: String) extends CoordinatesValue {
         override def get(implicit entityHolder: EntityRepository): Option[Coordinates] = {
             entityHolder.getById(entityId) match {
-                case Some(en: PositionHolder) => Some(en.position.coordinates)
+                case Some(en: PositionHolder[_]) => Some(en.position.coordinates)
                 case _ => None
             }
         }

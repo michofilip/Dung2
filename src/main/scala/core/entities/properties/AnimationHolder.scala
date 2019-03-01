@@ -17,11 +17,11 @@ trait AnimationHolder[T <: AnimationHolder[T]] extends Entity[T] {
     
     private def animation: Animation = {
         val stateOpt = this match {
-            case en: StateHolder => Some(en.state)
+            case en: StateHolder[_] => Some(en.state)
             case _ => None
         }
         val directionOpt = this match {
-            case en: PositionHolder => Some(en.position.direction)
+            case en: PositionHolder[_] => Some(en.position.direction)
             case _ => None
         }
         animationSelector.getAnimation(stateOpt, directionOpt)

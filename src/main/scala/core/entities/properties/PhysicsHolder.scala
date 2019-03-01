@@ -13,7 +13,7 @@ trait PhysicsHolder[T <: PhysicsHolder[T]] extends Entity[T] {
     
     def physics: Physics = {
         val stateOpt = this match {
-            case en: StateHolder => Some(en.state)
+            case en: StateHolder[_] => Some(en.state)
             case _ => None
         }
         physicsSelector.getPhysics(stateOpt)

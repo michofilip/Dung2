@@ -46,7 +46,7 @@ class WorldFrame(private val entityHolder: EntityRepository,
 }
 
 object WorldFrame {
-    def apply(entities: Vector[Entity], events: Vector[Event]): WorldFrame = {
+    def apply(entities: Vector[Entity[_]], events: Vector[Event]): WorldFrame = {
         new WorldFrame(EntityRepository(entities), events)
     }
     

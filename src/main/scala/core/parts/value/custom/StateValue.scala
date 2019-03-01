@@ -42,7 +42,7 @@ object StateValue {
     final case class GetState(entityId: String) extends StateValue {
         override def get(implicit entityHolder: EntityRepository): Option[State] = {
             entityHolder.getById(entityId) match {
-                case Some(en: StateHolder) => Some(en.state)
+                case Some(en: StateHolder[_]) => Some(en.state)
                 case _ => None
             }
         }
