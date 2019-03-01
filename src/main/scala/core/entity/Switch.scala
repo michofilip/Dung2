@@ -13,7 +13,7 @@ final class Switch(override val id: String,
                    override val state: State
                   ) extends Switchable {
     
-    override protected type T >: Switch
+//    override protected type T >: Switch
     
     val switchingOffLength = 1000
     val switchingOnLength = 1000
