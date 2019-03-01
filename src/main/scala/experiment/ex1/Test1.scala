@@ -1,7 +1,7 @@
 package experiment.ex1
 
 object Test1 extends App {
-    var en = new ConEntityEX(1, 2)
+    var en = new FinalEntity(1, 2)
     println(en)
     en = en.setA(10)
     println(en)
@@ -10,11 +10,18 @@ object Test1 extends App {
     en = en.setAB(100, 200)
     println(en)
     
-    val en1: EntityEX[_] = new ConEntityEX(0, 0)
+    val en1: Entity[_] = new FinalEntity(0, 0)
     println(en1)
     val en2 = en1 match {
-        case pa: AbsEntityEX[_] => pa.setA(10).setB(20)
+        case pa: AbstractEntity[_] => pa.setAB(10, 10)
+    }
+    
+    def setAB(en: Entity[_], a: Int, b: Int): Entity[_] = {
+        en match {
+            case pa: AbstractEntity[_] => pa.setAB(a, b)
+        }
     }
     
     println(en2)
+    println(setAB(en2, 100, 100))
 }
