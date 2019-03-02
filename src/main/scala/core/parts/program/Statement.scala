@@ -20,9 +20,9 @@ object Statement {
     
     implicit def inst2Vec(instruction: Instruction): Vector[Instruction] = Vector(instruction)
     
-    implicit def ev2Do(event: Event): Do = Do(event)
+    implicit def ev2Do(event: Event): Execute = Execute(event)
     
-    implicit def evs2Do(events: Vector[Event]): Do = Do(events)
+    implicit def evs2Do(events: Vector[Event]): Execute = Execute(events)
     
     def block(statements: Statement*): Block = {
         Block(statements.toVector)
@@ -44,7 +44,7 @@ object Statement {
         Choose(switchTest, variants.toVector, Block(defaultStatements.toVector))
     }
     
-    case class Do(events: Vector[Event]) extends Statement {
+    case class Execute(events: Vector[Event]) extends Statement {
         override protected def compile(initialInstructions: Vector[Instruction], initialLabelId: Int): (Vector[Instruction], Int) = {
             (initialInstructions ++ EXECUTE(events), initialLabelId)
         }

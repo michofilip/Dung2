@@ -1,7 +1,7 @@
 package core.parts.program
 
 import core.parts.program.Instruction._
-import core.parts.program.Statement.{Block, Choose, Do, Loop, Variant, When}
+import core.parts.program.Statement.{Block, Choose, Execute, Loop, Variant, When}
 import core.parts.value.Value
 
 import scala.language.implicitConversions
@@ -35,7 +35,7 @@ object Compiler {
             sts match {
                 case st +: rest =>
                     st match {
-                        case Do(events) =>
+                        case Execute(events) =>
                             comp(rest, inst ++ EXECUTE(events), nextLabelId)
                         
                         case Block(statements) =>
