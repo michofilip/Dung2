@@ -4,7 +4,7 @@ import core.entities.Entity
 import core.entities.selectors.PhysicsSelector
 import core.parts.physics.Physics
 
-trait PhysicsHolder[T <: PhysicsHolder[T]] extends Entity[T] {
+trait PhysicsHolder[T <: PhysicsHolder[T]] extends Entity {
     protected val physicsSelector: PhysicsSelector
     
     def physicsSelectorId: String = {

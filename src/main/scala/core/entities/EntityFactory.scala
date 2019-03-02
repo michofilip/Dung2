@@ -10,7 +10,7 @@ import core.parts.timer.Timer
 
 class EntityFactory(private val clock: Timer) {
     // todo redo it
-    def create(name: String, args: String*): Option[Entity[_]] = {
+    def create(name: String, args: String*): Option[Entity] = {
         name match {
             case "lever" => Some(lever())
             case "door" => Some(door())

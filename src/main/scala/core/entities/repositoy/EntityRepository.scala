@@ -4,10 +4,10 @@ import core.entities.Entity
 import core.entities.properties.PositionHolder
 import core.parts.position.Coordinates
 
-class EntityRepository private(private val entitiesById: Map[String, Entity[_]],
-                               private val entitiesByCoordinates: Map[Coordinates, Map[String, Entity[_]]]) {
+class EntityRepository private(private val entitiesById: Map[String, Entity],
+                               private val entitiesByCoordinates: Map[Coordinates, Map[String, Entity]]) {
     
-    def add(entity: Entity[_]): EntityRepository = {
+    def add(entity: Entity): EntityRepository = {
         val newEntitiesById = entitiesById + (entity.id -> entity)
         val newEntitiesByCoordinates = entity match {
             case en: PositionHolder[_] =>
@@ -20,19 +20,19 @@ class EntityRepository private(private val entitiesById: Map[String, Entity[_]],
         new EntityRepository(newEntitiesById, newEntitiesByCoordinates)
     }
     
-    def +(entity: Entity[_]): EntityRepository = {
+    def +(entity: Entity): EntityRepository = {
         add(entity)
     }
     
-    def addAll(entities: Seq[Entity[_]]): EntityRepository = {
+    def addAll(entities: Seq[Entity]): EntityRepository = {
         entities.foldLeft(this)((entityHolder, entity) => entityHolder + entity)
     }
     
-    def ++(entities: Seq[Entity[_]]): EntityRepository = {
+    def ++(entities: Seq[Entity]): EntityRepository = {
         addAll(entities)
     }
     
-    def remove(entity: Entity[_]): EntityRepository = {
+    def remove(entity: Entity): EntityRepository = {
         val newEntitiesById = entitiesById - entity.id
         val newEntitiesByCoordinates = entity match {
             case en: PositionHolder[_] =>
@@ -48,15 +48,15 @@ class EntityRepository private(private val entitiesById: Map[String, Entity[_]],
         new EntityRepository(newEntitiesById, newEntitiesByCoordinates)
     }
     
-    def -(entity: Entity[_]): EntityRepository = {
+    def -(entity: Entity): EntityRepository = {
         remove(entity)
     }
     
-    def removeAll(entities: Seq[Entity[_]]): EntityRepository = {
+    def removeAll(entities: Seq[Entity]): EntityRepository = {
         entities.foldLeft(this)((entityHolder, entity) => entityHolder - entity)
     }
     
-    def --(entities: Seq[Entity[_]]): EntityRepository = {
+    def --(entities: Seq[Entity]): EntityRepository = {
         removeAll(entities)
     }
     
@@ -64,23 +64,23 @@ class EntityRepository private(private val entitiesById: Map[String, Entity[_]],
         entitiesById.contains(id)
     }
     
-    def getAll: Vector[Entity[_]] = {
+    def getAll: Vector[Entity] = {
         entitiesById.values.toVector
     }
     
-    def getById(id: String): Option[Entity[_]] = {
+    def getById(id: String): Option[Entity] = {
         entitiesById.get(id)
     }
     
-    def getByCoordinates(coordinates: Coordinates): Vector[Entity[_]] = {
+    def getByCoordinates(coordinates: Coordinates): Vector[Entity] = {
         entitiesByCoordinates.getOrElse(coordinates, Map.empty).values.toVector
     }
     
-    def existsAtCoordinates(coordinates: Coordinates, condition: Entity[_] => Boolean): Boolean = {
+    def existsAtCoordinates(coordinates: Coordinates, condition: Entity => Boolean): Boolean = {
         getByCoordinates(coordinates).exists(condition)
     }
     
-    def forallAtCoordinates(coordinates: Coordinates, condition: Entity[_] => Boolean): Boolean = {
+    def forallAtCoordinates(coordinates: Coordinates, condition: Entity => Boolean): Boolean = {
         getByCoordinates(coordinates).forall(condition)
     }
     
@@ -91,7 +91,7 @@ object EntityRepository {
         new EntityRepository(Map.empty, Map.empty)
     }
     
-    def apply(entities: Seq[Entity[_]]): EntityRepository = {
+    def apply(entities: Seq[Entity]): EntityRepository = {
         EntityRepository() ++ entities
     }
 }

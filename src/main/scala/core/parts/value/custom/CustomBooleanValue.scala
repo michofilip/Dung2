@@ -24,7 +24,7 @@ object CustomBooleanValue {
     
     final case class IsSolidAtCoordinates(value: CoordinatesValue) extends BooleanValue {
         override def get(implicit entityHolder: EntityRepository): Option[Boolean] = {
-            val condition: Entity[_] => Boolean = {
+            val condition: Entity => Boolean = {
                 case en: PhysicsHolder[_] if en.physics.solid => true
                 case _ => false
             }
@@ -45,7 +45,7 @@ object CustomBooleanValue {
     
     final case class IsOpaqueAtCoordinates(value: CoordinatesValue) extends BooleanValue {
         override def get(implicit entityHolder: EntityRepository): Option[Boolean] = {
-            val condition: Entity[_] => Boolean = {
+            val condition: Entity => Boolean = {
                 case en: PhysicsHolder[_] if en.physics.opaque => true
                 case _ => false
             }
