@@ -1,6 +1,6 @@
 package core.parts.program
 
-import core.event.Event
+import core.events.Event
 import core.parts.program.Instruction._
 import core.parts.value.Value
 import core.parts.value.basic.BooleanValue

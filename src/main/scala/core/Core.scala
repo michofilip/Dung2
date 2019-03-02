@@ -1,6 +1,6 @@
 package core
 
-import core.entity.EntityFactory
+import core.entities.EntityFactory
 import core.parts.timer.Timer
 
 class Core {

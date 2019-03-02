@@ -1,8 +1,8 @@
 package core.parts.value.custom
 
 import core.parts.state.State
-import core.entity.properties.StateHolder
-import core.entity.repositoy.EntityRepository
+import core.entities.properties.StateHolder
+import core.entities.repositoy.EntityRepository
 import core.parts.value.Value
 import json.JValue
 
@@ -42,7 +42,7 @@ object StateValue {
     final case class GetState(entityId: String) extends StateValue {
         override def get(implicit entityHolder: EntityRepository): Option[State] = {
             entityHolder.getById(entityId) match {
-                case Some(en: StateHolder) => Some(en.state)
+                case Some(en: StateHolder[_]) => Some(en.state)
                 case _ => None
             }
         }

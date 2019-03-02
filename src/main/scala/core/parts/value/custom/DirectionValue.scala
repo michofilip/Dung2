@@ -1,8 +1,8 @@
 package core.parts.value.custom
 
 import core.parts.position.Direction
-import core.entity.properties.PositionHolder
-import core.entity.repositoy.EntityRepository
+import core.entities.properties.PositionHolder
+import core.entities.repositoy.EntityRepository
 import core.parts.value.Value
 import json.JValue
 
@@ -42,7 +42,7 @@ object DirectionValue {
     final case class GetDirection(entityId: String) extends DirectionValue {
         override def get(implicit entityHolder: EntityRepository): Option[Direction] = {
             entityHolder.getById(entityId) match {
-                case Some(en: PositionHolder) => Some(en.position.direction)
+                case Some(en: PositionHolder[_]) => Some(en.position.direction)
                 case _ => None
             }
         }

@@ -1,8 +1,8 @@
 package core.world
 
-import core.entity.Entity
-import core.entity.repositoy.EntityRepository
-import core.event.Event
+import core.entities.Entity
+import core.entities.repositoy.EntityRepository
+import core.events.Event
 import json.MyJ.ToJSON
 import json.{JSONParsable, JValue}
 
@@ -21,7 +21,7 @@ class WorldFrame(private val entityHolder: EntityRepository,
                 case ((tempEntityHolder, tempEvents), event) =>
                     implicit val eh: EntityRepository = tempEntityHolder
                     tempEntityHolder.getById(event.entityId) match {
-                        case Some(entity) =>
+                        case Some(entity: Entity) =>
                             val (resultEntities, resultEvents) = event.applyTo(entity)
                             
                             val newTempEntityHolder = tempEntityHolder - entity ++ resultEntities
@@ -29,7 +29,7 @@ class WorldFrame(private val entityHolder: EntityRepository,
                             
                             (newTempEntityHolder, newTempEvents)
                         
-                        case None =>
+                        case _ =>
                             (tempEntityHolder, tempEvents)
                     }
             }

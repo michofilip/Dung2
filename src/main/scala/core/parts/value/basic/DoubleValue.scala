@@ -1,6 +1,6 @@
 package core.parts.value.basic
 
-import core.entity.repositoy.EntityRepository
+import core.entities.repositoy.EntityRepository
 import core.parts.value.Value
 import core.parts.value.basic.DoubleValue._
 import core.parts.value.basic.Implicits._
