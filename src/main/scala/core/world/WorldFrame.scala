@@ -1,16 +1,17 @@
 package core.world
 
-import core.entity.{Entity, EntityHolder}
-import core.event.Event
+import core.entities.Entity
+import core.entities.repositoy.EntityRepository
+import core.events.Event
 import json.MyJ.ToJSON
 import json.{JSONParsable, JValue}
 
 import scala.collection.immutable.ListMap
 
-class WorldFrame(private val entityHolder: EntityHolder,
+class WorldFrame(private val entityHolder: EntityRepository,
                  private val events: Vector[Event]
                 ) extends JSONParsable {
-    private def update(entityHolder: EntityHolder = entityHolder, events: Vector[Event] = events): WorldFrame = {
+    private def update(entityHolder: EntityRepository = entityHolder, events: Vector[Event] = events): WorldFrame = {
         new WorldFrame(entityHolder, events)
     }
     
@@ -18,9 +19,9 @@ class WorldFrame(private val entityHolder: EntityHolder,
         val (newEntityHolder, newEvents) =
             events.foldLeft(entityHolder, externalEvents) {
                 case ((tempEntityHolder, tempEvents), event) =>
-                    implicit val eh: EntityHolder = tempEntityHolder
+                    implicit val eh: EntityRepository = tempEntityHolder
                     tempEntityHolder.getById(event.entityId) match {
-                        case Some(entity) =>
+                        case Some(entity: Entity) =>
                             val (resultEntities, resultEvents) = event.applyTo(entity)
                             
                             val newTempEntityHolder = tempEntityHolder - entity ++ resultEntities
@@ -28,7 +29,7 @@ class WorldFrame(private val entityHolder: EntityHolder,
                             
                             (newTempEntityHolder, newTempEvents)
                         
-                        case None =>
+                        case _ =>
                             (tempEntityHolder, tempEvents)
                     }
             }
@@ -46,7 +47,7 @@ class WorldFrame(private val entityHolder: EntityHolder,
 
 object WorldFrame {
     def apply(entities: Vector[Entity], events: Vector[Event]): WorldFrame = {
-        new WorldFrame(EntityHolder(entities), events)
+        new WorldFrame(EntityRepository(entities), events)
     }
     
 }
