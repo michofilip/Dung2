@@ -9,6 +9,8 @@ object Instruction {
     
     final case object EX extends Instruction
     
+    final case class ER(code: Int) extends Instruction
+    
     final case class DO(events: Vector[Event]) extends Instruction
     
     final case class LB(labelId: Int) extends Instruction
