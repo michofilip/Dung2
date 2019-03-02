@@ -21,7 +21,7 @@ class WorldFrame(private val entityHolder: EntityRepository,
                 case ((tempEntityHolder, tempEvents), event) =>
                     implicit val eh: EntityRepository = tempEntityHolder
                     tempEntityHolder.getById(event.entityId) match {
-                        case Some(entity) =>
+                        case Some(entity: Entity) =>
                             val (resultEntities, resultEvents) = event.applyTo(entity)
                             
                             val newTempEntityHolder = tempEntityHolder - entity ++ resultEntities
@@ -29,7 +29,7 @@ class WorldFrame(private val entityHolder: EntityRepository,
                             
                             (newTempEntityHolder, newTempEvents)
                         
-                        case None =>
+                        case _ =>
                             (tempEntityHolder, tempEvents)
                     }
             }
@@ -46,7 +46,7 @@ class WorldFrame(private val entityHolder: EntityRepository,
 }
 
 object WorldFrame {
-    def apply(entities: Vector[Entity[_]], events: Vector[Event]): WorldFrame = {
+    def apply(entities: Vector[Entity], events: Vector[Event]): WorldFrame = {
         new WorldFrame(EntityRepository(entities), events)
     }
     

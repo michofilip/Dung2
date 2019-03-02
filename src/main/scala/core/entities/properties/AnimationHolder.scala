@@ -5,7 +5,7 @@ import core.entities.selectors.AnimationSelector
 import core.parts.graphics.{Animation, Frame}
 import core.parts.timer.Timer
 
-trait AnimationHolder[T <: AnimationHolder[T]] extends Entity[T] {
+trait AnimationHolder[T <: AnimationHolder[T]] extends Entity {
     protected val animationSelector: AnimationSelector
     protected val animationStartTime: Long
     

@@ -2,7 +2,7 @@ package core.entities
 
 import json.JSONParsable
 
-abstract class Entity[T <: Entity[T]] extends JSONParsable {
+abstract class Entity extends JSONParsable {
     val id: String
 }
 
