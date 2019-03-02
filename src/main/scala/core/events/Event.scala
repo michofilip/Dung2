@@ -337,18 +337,18 @@ object Event {
     final case class ExecuteScriptLine(override val entityId: String, script: Script, lineNo: Int) extends Event {
         override def applyTo(entity: Entity)(implicit entityHolder: EntityRepository): (Vector[Entity], Vector[Event]) = {
             script.getInstruction(lineNo) match {
-                case EX =>
+                case EXIT =>
                     (entity, Vector.empty)
-                case DO(events) =>
+                case EXECUTE(events) =>
                     (entity, ExecuteScriptLine(entityId, script, lineNo + 1) ++ events)
-                case LB(_) =>
+                case LABEL(_) =>
                     (entity, ExecuteScriptLine(entityId, script, lineNo + 1))
-                case GT(labelId) =>
+                case GOTO(labelId) =>
                     script.labelMap.get(labelId) match {
                         case Some(labelLineNo) => (entity, ExecuteScriptLine(entityId, script, labelLineNo + 1))
                         case None => (entity, ExecuteScriptLine(entityId, script, lineNo + 1))
                     }
-                case IF(condition) =>
+                case TEST(condition) =>
                     condition.get match {
                         case Some(true) => (entity, ExecuteScriptLine(entityId, script, lineNo + 2))
                         case Some(false) => (entity, ExecuteScriptLine(entityId, script, lineNo + 1))

@@ -46,7 +46,7 @@ object Statement {
     
     case class Do(events: Vector[Event]) extends Statement {
         override protected def compile(initialInstructions: Vector[Instruction], initialLabelId: Int): (Vector[Instruction], Int) = {
-            (initialInstructions ++ DO(events), initialLabelId)
+            (initialInstructions ++ EXECUTE(events), initialLabelId)
         }
     }
     
@@ -67,13 +67,13 @@ object Statement {
             val (thenInstructions, afterThenLabelId) = thenStatement.compile(Vector.empty, exitLabelId + 1)
             val (elseInstructions, afterElseLabelId) = elseStatement.compile(Vector.empty, afterThenLabelId + 1)
             
-            val instructions = IF(condition) ++
-                    GT(elseLabelId) ++
+            val instructions = TEST(condition) ++
+                    GOTO(elseLabelId) ++
                     thenInstructions ++
-                    GT(exitLabelId) ++
-                    LB(elseLabelId) ++
+                    GOTO(exitLabelId) ++
+                    LABEL(elseLabelId) ++
                     elseInstructions ++
-                    LB(exitLabelId)
+                    LABEL(exitLabelId)
             
             (initialInstructions ++ instructions, afterElseLabelId)
         }
@@ -86,12 +86,12 @@ object Statement {
             
             val (loopedInstructions, afterLoopLabelId) = loopedStatement.compile(Vector.empty, exitLabelId + 1)
             
-            val instructions = LB(loopLabelId) ++
-                    IF(condition) ++
-                    GT(exitLabelId) ++
+            val instructions = LABEL(loopLabelId) ++
+                    TEST(condition) ++
+                    GOTO(exitLabelId) ++
                     loopedInstructions ++
-                    GT(loopLabelId) ++
-                    LB(exitLabelId)
+                    GOTO(loopLabelId) ++
+                    LABEL(exitLabelId)
             
             (initialInstructions ++ instructions, afterLoopLabelId)
         }
@@ -103,11 +103,11 @@ object Statement {
             val variantExitLabelId = initialLabelId
             val (variantInstructions, afterVariantLabelId) = variantStatement.compile(Vector.empty, variantExitLabelId + 1)
             
-            val instructions = IF(switchTest === variantTest) ++
-                    GT(variantExitLabelId) ++
+            val instructions = TEST(switchTest === variantTest) ++
+                    GOTO(variantExitLabelId) ++
                     variantInstructions ++
-                    GT(exitLabelId) ++
-                    LB(variantExitLabelId)
+                    GOTO(exitLabelId) ++
+                    LABEL(variantExitLabelId)
             (initialInstructions ++ instructions, afterVariantLabelId)
         }
     }
@@ -124,7 +124,7 @@ object Statement {
             
             val instructions = variantInstructions ++
                     defaultInstructions ++
-                    LB(exitLabelId)
+                    LABEL(exitLabelId)
             
             (initialInstructions ++ instructions, afterDefaultLabelId)
         }

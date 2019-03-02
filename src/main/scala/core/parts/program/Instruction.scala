@@ -7,16 +7,16 @@ sealed abstract class Instruction
 
 object Instruction {
     
-    final case object EX extends Instruction
+    final case object EXIT extends Instruction
     
-    final case class ER(code: Int) extends Instruction
+    final case class ERROR(code: Int) extends Instruction
     
-    final case class DO(events: Vector[Event]) extends Instruction
+    final case class EXECUTE(events: Vector[Event]) extends Instruction
     
-    final case class LB(labelId: Int) extends Instruction
+    final case class LABEL(labelId: Int) extends Instruction
     
-    final case class GT(labelId: Int) extends Instruction
+    final case class GOTO(labelId: Int) extends Instruction
     
-    final case class IF(condition: BooleanValue) extends Instruction
+    final case class TEST(condition: BooleanValue) extends Instruction
     
 }

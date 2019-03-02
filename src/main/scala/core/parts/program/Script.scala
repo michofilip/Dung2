@@ -5,7 +5,7 @@ import core.parts.program.Instruction._
 class Script(private val instructions: Vector[Instruction]) {
     val labelMap: Map[Int, Int] = {
         instructions.zipWithIndex.foldLeft(Map.empty[Int, Int]) {
-            case (labels, (LB(labelId), lineNo)) => labels + (labelId -> lineNo)
+            case (labels, (LABEL(labelId), lineNo)) => labels + (labelId -> lineNo)
             case (labels, _) => labels
         }
     }
@@ -14,7 +14,7 @@ class Script(private val instructions: Vector[Instruction]) {
         if (0 <= lineNo && lineNo < instructions.length)
             instructions(lineNo)
         else
-            EX
+            EXIT
     }
     
     //    def nextLine(line: Int): Int = {
@@ -36,5 +36,5 @@ class Script(private val instructions: Vector[Instruction]) {
 object Script {
     def apply(statement: Statement): Script = new Script(statement.compile)
     
-    val emptyScript: Script = new Script(Vector(EX))
+    val emptyScript: Script = new Script(Vector(EXIT))
 }
