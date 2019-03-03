@@ -1,4 +1,4 @@
-package core.parts.program
+package core.parts.scripts
 
 import core.events.Event
 import core.parts.value.basic.BooleanValue
@@ -7,9 +7,7 @@ sealed abstract class Instruction
 
 object Instruction {
     
-    final case object EXIT extends Instruction
-    
-    final case class ERROR(code: Int) extends Instruction
+    final case class EXIT(code: Int) extends Instruction
     
     final case class EXECUTE(events: Vector[Event]) extends Instruction
     

@@ -5,8 +5,8 @@ import core.entities.properties._
 import core.entities.repositoy.EntityRepository
 import core.entities.templates.{Openable, Switchable}
 import core.parts.position.{Coordinates, Direction}
-import core.parts.program.Instruction._
-import core.parts.program.Script
+import core.parts.scripts.Instruction._
+import core.parts.scripts.Script
 import core.parts.state.State
 import core.parts.value.Value
 import core.parts.value.basic.Implicits._
@@ -337,14 +337,14 @@ object Event {
     final case class ExecuteScriptLine(override val entityId: String, script: Script, lineNo: Int) extends Event {
         override def applyTo(entity: Entity)(implicit entityHolder: EntityRepository): (Vector[Entity], Vector[Event]) = {
             script.getInstruction(lineNo) match {
-                case EXIT =>
+                case EXIT(_) =>
                     (entity, Vector.empty)
                 case EXECUTE(events) =>
-                    (entity, ExecuteScriptLine(entityId, script, lineNo + 1) ++ events)
+                    (entity, events ++ ExecuteScriptLine(entityId, script, lineNo + 1))
                 case LABEL(_) =>
                     (entity, ExecuteScriptLine(entityId, script, lineNo + 1))
                 case GOTO(labelId) =>
-                    script.labelMap.get(labelId) match {
+                    script.getLineNo(labelId) match {
                         case Some(labelLineNo) => (entity, ExecuteScriptLine(entityId, script, labelLineNo + 1))
                         case None => (entity, ExecuteScriptLine(entityId, script, lineNo + 1))
                     }

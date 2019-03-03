@@ -1,7 +1,7 @@
-package core.parts.program
+package core.parts.scripts
 
 import core.events.Event
-import core.parts.program.Instruction._
+import core.parts.scripts.Instruction._
 import core.parts.value.Value
 import core.parts.value.basic.BooleanValue
 
@@ -53,7 +53,7 @@ object Statement {
     case class Block(statements: Vector[Statement]) extends Statement {
         override protected def compile(initialInstructions: Vector[Instruction], initialLabelId: Int): (Vector[Instruction], Int) = {
             val (blockInstructions, afterBlockLabelId) = statements.foldLeft((initialInstructions, initialLabelId)) {
-                case ((instructions, labelId), st) => st.compile(instructions, labelId)
+                case ((instructions, labelId), statement) => statement.compile(instructions, labelId)
             }
             (initialInstructions ++ blockInstructions, afterBlockLabelId)
         }
@@ -98,8 +98,7 @@ object Statement {
     }
     
     case class Variant(variantTest: Value, variantStatement: Statement) {
-        
-        def compile(initialInstructions: Vector[Instruction], switchTest: Value, exitLabelId: Int, initialLabelId: Int): (Vector[Instruction], Int) = {
+        private[Statement] def compile(initialInstructions: Vector[Instruction], switchTest: Value, exitLabelId: Int, initialLabelId: Int): (Vector[Instruction], Int) = {
             val variantExitLabelId = initialLabelId
             val (variantInstructions, afterVariantLabelId) = variantStatement.compile(Vector.empty, variantExitLabelId + 1)
             
@@ -108,6 +107,7 @@ object Statement {
                     variantInstructions ++
                     GOTO(exitLabelId) ++
                     LABEL(variantExitLabelId)
+            
             (initialInstructions ++ instructions, afterVariantLabelId)
         }
     }
