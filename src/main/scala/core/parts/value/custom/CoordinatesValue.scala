@@ -13,7 +13,7 @@ abstract class CoordinatesValue extends Value {
 object CoordinatesValue {
     
     final case object CoordinatesNull extends CoordinatesValue {
-        override def get(implicit entityHolder: EntityRepository): Option[Coordinates] = {
+        override def get(implicit entityRepository: EntityRepository): Option[Coordinates] = {
             None
         }
         
@@ -26,7 +26,7 @@ object CoordinatesValue {
     }
     
     final case class CoordinatesConstant(value: Coordinates) extends CoordinatesValue {
-        override def get(implicit entityHolder: EntityRepository): Option[Coordinates] = {
+        override def get(implicit entityRepository: EntityRepository): Option[Coordinates] = {
             Some(value)
         }
         
@@ -40,8 +40,8 @@ object CoordinatesValue {
     }
     
     final case class GetCoordinates(entityId: String) extends CoordinatesValue {
-        override def get(implicit entityHolder: EntityRepository): Option[Coordinates] = {
-            entityHolder.getById(entityId) match {
+        override def get(implicit entityRepository: EntityRepository): Option[Coordinates] = {
+            entityRepository.getById(entityId) match {
                 case Some(en: PositionHolder[_]) => Some(en.position.coordinates)
                 case _ => None
             }
@@ -57,8 +57,8 @@ object CoordinatesValue {
     }
     
     final case class GetCoordinatesValue(entityId: String, name: String) extends CoordinatesValue {
-        override def get(implicit entityHolder: EntityRepository): Option[Coordinates] = {
-            entityHolder.getById(entityId) match {
+        override def get(implicit entityRepository: EntityRepository): Option[Coordinates] = {
+            entityRepository.getById(entityId) match {
                 case en: ValueHolder[_] => en.getValue(name) match {
                     case value: CoordinatesValue => value.get
                     case _ => None

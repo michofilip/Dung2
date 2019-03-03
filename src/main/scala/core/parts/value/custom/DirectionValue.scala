@@ -13,7 +13,7 @@ abstract class DirectionValue extends Value {
 object DirectionValue {
     
     final case object DirectionNull extends DirectionValue {
-        override def get(implicit entityHolder: EntityRepository): Option[Direction] = {
+        override def get(implicit entityRepository: EntityRepository): Option[Direction] = {
             None
         }
         
@@ -26,7 +26,7 @@ object DirectionValue {
     }
     
     final case class DirectionConstant(value: Direction) extends DirectionValue {
-        override def get(implicit entityHolder: EntityRepository): Option[Direction] = {
+        override def get(implicit entityRepository: EntityRepository): Option[Direction] = {
             Some(value)
         }
         
@@ -40,8 +40,8 @@ object DirectionValue {
     }
     
     final case class GetDirection(entityId: String) extends DirectionValue {
-        override def get(implicit entityHolder: EntityRepository): Option[Direction] = {
-            entityHolder.getById(entityId) match {
+        override def get(implicit entityRepository: EntityRepository): Option[Direction] = {
+            entityRepository.getById(entityId) match {
                 case Some(en: PositionHolder[_]) => Some(en.position.direction)
                 case _ => None
             }
@@ -57,8 +57,8 @@ object DirectionValue {
     }
     
     final case class GetDirectionValue(entityId: String, name: String) extends DirectionValue {
-        override def get(implicit entityHolder: EntityRepository): Option[Direction] = {
-            entityHolder.getById(entityId) match {
+        override def get(implicit entityRepository: EntityRepository): Option[Direction] = {
+            entityRepository.getById(entityId) match {
                 case en: ValueHolder[_] => en.getValue(name) match {
                     case value: DirectionValue => value.get
                     case _ => None

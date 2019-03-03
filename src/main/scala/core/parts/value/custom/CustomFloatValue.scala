@@ -8,8 +8,8 @@ import json.JValue
 object CustomFloatValue {
     
     final case class GetFloatValue(entityId: String, name: String) extends FloatValue {
-        override def get(implicit entityHolder: EntityRepository): Option[Float] = {
-            entityHolder.getById(entityId) match {
+        override def get(implicit entityRepository: EntityRepository): Option[Float] = {
+            entityRepository.getById(entityId) match {
                 case en: ValueHolder[_] => en.getValue(name) match {
                     case value: FloatValue => value.get
                     case _ => None

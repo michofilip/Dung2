@@ -8,7 +8,7 @@ import json.JValue
 case object NullValue extends Value {
     override type T = Unit
     
-    override def get(implicit entityHolder: EntityRepository): Option[Unit] = {
+    override def get(implicit entityRepository: EntityRepository): Option[Unit] = {
         None
     }
     

@@ -8,8 +8,8 @@ import json.JValue
 object CustomCharValue {
     
     final case class GetCharValue(entityId: String, name: String) extends CharValue {
-        override def get(implicit entityHolder: EntityRepository): Option[Char] = {
-            entityHolder.getById(entityId) match {
+        override def get(implicit entityRepository: EntityRepository): Option[Char] = {
+            entityRepository.getById(entityId) match {
                 case en: ValueHolder[_] => en.getValue(name) match {
                     case value: CharValue => value.get
                     case _ => None

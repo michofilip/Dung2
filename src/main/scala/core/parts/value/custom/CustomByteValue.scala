@@ -8,8 +8,8 @@ import json.JValue
 object CustomByteValue {
     
     final case class GetByteValue(entityId: String, name: String) extends ByteValue {
-        override def get(implicit entityHolder: EntityRepository): Option[Byte] = {
-            entityHolder.getById(entityId) match {
+        override def get(implicit entityRepository: EntityRepository): Option[Byte] = {
+            entityRepository.getById(entityId) match {
                 case en: ValueHolder[_] => en.getValue(name) match {
                     case value: ByteValue => value.get
                     case _ => None

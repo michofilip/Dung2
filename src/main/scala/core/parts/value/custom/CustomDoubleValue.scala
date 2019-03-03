@@ -8,8 +8,8 @@ import json.JValue
 object CustomDoubleValue {
     
     final case class GetDoubleValue(entityId: String, name: String) extends DoubleValue {
-        override def get(implicit entityHolder: EntityRepository): Option[Double] = {
-            entityHolder.getById(entityId) match {
+        override def get(implicit entityRepository: EntityRepository): Option[Double] = {
+            entityRepository.getById(entityId) match {
                 case en: ValueHolder[_] => en.getValue(name) match {
                     case value: DoubleValue => value.get
                     case _ => None

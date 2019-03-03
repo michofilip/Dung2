@@ -8,8 +8,8 @@ import json.JValue
 object CustomShortValue {
     
     final case class GetShortValue(entityId: String, name: String) extends ShortValue {
-        override def get(implicit entityHolder: EntityRepository): Option[Short] = {
-            entityHolder.getById(entityId) match {
+        override def get(implicit entityRepository: EntityRepository): Option[Short] = {
+            entityRepository.getById(entityId) match {
                 case en: ValueHolder[_] => en.getValue(name) match {
                     case value: ShortValue => value.get
                     case _ => None
