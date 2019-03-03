@@ -1,8 +1,8 @@
 package core.parts.value.custom
 
-import core.parts.position.Direction
-import core.entities.properties.PositionHolder
+import core.entities.properties.{PositionHolder, ValueHolder}
 import core.entities.repositoy.EntityRepository
+import core.parts.position.Direction
 import core.parts.value.Value
 import json.JValue
 
@@ -52,6 +52,27 @@ object DirectionValue {
             jObject(
                 "class" -> this.getClass.getSimpleName,
                 "entityId" -> entityId
+            )
+        }
+    }
+    
+    final case class GetDirectionValue(entityId: String, name: String) extends DirectionValue {
+        override def get(implicit entityHolder: EntityRepository): Option[Direction] = {
+            entityHolder.getById(entityId) match {
+                case en: ValueHolder[_] => en.getValue(name) match {
+                    case value: DirectionValue => value.get
+                    case _ => None
+                }
+                case _ => None
+            }
+        }
+        
+        override def toJSON: JValue = {
+            import json.MyJ._
+            jObject(
+                "class" -> this.getClass.getSimpleName,
+                "entityId" -> entityId,
+                "name" -> name
             )
         }
     }

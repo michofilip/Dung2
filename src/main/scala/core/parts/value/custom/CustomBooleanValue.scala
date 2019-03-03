@@ -8,20 +8,6 @@ import json.JValue
 
 object CustomBooleanValue {
     
-    final case class Exists(entityId: String) extends BooleanValue {
-        override def get(implicit entityHolder: EntityRepository): Option[Boolean] = {
-            Some(entityHolder.contains(entityId))
-        }
-        
-        override def toJSON: JValue = {
-            import json.MyJ._
-            jObject(
-                "class" -> this.getClass.getSimpleName,
-                "entityId" -> entityId
-            )
-        }
-    }
-    
     final case class GetBooleanValue(entityId: String, name: String) extends BooleanValue {
         override def get(implicit entityHolder: EntityRepository): Option[Boolean] = {
             entityHolder.getById(entityId) match {
@@ -39,6 +25,20 @@ object CustomBooleanValue {
                 "class" -> this.getClass.getSimpleName,
                 "entityId" -> entityId,
                 "name" -> name
+            )
+        }
+    }
+    
+    final case class Exists(entityId: String) extends BooleanValue {
+        override def get(implicit entityHolder: EntityRepository): Option[Boolean] = {
+            Some(entityHolder.contains(entityId))
+        }
+        
+        override def toJSON: JValue = {
+            import json.MyJ._
+            jObject(
+                "class" -> this.getClass.getSimpleName,
+                "entityId" -> entityId
             )
         }
     }
