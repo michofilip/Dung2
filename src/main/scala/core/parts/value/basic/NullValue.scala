@@ -4,11 +4,11 @@ import core.entities.repositoy.EntityRepository
 import core.parts.value.Value
 import json.JValue
 
-// todo cam up with a better implementation
-object UnitValue extends Value {
-    override type T = this.type
+// todo come up with a better implementation
+case object NullValue extends Value {
+    override type T = Unit
     
-    override def get(implicit entityHolder: EntityRepository): Option[UnitValue.type] = {
+    override def get(implicit entityHolder: EntityRepository): Option[Unit] = {
         None
     }
     
