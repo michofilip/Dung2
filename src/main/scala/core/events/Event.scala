@@ -27,6 +27,18 @@ object Event {
     
     implicit def ev2Vector(event: Event): Vector[Event] = Vector(event)
     
+    // entity amount
+    final case class Create(override val entityId: String)extends Event {
+        override def applyTo(entity: Entity)(implicit entityHolder: EntityRepository): (Vector[Entity], Vector[Event]) = ???
+    
+        override def toJSON: JValue = {
+            import json.MyJ._
+            jObject(
+                "class" -> this.getClass.getSimpleName,
+                "entityId" -> entityId
+            )
+        }
+    }
     final case class Delete(override val entityId: String) extends Event {
         override def applyTo(entity: Entity)(implicit entityHolder: EntityRepository): (Vector[Entity], Vector[Event]) = {
             (Vector.empty, Vector.empty)

@@ -1,6 +1,11 @@
 package core.parts.scripts
 
+import core.events.Event.Delete
 import core.parts.scripts.Instruction._
+import core.parts.state.State.Open
+import core.parts.value.basic.Implicits._
+import core.parts.value.custom.Implicits._
+import core.parts.value.custom.StateValue.GetState
 
 class Script(private val instructions: Vector[Instruction]) {
     private val labelMap: Map[Int, Int] = {
@@ -26,4 +31,24 @@ object Script {
     def apply(statement: Statement): Script = new Script(statement.compile ++ Vector(EXIT(0)))
     
     val emptyScript: Script = new Script(Vector(EXIT(0)))
+    
+    def autoClose(entityId: String): Script = {
+        import Statement._
+        val statement =
+            loop(true)(
+                choose(GetState(entityId))(
+                    variant(Open)(
+                        when(true)(
+                            Delete(entityId)
+                        )(),
+                        Delete(entityId),
+                        Delete(entityId)
+                    )
+                )()
+            
+            )
+        
+        val instructions = statement.compile
+        new Script(instructions)
+    }
 }

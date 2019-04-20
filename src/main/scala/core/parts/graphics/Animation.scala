@@ -10,10 +10,7 @@ class Animation(private val frames: Vector[Frame], private val length: Int, priv
             frames(Math.min(frameNo, frames.length - 1))
     }
     
-    def getFrame1(fraction: Double): Frame = {
-        
-        ???
+    def reverse: Animation = {
+        new Animation(frames.reverse, length, looped)
     }
-    
-    def reverse: Animation = new Animation(frames.reverse, length, looped)
 }

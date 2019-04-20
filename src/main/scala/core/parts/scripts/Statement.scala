@@ -32,6 +32,10 @@ object Statement {
         When(condition, Block(thenStatements.toVector), Block(elseStatements.toVector))
     }
     
+    implicit def whenConv(whenPart: Seq[Statement] => When): When = {
+        whenPart(Seq.empty)
+    }
+    
     def loop(condition: BooleanValue)(loopedStatements: Statement*): Loop = {
         Loop(condition, Block(loopedStatements.toVector))
     }
@@ -42,6 +46,10 @@ object Statement {
     
     def choose(switchTest: Value)(variants: Variant*)(defaultStatements: Statement*): Choose = {
         Choose(switchTest, variants.toVector, Block(defaultStatements.toVector))
+    }
+    
+    implicit def chooseConv(choosePart: Seq[Statement] => Choose): Choose = {
+        choosePart(Seq.empty)
     }
     
     case class Execute(events: Vector[Event]) extends Statement {
