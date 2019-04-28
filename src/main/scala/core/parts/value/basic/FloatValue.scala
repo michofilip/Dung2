@@ -72,7 +72,7 @@ abstract class FloatValue extends Value with NumericValue {
 object FloatValue {
     
     final case object FloatNull extends FloatValue {
-        override def get(implicit entityHolder: EntityRepository): Option[Float] = {
+        override def get(implicit entityRepository: EntityRepository): Option[Float] = {
             None
         }
         
@@ -85,7 +85,7 @@ object FloatValue {
     }
     
     final case class FloatConstant(value: Float) extends FloatValue {
-        override def get(implicit entityHolder: EntityRepository): Option[Float] = {
+        override def get(implicit entityRepository: EntityRepository): Option[Float] = {
             Some(value)
         }
         
@@ -99,7 +99,7 @@ object FloatValue {
     }
     
     final case class FloatNegate(value: FloatValue) extends FloatValue {
-        override def get(implicit entityHolder: EntityRepository): Option[Float] = {
+        override def get(implicit entityRepository: EntityRepository): Option[Float] = {
             value.get match {
                 case Some(v) => Some(-v)
                 case _ => None
@@ -116,7 +116,7 @@ object FloatValue {
     }
     
     final case class FloatAdd(value1: FloatValue, value2: FloatValue) extends FloatValue {
-        override def get(implicit entityHolder: EntityRepository): Option[Float] = {
+        override def get(implicit entityRepository: EntityRepository): Option[Float] = {
             (value1.get, value2.get) match {
                 case (Some(v1), Some(v2)) => Some(v1 + v2)
                 case _ => None
@@ -134,7 +134,7 @@ object FloatValue {
     }
     
     final case class FloatSubtract(value1: FloatValue, value2: FloatValue) extends FloatValue {
-        override def get(implicit entityHolder: EntityRepository): Option[Float] = {
+        override def get(implicit entityRepository: EntityRepository): Option[Float] = {
             (value1.get, value2.get) match {
                 case (Some(v1), Some(v2)) => Some(v1 - v2)
                 case _ => None
@@ -152,7 +152,7 @@ object FloatValue {
     }
     
     final case class FloatMultiply(value1: FloatValue, value2: FloatValue) extends FloatValue {
-        override def get(implicit entityHolder: EntityRepository): Option[Float] = {
+        override def get(implicit entityRepository: EntityRepository): Option[Float] = {
             (value1.get, value2.get) match {
                 case (Some(v1), Some(v2)) => Some(v1 * v2)
                 case _ => None
@@ -170,7 +170,7 @@ object FloatValue {
     }
     
     final case class FloatDivide(value1: FloatValue, value2: FloatValue) extends FloatValue {
-        override def get(implicit entityHolder: EntityRepository): Option[Float] = {
+        override def get(implicit entityRepository: EntityRepository): Option[Float] = {
             (value1.get, value2.get) match {
                 case (Some(v1), Some(v2)) => Some(v1 / v2)
                 case _ => None
@@ -188,7 +188,7 @@ object FloatValue {
     }
     
     final case class NumericToFloat(value: NumericValue) extends FloatValue {
-        override def get(implicit entityHolder: EntityRepository): Option[Float] = {
+        override def get(implicit entityRepository: EntityRepository): Option[Float] = {
             value.get match {
                 case Some(v: Byte) => Some(v.toFloat)
                 case Some(v: Short) => Some(v.toFloat)

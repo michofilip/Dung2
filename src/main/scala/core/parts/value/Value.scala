@@ -10,9 +10,9 @@ import scala.language.implicitConversions
 abstract class Value extends JSONParsable {
     type T
     
-    def get(implicit entityHolder: EntityRepository): Option[T]
+    def get(implicit entityRepository: EntityRepository): Option[T]
     
-    def getOrElse(default: => T)(implicit entityHolder: EntityRepository): T = {
+    def getOrElse(default: => T)(implicit entityRepository: EntityRepository): T = {
         get match {
             case Some(value) => value
             case None => default

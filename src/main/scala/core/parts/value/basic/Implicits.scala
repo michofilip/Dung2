@@ -1,18 +1,56 @@
 package core.parts.value.basic
 
-import core.parts.value.basic.BooleanValue.BooleanConstant
-import core.parts.value.basic.ByteValue.{ByteConstant, NumericToByte}
-import core.parts.value.basic.CharValue.CharConstant
-import core.parts.value.basic.DoubleValue.{DoubleConstant, NumericToDouble}
-import core.parts.value.basic.FloatValue.{FloatConstant, NumericToFloat}
-import core.parts.value.basic.IntValue.{IntConstant, NumericToInt}
-import core.parts.value.basic.LongValue.{LongConstant, NumericToLong}
-import core.parts.value.basic.ShortValue.{NumericToShort, ShortConstant}
-import core.parts.value.basic.StringValue.{NumericToString, StringConstant}
+import core.parts.value.basic.BooleanValue.{BooleanConstant, BooleanNull}
+import core.parts.value.basic.ByteValue.{ByteConstant, ByteNull, NumericToByte}
+import core.parts.value.basic.CharValue.{CharConstant, CharNull}
+import core.parts.value.basic.DoubleValue.{DoubleConstant, DoubleNull, NumericToDouble}
+import core.parts.value.basic.FloatValue.{FloatConstant, FloatNull, NumericToFloat}
+import core.parts.value.basic.IntValue.{IntConstant, IntNull, NumericToInt}
+import core.parts.value.basic.LongValue.{LongConstant, LongNull, NumericToLong}
+import core.parts.value.basic.ShortValue.{NumericToShort, ShortConstant, ShortNull}
+import core.parts.value.basic.StringValue.{NumericToString, StringConstant, StringNull}
 
 import scala.language.implicitConversions
 
 object Implicits {
+    // null converters
+    implicit def null2BooleanValue(v: NullValue.type): BooleanValue = {
+        BooleanNull
+    }
+    
+    implicit def null2ByteValue(v: NullValue.type): ByteValue = {
+        ByteNull
+    }
+    
+    implicit def null2ShortValue(v: NullValue.type): ShortValue = {
+        ShortNull
+    }
+    
+    implicit def null2IntValue(v: NullValue.type): IntValue = {
+        IntNull
+    }
+    
+    implicit def null2LongValue(v: NullValue.type): LongValue = {
+        LongNull
+    }
+    
+    implicit def null2FloatValue(v: NullValue.type): FloatValue = {
+        FloatNull
+    }
+    
+    implicit def null2DoubleValue(v: NullValue.type): DoubleValue = {
+        DoubleNull
+    }
+    
+    implicit def null2CharValue(v: NullValue.type): CharValue = {
+        CharNull
+    }
+    
+    implicit def null2StringValue(v: NullValue.type): StringValue = {
+        StringNull
+    }
+    
+    // constant converters
     implicit def boolean2Value(value: Boolean): BooleanValue = {
         BooleanConstant(value)
     }
@@ -49,6 +87,7 @@ object Implicits {
         StringConstant(value)
     }
     
+    // numeric converters
     implicit def numeric2ByteValue(value: NumericValue): ByteValue = {
         NumericToByte(value)
     }
@@ -77,6 +116,7 @@ object Implicits {
         NumericToString(value)
     }
     
+    // additional methods
     implicit class Boolean2Value(value: Boolean) {
         def toValue: BooleanValue = value
         

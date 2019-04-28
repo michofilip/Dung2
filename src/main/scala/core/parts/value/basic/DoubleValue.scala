@@ -71,7 +71,7 @@ abstract class DoubleValue extends Value with NumericValue {
 object DoubleValue {
     
     final case object DoubleNull extends DoubleValue {
-        override def get(implicit entityHolder: EntityRepository): Option[Double] = {
+        override def get(implicit entityRepository: EntityRepository): Option[Double] = {
             None
         }
         
@@ -84,7 +84,7 @@ object DoubleValue {
     }
     
     final case class DoubleConstant(value: Double) extends DoubleValue {
-        override def get(implicit entityHolder: EntityRepository): Option[Double] = {
+        override def get(implicit entityRepository: EntityRepository): Option[Double] = {
             Some(value)
         }
         
@@ -98,7 +98,7 @@ object DoubleValue {
     }
     
     final case class DoubleNegate(value: DoubleValue) extends DoubleValue {
-        override def get(implicit entityHolder: EntityRepository): Option[Double] = {
+        override def get(implicit entityRepository: EntityRepository): Option[Double] = {
             value.get match {
                 case Some(v) => Some(-v)
                 case _ => None
@@ -115,7 +115,7 @@ object DoubleValue {
     }
     
     final case class DoubleAdd(value1: DoubleValue, value2: DoubleValue) extends DoubleValue {
-        override def get(implicit entityHolder: EntityRepository): Option[Double] = {
+        override def get(implicit entityRepository: EntityRepository): Option[Double] = {
             (value1.get, value2.get) match {
                 case (Some(v1), Some(v2)) => Some(v1 + v2)
                 case _ => None
@@ -133,7 +133,7 @@ object DoubleValue {
     }
     
     final case class DoubleSubtract(value1: DoubleValue, value2: DoubleValue) extends DoubleValue {
-        override def get(implicit entityHolder: EntityRepository): Option[Double] = {
+        override def get(implicit entityRepository: EntityRepository): Option[Double] = {
             (value1.get, value2.get) match {
                 case (Some(v1), Some(v2)) => Some(v1 - v2)
                 case _ => None
@@ -151,7 +151,7 @@ object DoubleValue {
     }
     
     final case class DoubleMultiply(value1: DoubleValue, value2: DoubleValue) extends DoubleValue {
-        override def get(implicit entityHolder: EntityRepository): Option[Double] = {
+        override def get(implicit entityRepository: EntityRepository): Option[Double] = {
             (value1.get, value2.get) match {
                 case (Some(v1), Some(v2)) => Some(v1 * v2)
                 case _ => None
@@ -169,7 +169,7 @@ object DoubleValue {
     }
     
     final case class DoubleDivide(value1: DoubleValue, value2: DoubleValue) extends DoubleValue {
-        override def get(implicit entityHolder: EntityRepository): Option[Double] = {
+        override def get(implicit entityRepository: EntityRepository): Option[Double] = {
             (value1.get, value2.get) match {
                 case (Some(v1), Some(v2)) => Some(v1 / v2)
                 case _ => None
@@ -187,7 +187,7 @@ object DoubleValue {
     }
     
     final case class NumericToDouble(value: NumericValue) extends DoubleValue {
-        override def get(implicit entityHolder: EntityRepository): Option[Double] = {
+        override def get(implicit entityRepository: EntityRepository): Option[Double] = {
             value.get match {
                 case Some(v: Byte) => Some(v.toDouble)
                 case Some(v: Short) => Some(v.toDouble)

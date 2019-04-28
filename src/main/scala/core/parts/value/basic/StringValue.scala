@@ -16,7 +16,7 @@ abstract class StringValue extends Value {
 object StringValue {
     
     final case object StringNull extends StringValue {
-        override def get(implicit entityHolder: EntityRepository): Option[String] = {
+        override def get(implicit entityRepository: EntityRepository): Option[String] = {
             None
         }
         
@@ -29,7 +29,7 @@ object StringValue {
     }
     
     final case class StringConstant(value: String) extends StringValue {
-        override def get(implicit entityHolder: EntityRepository): Option[String] = {
+        override def get(implicit entityRepository: EntityRepository): Option[String] = {
             Some(value)
         }
         
@@ -43,7 +43,7 @@ object StringValue {
     }
     
     final case class Concatenate(value1: StringValue, value2: StringValue) extends StringValue {
-        override def get(implicit entityHolder: EntityRepository): Option[String] = {
+        override def get(implicit entityRepository: EntityRepository): Option[String] = {
             (value1.get, value2.get) match {
                 case (Some(v1), Some(v2)) => Some(v1 + v2)
                 case _ => None
@@ -61,7 +61,7 @@ object StringValue {
     }
     
     final case class Length(value: StringValue) extends IntValue {
-        override def get(implicit entityHolder: EntityRepository): Option[Int] = {
+        override def get(implicit entityRepository: EntityRepository): Option[Int] = {
             value.get match {
                 case Some(v) => Some(v.length)
                 case _ => None
@@ -78,7 +78,7 @@ object StringValue {
     }
     
     final case class NumericToString(value: NumericValue) extends StringValue {
-        override def get(implicit entityHolder: EntityRepository): Option[String] = {
+        override def get(implicit entityRepository: EntityRepository): Option[String] = {
             value.get match {
                 case Some(v: Byte) => Some(v.toString)
                 case Some(v: Short) => Some(v.toString)

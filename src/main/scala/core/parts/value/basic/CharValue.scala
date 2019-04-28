@@ -13,7 +13,7 @@ abstract class CharValue extends Value {
 object CharValue {
     
     final case object CharNull extends CharValue {
-        override def get(implicit entityHolder: EntityRepository): Option[Char] = {
+        override def get(implicit entityRepository: EntityRepository): Option[Char] = {
             None
         }
         
@@ -26,7 +26,7 @@ object CharValue {
     }
     
     final case class CharConstant(value: Char) extends CharValue {
-        override def get(implicit entityHolder: EntityRepository): Option[Char] = Some(value)
+        override def get(implicit entityRepository: EntityRepository): Option[Char] = Some(value)
         
         override def toJSON: JValue = {
             import json.MyJ._

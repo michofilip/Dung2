@@ -5,12 +5,11 @@ import core.entities.properties._
 import core.entities.repositoy.EntityRepository
 import core.entities.templates.{Openable, Switchable}
 import core.parts.position.{Coordinates, Direction}
-import core.parts.program.Instruction._
-import core.parts.program.Script
+import core.parts.scripts.Instruction._
+import core.parts.scripts.Script
 import core.parts.state.State
 import core.parts.value.Value
 import core.parts.value.basic.Implicits._
-import core.parts.value.basic.UnitValue
 import core.parts.value.custom.CustomLongValue.{GetTime, GetTurn}
 import core.parts.value.custom.Implicits._
 import json.{JSONParsable, JValue}
@@ -28,6 +27,18 @@ object Event {
     
     implicit def ev2Vector(event: Event): Vector[Event] = Vector(event)
     
+    // entity amount
+    final case class Create(override val entityId: String)extends Event {
+        override def applyTo(entity: Entity)(implicit entityHolder: EntityRepository): (Vector[Entity], Vector[Event]) = ???
+    
+        override def toJSON: JValue = {
+            import json.MyJ._
+            jObject(
+                "class" -> this.getClass.getSimpleName,
+                "entityId" -> entityId
+            )
+        }
+    }
     final case class Delete(override val entityId: String) extends Event {
         override def applyTo(entity: Entity)(implicit entityHolder: EntityRepository): (Vector[Entity], Vector[Event]) = {
             (Vector.empty, Vector.empty)
@@ -246,11 +257,11 @@ object Event {
     }
     
     // value
-    final case class SetValue(override val entityId: String, value: Value) extends Event {
+    final case class SetValue(override val entityId: String, name: String, value: Value) extends Event {
         override def applyTo(entity: Entity)(implicit entityHolder: EntityRepository): (Vector[Entity], Vector[Event]) = {
             entity match {
                 case en: ValueHolder[_] =>
-                    (en.setValue(value), Vector.empty)
+                    (en.setValue(name, value), Vector.empty)
                 case _ =>
                     (entity, Vector.empty)
             }
@@ -260,44 +271,64 @@ object Event {
             import json.MyJ._
             jObject(
                 "class" -> this.getClass.getSimpleName,
+                "name" -> name,
                 "value" -> value
             )
         }
     }
     
-    final case class SetCalculatedValue(override val entityId: String, value: Value) extends Event {
+    final case class RemoveValue(override val entityId: String, name: String) extends Event {
+        override def applyTo(entity: Entity)(implicit entityHolder: EntityRepository): (Vector[Entity], Vector[Event]) = {
+            entity match {
+                case en: ValueHolder[_] =>
+                    (en.removeValue(name), Vector.empty)
+                case _ =>
+                    (entity, Vector.empty)
+            }
+        }
+        
+        override def toJSON: JValue = {
+            import json.MyJ._
+            jObject(
+                "class" -> this.getClass.getSimpleName,
+                "name" -> name
+            )
+        }
+    }
+    
+    final case class SetCalculatedValue(override val entityId: String, name: String, value: Value) extends Event {
         override def applyTo(entity: Entity)(implicit entityHolder: EntityRepository): (Vector[Entity], Vector[Event]) = {
             entity match {
                 case en: ValueHolder[_] =>
                     value.get match {
                         case Some(v: Boolean) =>
-                            (en.setValue(v), Vector.empty)
+                            (en.setValue(name, v), Vector.empty)
                         case Some(v: Byte) =>
-                            (en.setValue(v), Vector.empty)
+                            (en.setValue(name, v), Vector.empty)
                         case Some(v: Short) =>
-                            (en.setValue(v), Vector.empty)
+                            (en.setValue(name, v), Vector.empty)
                         case Some(v: Int) =>
-                            (en.setValue(v), Vector.empty)
+                            (en.setValue(name, v), Vector.empty)
                         case Some(v: Long) =>
-                            (en.setValue(v), Vector.empty)
+                            (en.setValue(name, v), Vector.empty)
                         case Some(v: Float) =>
-                            (en.setValue(v), Vector.empty)
+                            (en.setValue(name, v), Vector.empty)
                         case Some(v: Double) =>
-                            (en.setValue(v), Vector.empty)
+                            (en.setValue(name, v), Vector.empty)
                         case Some(v: Char) =>
-                            (en.setValue(v), Vector.empty)
+                            (en.setValue(name, v), Vector.empty)
                         case Some(v: String) =>
-                            (en.setValue(v), Vector.empty)
+                            (en.setValue(name, v), Vector.empty)
                         
                         case Some(v: Coordinates) =>
-                            (en.setValue(v), Vector.empty)
+                            (en.setValue(name, v), Vector.empty)
                         case Some(v: Direction) =>
-                            (en.setValue(v), Vector.empty)
+                            (en.setValue(name, v), Vector.empty)
                         case Some(v: State) =>
-                            (en.setValue(v), Vector.empty)
+                            (en.setValue(name, v), Vector.empty)
                         
                         case _ =>
-                            (en.setValue(UnitValue), Vector.empty)
+                            (en.removeValue(name), Vector.empty)
                     }
                 case _ =>
                     (entity, Vector.empty)
@@ -308,6 +339,7 @@ object Event {
             import json.MyJ._
             jObject(
                 "class" -> this.getClass.getSimpleName,
+                "name" -> name,
                 "value" -> value
             )
         }
@@ -337,18 +369,18 @@ object Event {
     final case class ExecuteScriptLine(override val entityId: String, script: Script, lineNo: Int) extends Event {
         override def applyTo(entity: Entity)(implicit entityHolder: EntityRepository): (Vector[Entity], Vector[Event]) = {
             script.getInstruction(lineNo) match {
-                case EX =>
+                case EXIT(_) =>
                     (entity, Vector.empty)
-                case DO(events) =>
-                    (entity, ExecuteScriptLine(entityId, script, lineNo + 1) ++ events)
-                case LB(_) =>
+                case EXECUTE(events) =>
+                    (entity, events ++ ExecuteScriptLine(entityId, script, lineNo + 1))
+                case LABEL(_) =>
                     (entity, ExecuteScriptLine(entityId, script, lineNo + 1))
-                case GT(labelId) =>
-                    script.labelMap.get(labelId) match {
+                case GOTO(labelId) =>
+                    script.getLineNo(labelId) match {
                         case Some(labelLineNo) => (entity, ExecuteScriptLine(entityId, script, labelLineNo + 1))
                         case None => (entity, ExecuteScriptLine(entityId, script, lineNo + 1))
                     }
-                case IF(condition) =>
+                case TEST(condition) =>
                     condition.get match {
                         case Some(true) => (entity, ExecuteScriptLine(entityId, script, lineNo + 2))
                         case Some(false) => (entity, ExecuteScriptLine(entityId, script, lineNo + 1))

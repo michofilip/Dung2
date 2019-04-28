@@ -1,7 +1,7 @@
-package core.parts.program
+package core.parts.scripts
 
 import core.events.Event
-import core.parts.program.Instruction._
+import core.parts.scripts.Instruction._
 import core.parts.value.Value
 import core.parts.value.basic.BooleanValue
 
@@ -20,9 +20,9 @@ object Statement {
     
     implicit def inst2Vec(instruction: Instruction): Vector[Instruction] = Vector(instruction)
     
-    implicit def ev2Do(event: Event): Do = Do(event)
+    implicit def ev2Do(event: Event): Execute = Execute(event)
     
-    implicit def evs2Do(events: Vector[Event]): Do = Do(events)
+    implicit def evs2Do(events: Vector[Event]): Execute = Execute(events)
     
     def block(statements: Statement*): Block = {
         Block(statements.toVector)
@@ -30,6 +30,10 @@ object Statement {
     
     def when(condition: BooleanValue)(thenStatements: Statement*)(elseStatements: Statement*): When = {
         When(condition, Block(thenStatements.toVector), Block(elseStatements.toVector))
+    }
+    
+    implicit def whenConv(whenPart: Seq[Statement] => When): When = {
+        whenPart(Seq.empty)
     }
     
     def loop(condition: BooleanValue)(loopedStatements: Statement*): Loop = {
@@ -44,16 +48,20 @@ object Statement {
         Choose(switchTest, variants.toVector, Block(defaultStatements.toVector))
     }
     
-    case class Do(events: Vector[Event]) extends Statement {
+    implicit def chooseConv(choosePart: Seq[Statement] => Choose): Choose = {
+        choosePart(Seq.empty)
+    }
+    
+    case class Execute(events: Vector[Event]) extends Statement {
         override protected def compile(initialInstructions: Vector[Instruction], initialLabelId: Int): (Vector[Instruction], Int) = {
-            (initialInstructions ++ DO(events), initialLabelId)
+            (initialInstructions ++ EXECUTE(events), initialLabelId)
         }
     }
     
     case class Block(statements: Vector[Statement]) extends Statement {
         override protected def compile(initialInstructions: Vector[Instruction], initialLabelId: Int): (Vector[Instruction], Int) = {
             val (blockInstructions, afterBlockLabelId) = statements.foldLeft((initialInstructions, initialLabelId)) {
-                case ((instructions, labelId), st) => st.compile(instructions, labelId)
+                case ((instructions, labelId), statement) => statement.compile(instructions, labelId)
             }
             (initialInstructions ++ blockInstructions, afterBlockLabelId)
         }
@@ -67,13 +75,13 @@ object Statement {
             val (thenInstructions, afterThenLabelId) = thenStatement.compile(Vector.empty, exitLabelId + 1)
             val (elseInstructions, afterElseLabelId) = elseStatement.compile(Vector.empty, afterThenLabelId + 1)
             
-            val instructions = IF(condition) ++
-                    GT(elseLabelId) ++
+            val instructions = TEST(condition) ++
+                    GOTO(elseLabelId) ++
                     thenInstructions ++
-                    GT(exitLabelId) ++
-                    LB(elseLabelId) ++
+                    GOTO(exitLabelId) ++
+                    LABEL(elseLabelId) ++
                     elseInstructions ++
-                    LB(exitLabelId)
+                    LABEL(exitLabelId)
             
             (initialInstructions ++ instructions, afterElseLabelId)
         }
@@ -86,28 +94,28 @@ object Statement {
             
             val (loopedInstructions, afterLoopLabelId) = loopedStatement.compile(Vector.empty, exitLabelId + 1)
             
-            val instructions = LB(loopLabelId) ++
-                    IF(condition) ++
-                    GT(exitLabelId) ++
+            val instructions = LABEL(loopLabelId) ++
+                    TEST(condition) ++
+                    GOTO(exitLabelId) ++
                     loopedInstructions ++
-                    GT(loopLabelId) ++
-                    LB(exitLabelId)
+                    GOTO(loopLabelId) ++
+                    LABEL(exitLabelId)
             
             (initialInstructions ++ instructions, afterLoopLabelId)
         }
     }
     
     case class Variant(variantTest: Value, variantStatement: Statement) {
-        
-        def compile(initialInstructions: Vector[Instruction], switchTest: Value, exitLabelId: Int, initialLabelId: Int): (Vector[Instruction], Int) = {
+        private[Statement] def compile(initialInstructions: Vector[Instruction], switchTest: Value, exitLabelId: Int, initialLabelId: Int): (Vector[Instruction], Int) = {
             val variantExitLabelId = initialLabelId
             val (variantInstructions, afterVariantLabelId) = variantStatement.compile(Vector.empty, variantExitLabelId + 1)
             
-            val instructions = IF(switchTest === variantTest) ++
-                    GT(variantExitLabelId) ++
+            val instructions = TEST(switchTest === variantTest) ++
+                    GOTO(variantExitLabelId) ++
                     variantInstructions ++
-                    GT(exitLabelId) ++
-                    LB(variantExitLabelId)
+                    GOTO(exitLabelId) ++
+                    LABEL(variantExitLabelId)
+            
             (initialInstructions ++ instructions, afterVariantLabelId)
         }
     }
@@ -124,7 +132,7 @@ object Statement {
             
             val instructions = variantInstructions ++
                     defaultInstructions ++
-                    LB(exitLabelId)
+                    LABEL(exitLabelId)
             
             (initialInstructions ++ instructions, afterDefaultLabelId)
         }
