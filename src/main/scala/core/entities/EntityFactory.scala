@@ -20,7 +20,7 @@ class EntityFactory(private val clock: Timer) {
     
     private def lever(): Switch = {
         val id = "1000"
-        val position = Position(Coordinates(10, 20), North)
+        val position = Position(coordinates = Coordinates(10, 20), direction = North, canMove = true, canRotate = true)
         val physicsSelector = LeverPhysicsSelector
         val animationSelector = LeverAnimationSelector
         val animationStartTime = clock.getTime
@@ -31,7 +31,7 @@ class EntityFactory(private val clock: Timer) {
     
     private def door(): Door = {
         val id = "1001"
-        val position = Position(Coordinates(10, 20), North)
+        val position = Position(coordinates = Coordinates(10, 20), direction = North, canMove = true, canRotate = true)
         val physicsSelector = DoorPhysicsSelector
         val animationSelector = DoorAnimationSelector
         val animationStartTime = clock.getTime
