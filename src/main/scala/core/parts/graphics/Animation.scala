@@ -1,20 +1,22 @@
 package core.parts.graphics
 
 import core.parts.timer.TimeStamp
+import math.MyMath.{Mod, restrict}
 
-class Animation(private val frames: Vector[Frame], private val length: Int, private val looped: Boolean) {
+class Animation(private val frames: Vector[Frame], private val duration: Long, private val looped: Boolean) {
+    
     def getFrame(timeStamp: TimeStamp): Frame = {
         val milliseconds = timeStamp.milliseconds
-        val frameNo: Int = Math.max(frames.length * milliseconds / length, 0).toInt
+        val frameNo: Int = (frames.length * milliseconds / duration).toInt
         
         if (looped) {
-            frames(frameNo % frames.length)
+            frames(frameNo %% frames.length)
         } else {
-            frames(Math.min(frameNo, frames.length - 1))
+            frames(restrict(frameNo, 0, frames.length))
         }
     }
     
     def reverse: Animation = {
-        new Animation(frames.reverse, length, looped)
+        new Animation(frames.reverse, duration, looped)
     }
 }
