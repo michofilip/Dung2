@@ -8,7 +8,7 @@ import core.parts.position.{Coordinates, Position}
 import core.parts.state.State._
 import core.parts.timer.Timer
 
-class EntityFactory(private val clock: Timer) {
+class EntityFactory(private val timer: Timer) {
     // todo redo it
     def create(name: String, args: String*): Option[Entity] = {
         name match {
@@ -23,10 +23,10 @@ class EntityFactory(private val clock: Timer) {
         val position = Position(coordinates = Coordinates(10, 20), direction = North, canMove = true, canRotate = true)
         val physicsSelector = LeverPhysicsSelector
         val animationSelector = LeverAnimationSelector
-        val animationStartTime = clock.getTime
+        val animationStartTime = timer.getTimeStamp.milliseconds
         val state = Off
         
-        new Switch(id, position, physicsSelector, animationSelector, animationStartTime, state)
+        new Switch(id, position, physicsSelector, animationSelector/*, animationStartTime*/, state)
     }
     
     private def door(): Door = {
@@ -34,10 +34,10 @@ class EntityFactory(private val clock: Timer) {
         val position = Position(coordinates = Coordinates(10, 20), direction = North, canMove = true, canRotate = true)
         val physicsSelector = DoorPhysicsSelector
         val animationSelector = DoorAnimationSelector
-        val animationStartTime = clock.getTime
+        val animationStartTime = timer.getTimeStamp.milliseconds
         val state = Open
         val lockCode = 1000
         
-        new Door(id, position, physicsSelector, animationSelector, animationStartTime, state, lockCode)
+        new Door(id, position, physicsSelector, animationSelector/*, animationStartTime*/, state, lockCode)
     }
 }

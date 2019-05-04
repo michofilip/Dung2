@@ -12,23 +12,23 @@ final class Switch2(override val id: Long,
                     override val position: Position,
                     override protected val physicsSelector: PhysicsSelector,
                     override protected val animationSelector: AnimationSelector,
-                    override protected val animationStartTime: Long,
+//                    override protected val animationStartTime: Long,
                     override val state: State,
                     override val switchingOffDuration: Int,
                     override val switchingOnDuration: Int
                    ) extends PositionHolder2 with PhysicsHolder2 with AnimationHolder2 with SwitchingCapable {
     
-    private def update(position: Position = position, animationStartTime: Long = animationStartTime, state: State = state): Switch2 = {
-        new Switch2(id, position, physicsSelector, animationSelector, animationStartTime, state, switchingOffDuration, switchingOnDuration)
+    private def update(position: Position = position/*, animationStartTime: Long = animationStartTime*/, state: State = state): Switch2 = {
+        new Switch2(id, position, physicsSelector, animationSelector/*, animationStartTime*/, state, switchingOffDuration, switchingOnDuration)
     }
     
     override protected def setPosition(position: Position): Switch2 = {
         update(position = position)
     }
     
-    override protected def setAnimationStartTime(animationStartTime: Long): Switch2 = {
-        update(animationStartTime = animationStartTime)
-    }
+//    override protected def setAnimationStartTime(animationStartTime: Long): Switch2 = {
+//        update(animationStartTime = animationStartTime)
+//    }
     
     override protected def setState(state: State): Switch2 = {
         update(state = state)

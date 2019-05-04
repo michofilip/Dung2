@@ -3,13 +3,13 @@ package core.entity2.traits
 import core.entities.selectors.AnimationSelector
 import core.entity2.Entity2
 import core.parts.graphics.{Animation, Frame}
-import core.parts.timer.Timer
+import core.parts.timer.TimeStamp
 
 trait AnimationHolder2 extends Entity2 {
     protected val animationSelector: AnimationSelector
-    protected val animationStartTime: Long
+    //    protected val animationStartTime: Long
     
-    protected def setAnimationStartTime(animationStartTime: Long): AnimationHolder2
+//    protected def setAnimationStartTime(animationStartTime: Long): AnimationHolder2
     
     def animationSelectorId: String = {
         animationSelector.id
@@ -27,7 +27,7 @@ trait AnimationHolder2 extends Entity2 {
         animationSelector.getAnimation(stateOpt, directionOpt)
     }
     
-    def getFrame(implicit timer: Timer): Frame = {
-        animation.getFrame(timer.getTime - animationStartTime)
+    def getFrame(timeStamp: TimeStamp): Frame = {
+        animation.getFrame(timeStamp)
     }
 }

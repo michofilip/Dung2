@@ -9,19 +9,19 @@ final class Static(override val id: String,
                    override val position: Position,
                    override protected val physicsSelector: PhysicsSelector,
                    override protected val animationSelector: AnimationSelector,
-                   override protected val animationStartTime: Long
+//                   override protected val animationStartTime: Long
                   ) extends MapEntity[Static] {
-    private def update(position: Position = position, animationStartTime: Long = animationStartTime): Static = {
-        new Static(id, position, physicsSelector, animationSelector, animationStartTime)
+    private def update(position: Position = position/*, animationStartTime: Long = animationStartTime*/): Static = {
+        new Static(id, position, physicsSelector, animationSelector/*, animationStartTime*/)
     }
     
     override protected def setPosition(position: Position): Static = {
         update(position = position)
     }
     
-    override protected def setAnimationStartTime(animationStartTime: Long): Static = {
-        update(animationStartTime = animationStartTime)
-    }
+//    override protected def setAnimationStartTime(animationStartTime: Long): Static = {
+//        update(animationStartTime = animationStartTime)
+//    }
     
     override def toJSON: JValue = {
         MyJ.jObject(
@@ -30,7 +30,7 @@ final class Static(override val id: String,
             "position" -> position,
             "physicsSelector" -> physicsSelector.id,
             "animationSelector" -> animationSelector.id,
-            "animationStartTime" -> animationStartTime
+//            "animationStartTime" -> animationStartTime
         )
     }
 }

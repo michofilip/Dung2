@@ -10,21 +10,21 @@ import scala.language.implicitConversions
 class Static2(override val id: Long,
               override val position: Position,
               override protected val physicsSelector: PhysicsSelector,
-              override protected val animationSelector: AnimationSelector,
-              override protected val animationStartTime: Long
+              override protected val animationSelector: AnimationSelector
+//              override protected val animationStartTime: Long
              ) extends PositionHolder2 with PhysicsHolder2 with AnimationHolder2 {
     
-    private def update(position: Position = position, animationStartTime: Long = animationStartTime): Static2 = {
-        new Static2(id, position, physicsSelector, animationSelector, animationStartTime)
+    private def update(position: Position = position/*, animationStartTime: Long = animationStartTime*/): Static2 = {
+        new Static2(id, position, physicsSelector, animationSelector/*, animationStartTime*/)
     }
     
     override protected def setPosition(position: Position): Static2 = {
         update(position = position)
     }
     
-    override protected def setAnimationStartTime(animationStartTime: Long): Static2 = {
-        update(animationStartTime = animationStartTime)
-    }
+//    override protected def setAnimationStartTime(animationStartTime: Long): Static2 = {
+//        update(animationStartTime = animationStartTime)
+//    }
     
 //    override def enableMovement(): Static2 = super.enableMovement()
 //

@@ -1,13 +1,13 @@
 package core.entities.properties
 
 import core.entities.Entity
-import core.parts.timer.Timer
+import core.parts.timer.{TimeStamp, Timer}
 
 trait TimeCounterHolder[T <: TimeCounterHolder[T]] extends Entity {
     protected val timer: Timer
     
-    def getTime: Long = {
-        timer.getTime
+    def getTimeStamp: TimeStamp = {
+        timer.getTimeStamp
     }
     
     def isRunning: Boolean = {
