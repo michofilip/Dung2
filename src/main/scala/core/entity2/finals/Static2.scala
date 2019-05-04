@@ -18,11 +18,11 @@ class Static2(override val id: Long,
         new Static2(id, position, physicsSelector, animationSelector, animationStartTime)
     }
     
-    override protected def setPosition(position: Position): PositionHolder2 = {
+    override protected def setPosition(position: Position): Static2 = {
         update(position = position)
     }
     
-    override protected def setAnimationStartTime(animationStartTime: Long): AnimationHolder2 = {
+    override protected def setAnimationStartTime(animationStartTime: Long): Static2 = {
         update(animationStartTime = animationStartTime)
     }
     
