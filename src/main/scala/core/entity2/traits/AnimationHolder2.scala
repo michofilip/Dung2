@@ -7,9 +7,6 @@ import core.parts.timer.TimeStamp
 
 trait AnimationHolder2 extends Entity2 {
     protected val animationSelector: AnimationSelector
-    //    protected val animationStartTime: Long
-    
-//    protected def setAnimationStartTime(animationStartTime: Long): AnimationHolder2
     
     def animationSelectorId: String = {
         animationSelector.id
