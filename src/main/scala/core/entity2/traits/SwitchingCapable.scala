@@ -24,9 +24,7 @@ trait SwitchingCapable extends Entity2 with StateHolder2 {
     def finishSwitchingOn(): SwitchingCapable = {
         setState(On)
     }
-}
-
-object SwitchingCapable {
+    
     implicit private def toSwitchCapable(entity: Entity2): SwitchingCapable = {
         entity.asInstanceOf[SwitchingCapable]
     }

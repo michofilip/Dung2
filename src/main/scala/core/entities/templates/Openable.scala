@@ -12,34 +12,42 @@ abstract class Openable[T <: Openable[T]] extends MapEntity[T] with StateHolder[
     val lockingLength = 1000
     
     def beginOpening(animationStartTime: Long): T = {
-        setState(Opening).setAnimationStartTime(animationStartTime)
+        setState(Opening)
+//                .setAnimationStartTime(animationStartTime)
     }
     
     def finishOpening(animationStartTime: Long): T = {
-        setState(Open).setAnimationStartTime(animationStartTime)
+        setState(Open)
+//                .setAnimationStartTime(animationStartTime)
     }
     
     def beginClosing(animationStartTime: Long): T = {
-        setState(Closing).setAnimationStartTime(animationStartTime)
+        setState(Closing)
+//                .setAnimationStartTime(animationStartTime)
     }
     
     def finishClosing(animationStartTime: Long): T = {
-        setState(Close).setAnimationStartTime(animationStartTime)
+        setState(Close)
+//                .setAnimationStartTime(animationStartTime)
     }
     
     def beginUnlocking(animationStartTime: Long): T = {
-        setState(Closing).setAnimationStartTime(animationStartTime)
+        setState(Closing)
+//                .setAnimationStartTime(animationStartTime)
     }
     
     def finishUnlocking(animationStartTime: Long): T = {
-        setState(Close).setAnimationStartTime(animationStartTime)
+        setState(Close)
+//                .setAnimationStartTime(animationStartTime)
     }
     
     def beginLocking(animationStartTime: Long): T = {
-        setState(Locking).setAnimationStartTime(animationStartTime)
+        setState(Locking)
+//                .setAnimationStartTime(animationStartTime)
     }
     
     def finishLocking(animationStartTime: Long): T = {
-        setState(Locked).setAnimationStartTime(animationStartTime)
+        setState(Locked)
+//                .setAnimationStartTime(animationStartTime)
     }
 }

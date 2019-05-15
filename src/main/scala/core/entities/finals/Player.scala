@@ -10,21 +10,21 @@ final class Player(override val id: String,
                    override val position: Position,
                    override protected val physicsSelector: PhysicsSelector,
                    override protected val animationSelector: AnimationSelector,
-                   override protected val animationStartTime: Long,
+//                   override protected val animationStartTime: Long,
                    override val state: State)
         extends Character[Player] {
     
-    private def update(position: Position = position, animationStartTime: Long = animationStartTime, state: State = state): Player = {
-        new Player(id, position, physicsSelector, animationSelector, animationStartTime, state)
+    private def update(position: Position = position, /*animationStartTime: Long = animationStartTime,*/ state: State = state): Player = {
+        new Player(id, position, physicsSelector, animationSelector, /*animationStartTime,*/ state)
     }
     
     override protected def setPosition(position: Position): Player = {
         update(position = position)
     }
     
-    override protected def setAnimationStartTime(animationStartTime: Long): Player = {
-        update(animationStartTime = animationStartTime)
-    }
+//    override protected def setAnimationStartTime(animationStartTime: Long): Player = {
+//        update(animationStartTime = animationStartTime)
+//    }
     
     override protected def setState(state: State): Player = {
         update(state = state)
@@ -37,7 +37,7 @@ final class Player(override val id: String,
             "position" -> position,
             "physicsSelector" -> physicsSelector.id,
             "animationSelector" -> animationSelector.id,
-            "animationStartTime" -> animationStartTime,
+//            "animationStartTime" -> animationStartTime,
             "state" -> state.toString
         )
     }

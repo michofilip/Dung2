@@ -31,7 +31,7 @@ object CustomLongValue {
     final case class GetTime(entityId: String) extends LongValue {
         override def get(implicit entityRepository: EntityRepository): Option[Long] = {
             entityRepository.getById(entityId) match {
-                case Some(en: TimeCounterHolder[_]) => Some(en.getTime)
+                case Some(en: TimeCounterHolder[_]) => Some(en.getTimeStamp.milliseconds)
                 case _ => None
             }
         }

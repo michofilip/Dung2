@@ -9,18 +9,22 @@ abstract class Switchable[T <: Switchable[T]] extends MapEntity[T] with StateHol
     val switchingOnLength = 1000
     
     def beginSwitchingOff(animationStartTime: Long): T = {
-        setState(SwitchingOff).setAnimationStartTime(animationStartTime)
+        setState(SwitchingOff)
+//                .setAnimationStartTime(animationStartTime)
     }
     
     def finishSwitchingOff(animationStartTime: Long): T = {
-        setState(Off).setAnimationStartTime(animationStartTime)
+        setState(Off)
+//                .setAnimationStartTime(animationStartTime)
     }
     
     def beginSwitchingOn(animationStartTime: Long): T = {
-        setState(SwitchingOn).setAnimationStartTime(animationStartTime)
+        setState(SwitchingOn)
+//                .setAnimationStartTime(animationStartTime)
     }
     
     def finishSwitchingOn(animationStartTime: Long): T = {
-        setState(On).setAnimationStartTime(animationStartTime)
+        setState(On)
+//                .setAnimationStartTime(animationStartTime)
     }
 }

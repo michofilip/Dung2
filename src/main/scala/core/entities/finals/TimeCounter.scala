@@ -27,7 +27,7 @@ final class TimeCounter(override val id: String,
         MyJ.jObject(
             "class" -> "TimeCounter",
             "id" -> id,
-            "time" -> timer.getTime
+            "time" -> timer.getTimeStamp
         )
     }
 }

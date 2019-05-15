@@ -8,38 +8,38 @@ import json.{JSONParsable, JValue}
 
 import scala.collection.immutable.ListMap
 
-class WorldFrame(private val entityHolder: EntityRepository,
+class WorldFrame(private val entityRepository: EntityRepository,
                  private val events: Vector[Event]
                 ) extends JSONParsable {
-    private def update(entityHolder: EntityRepository = entityHolder, events: Vector[Event] = events): WorldFrame = {
+    private def update(entityHolder: EntityRepository = entityRepository, events: Vector[Event] = events): WorldFrame = {
         new WorldFrame(entityHolder, events)
     }
     
     def nextFrame(externalEvents: Vector[Event] = Vector.empty): WorldFrame = {
-        val (newEntityHolder, newEvents) =
-            events.foldLeft(entityHolder, externalEvents) {
+        val (newEntityRepository, newEvents) =
+            events.foldLeft(entityRepository, externalEvents) {
                 case ((tempEntityHolder, tempEvents), event) =>
                     implicit val eh: EntityRepository = tempEntityHolder
                     tempEntityHolder.getById(event.entityId) match {
                         case Some(entity: Entity) =>
                             val (resultEntities, resultEvents) = event.applyTo(entity)
                             
-                            val newTempEntityHolder = tempEntityHolder - entity ++ resultEntities
+                            val newTempEntityRepository = tempEntityHolder - entity ++ resultEntities
                             val newTempEvents = tempEvents ++ resultEvents
                             
-                            (newTempEntityHolder, newTempEvents)
+                            (newTempEntityRepository, newTempEvents)
                         
                         case _ =>
                             (tempEntityHolder, tempEvents)
                     }
             }
         
-        update(entityHolder = newEntityHolder, events = newEvents)
+        update(entityHolder = newEntityRepository, events = newEvents)
     }
     
     override def toJSON: JValue = {
         ListMap(
-            "entities" -> entityHolder.getAll,
+            "entities" -> entityRepository.getAll,
             "events" -> events
         ).toJSON
     }
