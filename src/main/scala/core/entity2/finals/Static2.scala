@@ -4,7 +4,7 @@ import core.entities.selectors.{AnimationSelector, PhysicsSelector}
 import core.entity2.traits.{AnimationHolder2, PhysicsHolder2, PositionHolder2}
 import core.parts.position.Position
 
-class Static2(override val id: Long,
+final class Static2(override val id: Long,
               override val position: Position,
               override protected val physicsSelector: PhysicsSelector,
               override protected val animationSelector: AnimationSelector

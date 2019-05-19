@@ -10,11 +10,11 @@ trait TimeCounterHolder2 extends Entity2 {
         timer.getTimeStamp
     }
     
-    def isRunning: Boolean = {
+    def isTimerRunning: Boolean = {
         timer.isRunning
     }
     
-    def start(): TimeCounterHolder2
+    def startTimer(): TimeCounterHolder2
     
-    def stop(): TimeCounterHolder2
+    def stopTimer(): TimeCounterHolder2
 }
