@@ -17,30 +17,30 @@ object AnimationSelector2 {
         override val id: String = "LeverAnimationSelector"
         
         override def getAnimation(stateOpt: Option[State], directionOpt: Option[Direction]): Animation = {
-            val offAnimation = new Animation(frames = Vector(
+            val offAnimation = Animation(frames = Vector(
                 Frame(frameId = 100),
                 Frame(frameId = 101),
                 Frame(frameId = 102),
                 Frame(frameId = 103)
-            ), duration = 1000, 0, looped = true)
-            val switchingOffAnimation = new Animation(frames = Vector(
+            ), duration = 1000, initialOffset = 0, looped = true)
+            val switchingOffAnimation = Animation(frames = Vector(
                 Frame(frameId = 104),
                 Frame(frameId = 105),
                 Frame(frameId = 106),
                 Frame(frameId = 107)
-            ), duration = 1000, 0, looped = false)
-            val switchingOnAnimation = new Animation(frames = Vector(
+            ), duration = 1000, initialOffset = 0, looped = false)
+            val switchingOnAnimation = Animation(frames = Vector(
                 Frame(frameId = 107),
                 Frame(frameId = 106),
                 Frame(frameId = 105),
                 Frame(frameId = 104)
-            ), duration = 1000, 0, looped = false)
-            val onAnimation = new Animation(frames = Vector(
+            ), duration = 1000, initialOffset = 0, looped = false)
+            val onAnimation = Animation(frames = Vector(
                 Frame(frameId = 108),
                 Frame(frameId = 109),
                 Frame(frameId = 110),
                 Frame(frameId = 111)
-            ), duration = 1000, 0, looped = true)
+            ), duration = 1000, initialOffset = 0, looped = true)
             
             (stateOpt, directionOpt) match {
                 case (Some(Off), _) => offAnimation
@@ -56,48 +56,48 @@ object AnimationSelector2 {
         override val id: String = "DoorAnimationSelector"
         
         override def getAnimation(stateOpt: Option[State], directionOpt: Option[Direction]): Animation = {
-            val openAnimation = new Animation(frames = Vector(
+            val openAnimation = Animation(frames = Vector(
                 Frame(frameId = 100),
                 Frame(frameId = 101),
                 Frame(frameId = 102),
                 Frame(frameId = 103)
-            ), duration = 1000, 0, looped = true)
-            val openingOffAnimation = new Animation(frames = Vector(
+            ), duration = 1000, initialOffset = 0, looped = true)
+            val openingOffAnimation = Animation(frames = Vector(
                 Frame(frameId = 100),
                 Frame(frameId = 101),
                 Frame(frameId = 102),
                 Frame(frameId = 103)
-            ), duration = 1000, 0, looped = true)
-            val closingAnimation = new Animation(frames = Vector(
+            ), duration = 1000, initialOffset = 0, looped = true)
+            val closingAnimation = Animation(frames = Vector(
                 Frame(frameId = 100),
                 Frame(frameId = 101),
                 Frame(frameId = 102),
                 Frame(frameId = 103)
-            ), duration = 1000, 0, looped = true)
-            val closeAnimation = new Animation(frames = Vector(
+            ), duration = 1000, initialOffset = 0, looped = true)
+            val closeAnimation = Animation(frames = Vector(
                 Frame(frameId = 100),
                 Frame(frameId = 101),
                 Frame(frameId = 102),
                 Frame(frameId = 103)
-            ), duration = 1000, 0, looped = true)
-            val unlockingAnimation = new Animation(frames = Vector(
+            ), duration = 1000, initialOffset = 0, looped = true)
+            val unlockingAnimation = Animation(frames = Vector(
                 Frame(frameId = 100),
                 Frame(frameId = 101),
                 Frame(frameId = 102),
                 Frame(frameId = 103)
-            ), duration = 1000, 0, looped = true)
-            val lockingAnimation = new Animation(frames = Vector(
+            ), duration = 1000, initialOffset = 0, looped = true)
+            val lockingAnimation = Animation(frames = Vector(
                 Frame(frameId = 100),
                 Frame(frameId = 101),
                 Frame(frameId = 102),
                 Frame(frameId = 103)
-            ), duration = 1000, 0, looped = true)
-            val lockedAnimation = new Animation(frames = Vector(
+            ), duration = 1000, initialOffset = 0, looped = true)
+            val lockedAnimation = Animation(frames = Vector(
                 Frame(frameId = 100),
                 Frame(frameId = 101),
                 Frame(frameId = 102),
                 Frame(frameId = 103)
-            ), duration = 1000, 0, looped = true)
+            ), duration = 1000, initialOffset = 0, looped = true)
             
             (stateOpt, directionOpt) match {
                 case (Some(Open), _) => openAnimation

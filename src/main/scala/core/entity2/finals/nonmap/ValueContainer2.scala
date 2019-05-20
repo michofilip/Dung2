@@ -1,6 +1,6 @@
-package core.entity2.finals
+package core.entity2.finals.nonmap
 
-import core.entity2.traits.ValueHolder2
+import core.entity2.traits.properties.ValueHolder2
 import core.parts.value.Value
 
 final class ValueContainer2(override val id: Long,

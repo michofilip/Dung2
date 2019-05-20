@@ -1,6 +1,6 @@
-package core.entity2.finals
+package core.entity2.finals.nonmap
 
-import core.entity2.traits.TimeCounterHolder2
+import core.entity2.traits.properties.TimeCounterHolder2
 import core.parts.timer.Timer
 
 final class TimeCounter2(override val id: Long,

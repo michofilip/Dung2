@@ -1,11 +1,10 @@
-package core.entity2.traits
+package core.entity2.traits.properties
 
-import core.entities.selectors.PhysicsSelector
 import core.entity2.Entity2
-import core.parts.physics.Physics
+import core.parts.physics.{Physics, PhysicsSelector2}
 
 trait PhysicsHolder2 extends Entity2 {
-    protected val physicsSelector: PhysicsSelector
+    protected val physicsSelector: PhysicsSelector2
     
     def physicsSelectorId: String = {
         physicsSelector.id

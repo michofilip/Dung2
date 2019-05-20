@@ -2,6 +2,8 @@ package core.events
 
 import core.entity2.Entity2
 import core.entity2.traits._
+import core.entity2.traits.properties.{PositionHolder2, ScriptHolder2, TimeCounterHolder2, TurnCounterHolder2, ValueHolder2}
+import core.entity2.traits.templates.{ClosingCapable, LockingCapable, SwitchingCapable}
 import core.parts.position.{Coordinates, Direction}
 import core.parts.scripts.Instruction._
 import core.parts.scripts.Script

@@ -11,6 +11,10 @@ case class TimeStamp(milliseconds: Long) {
 }
 
 object TimeStamp {
+    def zero: TimeStamp = {
+        TimeStamp(0)
+    }
+    
     def now(): TimeStamp = {
         TimeStamp(System.currentTimeMillis())
     }

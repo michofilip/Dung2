@@ -1,7 +1,7 @@
 package core.repository
 
 import core.entity2.Entity2
-import core.entity2.traits.PositionHolder2
+import core.entity2.traits.properties.PositionHolder2
 import core.parts.position.Coordinates
 
 class EntityRepository2 private(private val entitiesById: Map[Long, Entity2],

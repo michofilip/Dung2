@@ -1,12 +1,14 @@
-package core.entity2.traits
+package core.entity2.traits.properties
 
-import core.entities.selectors.AnimationSelector
 import core.entity2.Entity2
-import core.parts.graphics.{Animation, Frame}
-import core.parts.timer.TimeStamp
+import core.parts.graphics.{Animation, AnimationSelector2, Frame}
+import core.parts.timer.{Duration, TimeStamp}
 
 trait AnimationHolder2 extends Entity2 {
-    protected val animationSelector: AnimationSelector
+    protected val animationSelector: AnimationSelector2
+    protected val animationBeginningTimeStamp: TimeStamp
+    
+    protected def setAnimationBeginningTimeStamp(animationBeginningTimeStamp: TimeStamp): AnimationHolder2
     
     def animationSelectorId: String = {
         animationSelector.id
@@ -25,6 +27,6 @@ trait AnimationHolder2 extends Entity2 {
     }
     
     def getFrame(timeStamp: TimeStamp): Frame = {
-        animation.getFrame(timeStamp)
+        animation.getFrame(Duration.between(animationBeginningTimeStamp, timeStamp).milliseconds)
     }
 }

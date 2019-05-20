@@ -1,19 +1,14 @@
 package core.parts.graphics
 
-import core.parts.timer.TimeStamp
 import math.MyMath.{Mod, restrict}
 
-case class Animation(frames: Vector[Frame], duration: Long, initialOffset: Long, looped: Boolean) {
+case class Animation(frames: Vector[Frame], duration: Long, looped: Boolean) {
     
-    private def update(frames: Vector[Frame] = frames,
-                       duration: Long = duration,
-                       initialOffset: Long = initialOffset,
-                       lopped: Boolean = looped): Animation = {
-        Animation(frames, duration, initialOffset, looped)
+    private def update(frames: Vector[Frame] = frames, duration: Long = duration, lopped: Boolean = looped): Animation = {
+        Animation(frames, duration, looped)
     }
     
-    def getFrame(timeStamp: TimeStamp): Frame = {
-        val milliseconds = timeStamp.milliseconds + initialOffset
+    def getFrame(milliseconds: Long): Frame = {
         val frameNo: Int = (frames.length * milliseconds / duration).toInt
         
         if (looped) {
@@ -21,18 +16,6 @@ case class Animation(frames: Vector[Frame], duration: Long, initialOffset: Long,
         } else {
             frames(restrict(frameNo, 0, frames.length))
         }
-    }
-    
-    def reverse: Animation = {
-        update(frames = frames.reverse)
-    }
-    
-    def setInitialOffset(initialOffset: Long): Animation = {
-        update(initialOffset = initialOffset)
-    }
-    
-    def setLooped(lopped: Boolean): Animation = {
-        update(lopped = lopped)
     }
     
 }

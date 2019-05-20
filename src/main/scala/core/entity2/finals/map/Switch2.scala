@@ -1,7 +1,7 @@
-package core.entity2.finals
+package core.entity2.finals.map
 
-import core.entities.selectors.{AnimationSelector, PhysicsSelector}
-import core.entity2.traits._
+import core.entity2.traits.properties.{AnimationHolder2, PhysicsHolder2, PositionHolder2}
+import core.entity2.traits.templates.SwitchingCapable
 import core.parts.position.Position
 import core.parts.state.State
 

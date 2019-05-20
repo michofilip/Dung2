@@ -1,4 +1,4 @@
-package core.entity2.traits
+package core.entity2.traits.properties
 
 import core.entity2.Entity2
 import core.parts.value.Value

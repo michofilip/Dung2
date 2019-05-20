@@ -8,7 +8,7 @@ object MyMath {
         } else if (x < upperBound) {
             x
         } else {
-            upperBound
+            upperBound - 1
         }
     }
     

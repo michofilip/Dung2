@@ -1,6 +1,6 @@
-package core.entity2.finals
+package core.entity2.finals.nonmap
 
-import core.entity2.traits.TurnCounterHolder2
+import core.entity2.traits.properties.TurnCounterHolder2
 
 final class TurnCounter2(override val id: Long,
                          override val turn: Long
