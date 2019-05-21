@@ -1,16 +1,21 @@
 package core.parts.graphics
 
-class Animation(private val frames: Vector[Frame], private val length: Int, private val looped: Boolean) {
-    def getFrame(time: Long): Frame = {
-        val frameNo: Int = Math.max(frames.length * time / length, 0).toInt
-        
-        if (looped)
-            frames(frameNo % frames.length)
-        else
-            frames(Math.min(frameNo, frames.length - 1))
+import math.MyMath.{Mod, restrict}
+
+case class Animation(frames: Vector[Frame], duration: Long, looped: Boolean) {
+    
+    private def update(frames: Vector[Frame] = frames, duration: Long = duration, lopped: Boolean = looped): Animation = {
+        Animation(frames, duration, looped)
     }
     
-    def reverse: Animation = {
-        new Animation(frames.reverse, length, looped)
+    def getFrame(milliseconds: Long): Frame = {
+        val frameNo: Int = (frames.length * milliseconds / duration).toInt
+        
+        if (looped) {
+            frames(frameNo %% frames.length)
+        } else {
+            frames(restrict(frameNo, 0, frames.length))
+        }
     }
+    
 }

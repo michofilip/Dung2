@@ -1,6 +1,6 @@
 package core.parts.value.basic
 
-import core.entities.repositoy.EntityRepository
+import core.repository.EntityRepository
 import core.parts.value.Value
 import json.JValue
 

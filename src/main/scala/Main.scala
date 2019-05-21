@@ -1,23 +1,24 @@
-import core.entities.finals.TimeCounter
-import core.entities.{Entity, EntityFactory}
+import core.entities.EntityFactory
+import core.entities.Entity
+import core.entities.finals.nonmap.TimeCounter
 import core.events.Event
 import core.events.Event._
 import core.parts.timer.Timer
 import core.world.WorldFrame
 
 object Main extends App {
-    val timeCounter: Timer = new Timer(0, true)
-    val entityFactory = new EntityFactory(timeCounter)
+    val timer: Timer = new Timer().start
+    val entityFactory = new EntityFactory(timer)
     var ent = entityFactory.create("lever").get
     
     val entities = Vector[Entity](
         ent,
-        new TimeCounter("TimeCounter", timeCounter),
+        new TimeCounter(0, timer),
         //        new entity.Entity.TurnCounter(0),
         //        new entity.Entity.ScriptRunner(0),
     )
     val events = Vector[Event](
-        SwitchOn("1000"),
+        SwitchOn(1000),
         //        StopTime
     )
     

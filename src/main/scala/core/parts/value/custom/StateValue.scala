@@ -1,9 +1,9 @@
 package core.parts.value.custom
 
-import core.entities.properties.{StateHolder, ValueHolder}
-import core.entities.repositoy.EntityRepository
+import core.entities.traits.properties.{StateHolder, ValueHolder}
 import core.parts.state.State
 import core.parts.value.Value
+import core.repository.EntityRepository
 import json.JValue
 
 sealed abstract class StateValue extends Value {
@@ -39,10 +39,10 @@ object StateValue {
         }
     }
     
-    final case class GetState(entityId: String) extends StateValue {
+    final case class GetState(entityId: Long) extends StateValue {
         override def get(implicit entityRepository: EntityRepository): Option[State] = {
             entityRepository.getById(entityId) match {
-                case Some(en: StateHolder[_]) => Some(en.state)
+                case Some(en: StateHolder) => Some(en.state)
                 case _ => None
             }
         }
@@ -56,10 +56,10 @@ object StateValue {
         }
     }
     
-    final case class GetStateValue(entityId: String, name: String) extends StateValue {
+    final case class GetStateValue(entityId: Long, name: String) extends StateValue {
         override def get(implicit entityRepository: EntityRepository): Option[State] = {
             entityRepository.getById(entityId) match {
-                case en: ValueHolder[_] => en.getValue(name) match {
+                case en: ValueHolder => en.getValue(name) match {
                     case value: StateValue => value.get
                     case _ => None
                 }
