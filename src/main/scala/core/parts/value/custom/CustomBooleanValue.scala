@@ -1,17 +1,17 @@
 package core.parts.value.custom
 
 import core.entities.Entity
-import core.entities.properties.{PhysicsHolder, ValueHolder}
-import core.entities.repositoy.EntityRepository
+import core.entities.traits.properties.{PhysicsHolder, ValueHolder}
 import core.parts.value.basic.BooleanValue
+import core.repository.EntityRepository
 import json.JValue
 
 object CustomBooleanValue {
     
-    final case class GetBooleanValue(entityId: String, name: String) extends BooleanValue {
+    final case class GetBooleanValue(entityId: Long, name: String) extends BooleanValue {
         override def get(implicit entityRepository: EntityRepository): Option[Boolean] = {
             entityRepository.getById(entityId) match {
-                case en: ValueHolder[_] => en.getValue(name) match {
+                case en: ValueHolder => en.getValue(name) match {
                     case value: BooleanValue => value.get
                     case _ => None
                 }
@@ -29,7 +29,7 @@ object CustomBooleanValue {
         }
     }
     
-    final case class Exists(entityId: String) extends BooleanValue {
+    final case class Exists(entityId: Long) extends BooleanValue {
         override def get(implicit entityRepository: EntityRepository): Option[Boolean] = {
             Some(entityRepository.contains(entityId))
         }
@@ -46,7 +46,7 @@ object CustomBooleanValue {
     final case class IsSolidAtCoordinates(value: CoordinatesValue) extends BooleanValue {
         override def get(implicit entityRepository: EntityRepository): Option[Boolean] = {
             val condition: Entity => Boolean = {
-                case en: PhysicsHolder[_] if en.physics.solid => true
+                case en: PhysicsHolder if en.physics.solid => true
                 case _ => false
             }
             value.get match {
@@ -67,7 +67,7 @@ object CustomBooleanValue {
     final case class IsOpaqueAtCoordinates(value: CoordinatesValue) extends BooleanValue {
         override def get(implicit entityRepository: EntityRepository): Option[Boolean] = {
             val condition: Entity => Boolean = {
-                case en: PhysicsHolder[_] if en.physics.opaque => true
+                case en: PhysicsHolder if en.physics.opaque => true
                 case _ => false
             }
             value.get match {

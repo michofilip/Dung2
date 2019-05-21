@@ -1,5 +1,6 @@
-import core.entities.finals.TimeCounter
-import core.entities.{Entity, EntityFactory}
+import core.entities.EntityFactory
+import core.entities.Entity
+import core.entities.finals.nonmap.TimeCounter
 import core.events.Event
 import core.events.Event._
 import core.parts.timer.Timer
@@ -12,12 +13,12 @@ object Main extends App {
     
     val entities = Vector[Entity](
         ent,
-        new TimeCounter("TimeCounter", timer),
+        new TimeCounter(0, timer),
         //        new entity.Entity.TurnCounter(0),
         //        new entity.Entity.ScriptRunner(0),
     )
     val events = Vector[Event](
-        SwitchOn("1000"),
+        SwitchOn(1000),
         //        StopTime
     )
     

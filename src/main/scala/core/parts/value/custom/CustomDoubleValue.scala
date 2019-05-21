@@ -1,16 +1,16 @@
 package core.parts.value.custom
 
-import core.entities.properties.ValueHolder
-import core.entities.repositoy.EntityRepository
+import core.entities.traits.properties.ValueHolder
 import core.parts.value.basic.DoubleValue
+import core.repository.EntityRepository
 import json.JValue
 
 object CustomDoubleValue {
     
-    final case class GetDoubleValue(entityId: String, name: String) extends DoubleValue {
+    final case class GetDoubleValue(entityId: Long, name: String) extends DoubleValue {
         override def get(implicit entityRepository: EntityRepository): Option[Double] = {
             entityRepository.getById(entityId) match {
-                case en: ValueHolder[_] => en.getValue(name) match {
+                case en: ValueHolder => en.getValue(name) match {
                     case value: DoubleValue => value.get
                     case _ => None
                 }

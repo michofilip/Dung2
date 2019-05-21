@@ -1,8 +1,8 @@
 package core.world
 
 import core.entities.Entity
-import core.entities.repositoy.EntityRepository
 import core.events.Event
+import core.repository.EntityRepository
 import json.MyJ.ToJSON
 import json.{JSONParsable, JValue}
 

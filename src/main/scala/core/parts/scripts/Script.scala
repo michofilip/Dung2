@@ -32,7 +32,7 @@ object Script {
     
     val emptyScript: Script = new Script(Vector(EXIT(0)))
     
-    def autoClose(entityId: String): Script = {
+    def autoClose(entityId: Long): Script = {
         import Statement._
         val statement =
             loop(true)(

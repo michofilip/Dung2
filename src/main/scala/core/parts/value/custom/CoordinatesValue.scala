@@ -1,9 +1,9 @@
 package core.parts.value.custom
 
-import core.entities.properties.{PositionHolder, ValueHolder}
-import core.entities.repositoy.EntityRepository
+import core.entities.traits.properties.{PositionHolder, ValueHolder}
 import core.parts.position.Coordinates
 import core.parts.value.Value
+import core.repository.EntityRepository
 import json.JValue
 
 abstract class CoordinatesValue extends Value {
@@ -39,10 +39,10 @@ object CoordinatesValue {
         }
     }
     
-    final case class GetCoordinates(entityId: String) extends CoordinatesValue {
+    final case class GetCoordinates(entityId: Long) extends CoordinatesValue {
         override def get(implicit entityRepository: EntityRepository): Option[Coordinates] = {
             entityRepository.getById(entityId) match {
-                case Some(en: PositionHolder[_]) => Some(en.position.coordinates)
+                case Some(en: PositionHolder) => Some(en.position.coordinates)
                 case _ => None
             }
         }
@@ -56,10 +56,10 @@ object CoordinatesValue {
         }
     }
     
-    final case class GetCoordinatesValue(entityId: String, name: String) extends CoordinatesValue {
+    final case class GetCoordinatesValue(entityId: Long, name: String) extends CoordinatesValue {
         override def get(implicit entityRepository: EntityRepository): Option[Coordinates] = {
             entityRepository.getById(entityId) match {
-                case en: ValueHolder[_] => en.getValue(name) match {
+                case en: ValueHolder => en.getValue(name) match {
                     case value: CoordinatesValue => value.get
                     case _ => None
                 }

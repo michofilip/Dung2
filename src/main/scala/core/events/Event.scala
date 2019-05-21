@@ -1,36 +1,44 @@
 package core.events
 
-import core.entity2.Entity2
-import core.entity2.traits._
-import core.entity2.traits.properties.{PositionHolder2, ScriptHolder2, TimeCounterHolder2, TurnCounterHolder2, ValueHolder2}
-import core.entity2.traits.templates.{ClosingCapable, LockingCapable, SwitchingCapable}
+import core.entities.Entity
+import core.entities.traits.properties._
+import core.entities.traits.templates.{ClosingCapable, LockingCapable, SwitchingCapable}
 import core.parts.position.{Coordinates, Direction}
 import core.parts.scripts.Instruction._
 import core.parts.scripts.Script
 import core.parts.state.State
+import core.parts.timer.TimeStamp
 import core.parts.value.Value
 import core.parts.value.basic.Implicits._
 import core.parts.value.custom.CustomLongValue.{GetTime, GetTurn}
 import core.parts.value.custom.Implicits._
-import core.repository.EntityRepository2
+import core.repository.EntityRepository
 import json.{JSONParsable, JValue}
 
 import scala.language.implicitConversions
 
 sealed abstract class Event extends JSONParsable {
-    val entityId: String
+    val entityId: Long
     
-    def applyTo(entity: Entity2)(implicit entityRepository: EntityRepository2): (Vector[Entity2], Vector[Event])
+    def applyTo(entity: Entity)(implicit entityRepository: EntityRepository): (Vector[Entity], Vector[Event])
 }
 
 object Event {
-    implicit def en2Vector(entity: Entity2): Vector[Entity2] = Vector[Entity2](entity)
+    implicit def en2Vector(entity: Entity): Vector[Entity] = Vector[Entity](entity)
     
     implicit def ev2Vector(event: Event): Vector[Event] = Vector(event)
     
+    private def getTimeStamp(implicit entityRepository: EntityRepository): TimeStamp = {
+        TimeStamp(GetTime(0).getOrElse(0))
+    }
+    
+    private def getTurn(implicit entityRepository: EntityRepository): Long = {
+        GetTurn(1).getOrElse(0)
+    }
+    
     // entity amount
-    final case class Create(override val entityId: String) extends Event {
-        override def applyTo(entity: Entity2)(implicit entityRepository: EntityRepository2): (Vector[Entity2], Vector[Event]) = ???
+    final case class Create(override val entityId: Long) extends Event {
+        override def applyTo(entity: Entity)(implicit entityRepository: EntityRepository): (Vector[Entity], Vector[Event]) = ???
         
         override def toJSON: JValue = {
             import json.MyJ._
@@ -41,8 +49,8 @@ object Event {
         }
     }
     
-    final case class Delete(override val entityId: String) extends Event {
-        override def applyTo(entity: Entity2)(implicit entityRepository: EntityRepository2): (Vector[Entity2], Vector[Event]) = {
+    final case class Delete(override val entityId: Long) extends Event {
+        override def applyTo(entity: Entity)(implicit entityRepository: EntityRepository): (Vector[Entity], Vector[Event]) = {
             (Vector.empty, Vector.empty)
         }
         
@@ -56,10 +64,10 @@ object Event {
     }
     
     // position
-    final case class MoveTo(override val entityId: String, x: Int, y: Int) extends Event {
-        override def applyTo(entity: Entity2)(implicit entityRepository: EntityRepository2): (Vector[Entity2], Vector[Event]) = {
+    final case class MoveTo(override val entityId: Long, x: Int, y: Int) extends Event {
+        override def applyTo(entity: Entity)(implicit entityRepository: EntityRepository): (Vector[Entity], Vector[Event]) = {
             entity match {
-                case ent: PositionHolder2 =>
+                case ent: PositionHolder =>
                     (ent.moveTo(x, y), Vector.empty)
                 case _ =>
                     (entity, Vector.empty)
@@ -77,10 +85,10 @@ object Event {
         }
     }
     
-    final case class MoveBy(override val entityId: String, dx: Int, dy: Int) extends Event {
-        override def applyTo(entity: Entity2)(implicit entityRepository: EntityRepository2): (Vector[Entity2], Vector[Event]) = {
+    final case class MoveBy(override val entityId: Long, dx: Int, dy: Int) extends Event {
+        override def applyTo(entity: Entity)(implicit entityRepository: EntityRepository): (Vector[Entity], Vector[Event]) = {
             entity match {
-                case ent: PositionHolder2 =>
+                case ent: PositionHolder =>
                     (ent.moveBy(dx, dy), Vector.empty)
                 case _ =>
                     (entity, Vector.empty)
@@ -129,13 +137,13 @@ object Event {
     //    }
     
     // switchable
-    final case class SwitchOff(override val entityId: String) extends Event {
-        override def applyTo(entity: Entity2)(implicit entityRepository: EntityRepository2): (Vector[Entity2], Vector[Event]) = {
+    final case class SwitchOff(override val entityId: Long) extends Event {
+        override def applyTo(entity: Entity)(implicit entityRepository: EntityRepository): (Vector[Entity], Vector[Event]) = {
             entity match {
                 case ent: SwitchingCapable if ent.state == State.On =>
-                    (ent.beginSwitchingOff(GetTime("TimeCounter").getOrElse(0)), DelayTime(entityId, ent.switchingOffDuration, SwitchOff(entityId)))
+                    (ent.beginSwitchingOff(getTimeStamp), DelayTime(entityId, ent.switchingOffDuration, SwitchOff(entityId)))
                 case ent: SwitchingCapable if ent.state == State.SwitchingOff =>
-                    (ent.finishSwitchingOff(GetTime("TimeCounter").getOrElse(0)), Vector.empty)
+                    (ent.finishSwitchingOff(getTimeStamp), Vector.empty)
                 case _ =>
                     (entity, Vector.empty)
             }
@@ -150,13 +158,13 @@ object Event {
         }
     }
     
-    final case class SwitchOn(override val entityId: String) extends Event {
-        override def applyTo(entity: Entity2)(implicit entityRepository: EntityRepository2): (Vector[Entity2], Vector[Event]) = {
+    final case class SwitchOn(override val entityId: Long) extends Event {
+        override def applyTo(entity: Entity)(implicit entityRepository: EntityRepository): (Vector[Entity], Vector[Event]) = {
             entity match {
                 case ent: SwitchingCapable if ent.state == State.Off =>
-                    (ent.beginSwitchingOn(GetTime("TimeCounter").getOrElse(0)), DelayTime(entityId, ent.switchingOnDuration, SwitchOn(entityId)))
+                    (ent.beginSwitchingOn(getTimeStamp), DelayTime(entityId, ent.switchingOnDuration, SwitchOn(entityId)))
                 case ent: SwitchingCapable if ent.state == State.SwitchingOn =>
-                    (ent.finishSwitchingOn(GetTime("TimeCounter").getOrElse(0)), Vector.empty)
+                    (ent.finishSwitchingOn(getTimeStamp), Vector.empty)
                 case _ =>
                     (entity, Vector.empty)
             }
@@ -172,13 +180,13 @@ object Event {
     }
     
     // openable
-    final case class Open(override val entityId: String) extends Event {
-        override def applyTo(entity: Entity2)(implicit entityRepository: EntityRepository2): (Vector[Entity2], Vector[Event]) = {
+    final case class Open(override val entityId: Long) extends Event {
+        override def applyTo(entity: Entity)(implicit entityRepository: EntityRepository): (Vector[Entity], Vector[Event]) = {
             entity match {
                 case ent: ClosingCapable if ent.state == State.Close =>
-                    (ent.beginOpening(GetTime("TimeCounter").getOrElse(0)), DelayTime(entityId, ent.openingDuration, Open(entityId)))
+                    (ent.beginOpening(getTimeStamp), DelayTime(entityId, ent.openingDuration, Open(entityId)))
                 case ent: ClosingCapable if ent.state == State.Opening =>
-                    (ent.finishOpening(GetTime("TimeCounter").getOrElse(0)), Vector.empty)
+                    (ent.finishOpening(getTimeStamp), Vector.empty)
                 case _ =>
                     (entity, Vector.empty)
             }
@@ -193,13 +201,13 @@ object Event {
         }
     }
     
-    final case class Close(override val entityId: String) extends Event {
-        override def applyTo(entity: Entity2)(implicit entityRepository: EntityRepository2): (Vector[Entity2], Vector[Event]) = {
+    final case class Close(override val entityId: Long) extends Event {
+        override def applyTo(entity: Entity)(implicit entityRepository: EntityRepository): (Vector[Entity], Vector[Event]) = {
             entity match {
                 case ent: ClosingCapable if ent.state == State.Open =>
-                    (ent.beginClosing(GetTime("TimeCounter").getOrElse(0)), DelayTime(entityId, ent.closingDuration, Close(entityId)))
+                    (ent.beginClosing(getTimeStamp), DelayTime(entityId, ent.closingDuration, Close(entityId)))
                 case ent: ClosingCapable if ent.state == State.Closing =>
-                    (ent.finishClosing(GetTime("TimeCounter").getOrElse(0)), Vector.empty)
+                    (ent.finishClosing(getTimeStamp), Vector.empty)
                 case _ =>
                     (entity, Vector.empty)
             }
@@ -214,13 +222,13 @@ object Event {
         }
     }
     
-    final case class Unlock(override val entityId: String, keys: Set[Long]) extends Event {
-        override def applyTo(entity: Entity2)(implicit entityRepository: EntityRepository2): (Vector[Entity2], Vector[Event]) = {
+    final case class Unlock(override val entityId: Long, keys: Set[Long]) extends Event {
+        override def applyTo(entity: Entity)(implicit entityRepository: EntityRepository): (Vector[Entity], Vector[Event]) = {
             entity match {
                 case ent: LockingCapable if ent.state == State.Locked =>
-                    (ent.beginUnlocking(GetTime("TimeCounter").getOrElse(0)), DelayTime(entityId, ent.unlockingDuration, Unlock(entityId, keys)))
+                    (ent.beginUnlocking(getTimeStamp), DelayTime(entityId, ent.unlockingDuration, Unlock(entityId, keys)))
                 case ent: LockingCapable if ent.state == State.Closing =>
-                    (ent.finishUnlocking(GetTime("TimeCounter").getOrElse(0)), Vector.empty)
+                    (ent.finishUnlocking(getTimeStamp), Vector.empty)
                 case _ =>
                     (entity, Vector.empty)
             }
@@ -236,13 +244,13 @@ object Event {
         }
     }
     
-    final case class Lock(override val entityId: String, keys: Set[Long]) extends Event {
-        override def applyTo(entity: Entity2)(implicit entityRepository: EntityRepository2): (Vector[Entity2], Vector[Event]) = {
+    final case class Lock(override val entityId: Long, keys: Set[Long]) extends Event {
+        override def applyTo(entity: Entity)(implicit entityRepository: EntityRepository): (Vector[Entity], Vector[Event]) = {
             entity match {
                 case ent: LockingCapable if ent.state == State.Close =>
-                    (ent.beginLocking(GetTime("TimeCounter").getOrElse(0)), DelayTime(entityId, ent.lockingDuration, Lock(entityId, keys)))
+                    (ent.beginLocking(getTimeStamp), DelayTime(entityId, ent.lockingDuration, Lock(entityId, keys)))
                 case ent: LockingCapable if ent.state == State.Locking =>
-                    (ent.finishLocking(GetTime("TimeCounter").getOrElse(0)), Vector.empty)
+                    (ent.finishLocking(getTimeStamp), Vector.empty)
                 case _ =>
                     (entity, Vector.empty)
             }
@@ -259,10 +267,10 @@ object Event {
     }
     
     // value
-    final case class SetValue(override val entityId: String, name: String, value: Value) extends Event {
-        override def applyTo(entity: Entity2)(implicit entityRepository: EntityRepository2): (Vector[Entity2], Vector[Event]) = {
+    final case class SetValue(override val entityId: Long, name: String, value: Value) extends Event {
+        override def applyTo(entity: Entity)(implicit entityRepository: EntityRepository): (Vector[Entity], Vector[Event]) = {
             entity match {
-                case en: ValueHolder2 =>
+                case en: ValueHolder =>
                     (en.setValue(name, value), Vector.empty)
                 case _ =>
                     (entity, Vector.empty)
@@ -279,10 +287,10 @@ object Event {
         }
     }
     
-    final case class RemoveValue(override val entityId: String, name: String) extends Event {
-        override def applyTo(entity: Entity2)(implicit entityRepository: EntityRepository2): (Vector[Entity2], Vector[Event]) = {
+    final case class RemoveValue(override val entityId: Long, name: String) extends Event {
+        override def applyTo(entity: Entity)(implicit entityRepository: EntityRepository): (Vector[Entity], Vector[Event]) = {
             entity match {
-                case en: ValueHolder2 =>
+                case en: ValueHolder =>
                     (en.removeValue(name), Vector.empty)
                 case _ =>
                     (entity, Vector.empty)
@@ -298,10 +306,10 @@ object Event {
         }
     }
     
-    final case class SetCalculatedValue(override val entityId: String, name: String, value: Value) extends Event {
-        override def applyTo(entity: Entity2)(implicit entityRepository: EntityRepository2): (Vector[Entity2], Vector[Event]) = {
+    final case class SetCalculatedValue(override val entityId: Long, name: String, value: Value) extends Event {
+        override def applyTo(entity: Entity)(implicit entityRepository: EntityRepository): (Vector[Entity], Vector[Event]) = {
             entity match {
-                case en: ValueHolder2 =>
+                case en: ValueHolder =>
                     value.get match {
                         case Some(v: Boolean) =>
                             (en.setValue(name, v), Vector.empty)
@@ -348,10 +356,10 @@ object Event {
     }
     
     // script
-    final case class RunScript(override val entityId: String, scriptName: String) extends Event {
-        override def applyTo(entity: Entity2)(implicit entityRepository: EntityRepository2): (Vector[Entity2], Vector[Event]) = {
+    final case class RunScript(override val entityId: Long, scriptName: String) extends Event {
+        override def applyTo(entity: Entity)(implicit entityRepository: EntityRepository): (Vector[Entity], Vector[Event]) = {
             entity match {
-                case ent: ScriptHolder2 =>
+                case ent: ScriptHolder =>
                     (entity, ExecuteScriptLine(entityId, ent.getScript(scriptName), 0))
                 case _ =>
                     (entity, Vector.empty)
@@ -368,8 +376,8 @@ object Event {
         }
     }
     
-    final case class ExecuteScriptLine(override val entityId: String, script: Script, lineNo: Int) extends Event {
-        override def applyTo(entity: Entity2)(implicit entityRepository: EntityRepository2): (Vector[Entity2], Vector[Event]) = {
+    final case class ExecuteScriptLine(override val entityId: Long, script: Script, lineNo: Int) extends Event {
+        override def applyTo(entity: Entity)(implicit entityRepository: EntityRepository): (Vector[Entity], Vector[Event]) = {
             script.getInstruction(lineNo) match {
                 case EXIT(_) =>
                     (entity, Vector.empty)
@@ -403,11 +411,11 @@ object Event {
     
     // time
     final case object StartTime extends Event {
-        override val entityId: String = "TimeCounter"
+        override val entityId: Long = 0
         
-        override def applyTo(entity: Entity2)(implicit entityRepository: EntityRepository2): (Vector[Entity2], Vector[Event]) = {
+        override def applyTo(entity: Entity)(implicit entityRepository: EntityRepository): (Vector[Entity], Vector[Event]) = {
             entity match {
-                case en: TimeCounterHolder2 if !en.isTimerRunning =>
+                case en: TimeCounterHolder if !en.isTimerRunning =>
                     (en.startTimer(), Vector.empty)
                 case _ =>
                     (entity, Vector.empty)
@@ -423,11 +431,11 @@ object Event {
     }
     
     final case object StopTime extends Event {
-        override val entityId: String = "TimeCounter"
+        override val entityId: Long = 0
         
-        override def applyTo(entity: Entity2)(implicit entityRepository: EntityRepository2): (Vector[Entity2], Vector[Event]) = {
+        override def applyTo(entity: Entity)(implicit entityRepository: EntityRepository): (Vector[Entity], Vector[Event]) = {
             entity match {
-                case en: TimeCounterHolder2 if en.isTimerRunning =>
+                case en: TimeCounterHolder if en.isTimerRunning =>
                     (en.stopTimer(), Vector.empty)
                 case _ =>
                     (entity, Vector.empty)
@@ -442,9 +450,9 @@ object Event {
         }
     }
     
-    final case class DelayTime(override val entityId: String, delay: Long, events: Vector[Event]) extends Event {
-        override def applyTo(entity: Entity2)(implicit entityRepository: EntityRepository2): (Vector[Entity2], Vector[Event]) = {
-            val time = GetTime("TimeCounter").getOrElse(0)
+    final case class DelayTime(override val entityId: Long, delay: Long, events: Vector[Event]) extends Event {
+        override def applyTo(entity: Entity)(implicit entityRepository: EntityRepository): (Vector[Entity], Vector[Event]) = {
+            val time = getTimeStamp.milliseconds
             (entity, ScheduleTime(entityId, time + delay, events))
         }
         
@@ -459,9 +467,9 @@ object Event {
         }
     }
     
-    final case class ScheduleTime(override val entityId: String, timeStamp: Long, events: Vector[Event]) extends Event {
-        override def applyTo(entity: Entity2)(implicit entityRepository: EntityRepository2): (Vector[Entity2], Vector[Event]) = {
-            val time = GetTime("TimeCounter").getOrElse(0)
+    final case class ScheduleTime(override val entityId: Long, timeStamp: Long, events: Vector[Event]) extends Event {
+        override def applyTo(entity: Entity)(implicit entityRepository: EntityRepository): (Vector[Entity], Vector[Event]) = {
+            val time = getTimeStamp.milliseconds
             if (time >= timeStamp)
                 (entity, events)
             else
@@ -481,11 +489,11 @@ object Event {
     
     // turn
     final case object NextTurn extends Event {
-        override val entityId: String = "TurnCounter"
+        override val entityId: Long = 1
         
-        override def applyTo(entity: Entity2)(implicit entityRepository: EntityRepository2): (Vector[Entity2], Vector[Event]) = {
+        override def applyTo(entity: Entity)(implicit entityRepository: EntityRepository): (Vector[Entity], Vector[Event]) = {
             entity match {
-                case en: TurnCounterHolder2 =>
+                case en: TurnCounterHolder =>
                     (en.nextTurn, Vector.empty)
                 case _ =>
                     (entity, Vector.empty)
@@ -500,10 +508,9 @@ object Event {
         }
     }
     
-    final case class DelayTurns(override val entityId: String, delay: Long, events: Vector[Event]) extends Event {
-        override def applyTo(entity: Entity2)(implicit entityRepository: EntityRepository2): (Vector[Entity2], Vector[Event]) = {
-            val turn = GetTurn("TurnCounter").getOrElse(0)
-            (entity, ScheduleTurns(entityId, turn + delay, events))
+    final case class DelayTurns(override val entityId: Long, delay: Long, events: Vector[Event]) extends Event {
+        override def applyTo(entity: Entity)(implicit entityRepository: EntityRepository): (Vector[Entity], Vector[Event]) = {
+            (entity, ScheduleTurns(entityId, getTurn + delay, events))
         }
         
         override def toJSON: JValue = {
@@ -517,10 +524,9 @@ object Event {
         }
     }
     
-    final case class ScheduleTurns(override val entityId: String, turnStamp: Long, events: Vector[Event]) extends Event {
-        override def applyTo(entity: Entity2)(implicit entityRepository: EntityRepository2): (Vector[Entity2], Vector[Event]) = {
-            val turn = GetTurn("TurnCounter").getOrElse(0)
-            if (turn >= turnStamp)
+    final case class ScheduleTurns(override val entityId: Long, turnStamp: Long, events: Vector[Event]) extends Event {
+        override def applyTo(entity: Entity)(implicit entityRepository: EntityRepository): (Vector[Entity], Vector[Event]) = {
+            if (getTurn >= turnStamp)
                 (entity, events)
             else
                 (entity, this)

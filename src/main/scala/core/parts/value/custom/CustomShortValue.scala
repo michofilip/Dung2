@@ -1,16 +1,16 @@
 package core.parts.value.custom
 
-import core.entities.properties.ValueHolder
-import core.entities.repositoy.EntityRepository
+import core.entities.traits.properties.ValueHolder
 import core.parts.value.basic.ShortValue
+import core.repository.EntityRepository
 import json.JValue
 
 object CustomShortValue {
     
-    final case class GetShortValue(entityId: String, name: String) extends ShortValue {
+    final case class GetShortValue(entityId: Long, name: String) extends ShortValue {
         override def get(implicit entityRepository: EntityRepository): Option[Short] = {
             entityRepository.getById(entityId) match {
-                case en: ValueHolder[_] => en.getValue(name) match {
+                case en: ValueHolder => en.getValue(name) match {
                     case value: ShortValue => value.get
                     case _ => None
                 }
