@@ -4,13 +4,13 @@ import org.scalatest.FunSuite
 
 class MyMathTest extends FunSuite {
     
-    test("testMod") {
-    
-    }
-    
-    test("testMod") {
-    
-    }
+//    test("testMod") {
+//
+//    }
+//
+//    test("testMod") {
+//
+//    }
     
     test("testRestrict") {
         assert(MyMath.restrict(5, 0, 10) == 5)

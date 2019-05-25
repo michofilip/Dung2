@@ -18,19 +18,19 @@ class WorldFrame(private val entityRepository: EntityRepository,
     def nextFrame(externalEvents: Vector[Event] = Vector.empty): WorldFrame = {
         val (newEntityRepository, newEvents) =
             events.foldLeft(entityRepository, externalEvents) {
-                case ((tempEntityHolder, tempEvents), event) =>
-                    implicit val eh: EntityRepository = tempEntityHolder
-                    tempEntityHolder.getById(event.entityId) match {
+                case ((tempEntityRepository, tempEvents), event) =>
+                    implicit val eh: EntityRepository = tempEntityRepository
+                    tempEntityRepository.getById(event.entityId) match {
                         case Some(entity: Entity) =>
                             val (resultEntities, resultEvents) = event.applyTo(entity)
                             
-                            val newTempEntityRepository = tempEntityHolder - entity ++ resultEntities
+                            val newTempEntityRepository = tempEntityRepository - entity ++ resultEntities
                             val newTempEvents = tempEvents ++ resultEvents
                             
                             (newTempEntityRepository, newTempEvents)
                         
                         case _ =>
-                            (tempEntityHolder, tempEvents)
+                            (tempEntityRepository, tempEvents)
                     }
             }
         

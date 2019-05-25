@@ -25,7 +25,7 @@ class EntityRepository private(private val entitiesById: Map[Long, Entity],
     }
     
     def addAll(entities: Seq[Entity]): EntityRepository = {
-        entities.foldLeft(this)((entityHolder, entity) => entityHolder + entity)
+        entities.foldLeft(this)((entityRepository, entity) => entityRepository + entity)
     }
     
     def ++(entities: Seq[Entity]): EntityRepository = {
@@ -53,7 +53,7 @@ class EntityRepository private(private val entitiesById: Map[Long, Entity],
     }
     
     def removeAll(entities: Seq[Entity]): EntityRepository = {
-        entities.foldLeft(this)((entityHolder, entity) => entityHolder - entity)
+        entities.foldLeft(this)((entityRepository, entity) => entityRepository - entity)
     }
     
     def --(entities: Seq[Entity]): EntityRepository = {
