@@ -1,6 +1,6 @@
 package core.parts.graphics
 
-import math.MyMath.{Mod, restrict}
+import core.utils.MathUtils.{Mod, bound}
 
 case class Animation(frames: Vector[Frame], duration: Long, looped: Boolean) {
     
@@ -14,7 +14,7 @@ case class Animation(frames: Vector[Frame], duration: Long, looped: Boolean) {
         if (looped) {
             frames(frameNo %% frames.length)
         } else {
-            frames(restrict(frameNo, 0, frames.length))
+            frames(bound(frameNo, 0, frames.length))
         }
     }
     

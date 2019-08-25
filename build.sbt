@@ -24,3 +24,6 @@ lazy val Core = project
             commonSettings,
             libraryDependencies ++= Dependencies.coreDependencies
         )
+        .dependsOn(
+            Value
+        )
