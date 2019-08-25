@@ -20,10 +20,9 @@ lazy val Value = project
         )
 
 lazy val Core = project
+        .dependsOn(Value)
         .settings(
             commonSettings,
             libraryDependencies ++= Dependencies.coreDependencies
         )
-        .dependsOn(
-            Value
-        )
+        
