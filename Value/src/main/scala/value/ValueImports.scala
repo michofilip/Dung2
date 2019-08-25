@@ -1,7 +1,5 @@
 package value
 
-import value.basic.StringValue
-
 import scala.language.implicitConversions
 
 object ValueImports {
