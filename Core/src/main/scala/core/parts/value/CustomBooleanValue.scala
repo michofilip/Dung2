@@ -7,6 +7,16 @@ import value.BooleanValue
 
 object CustomBooleanValue {
     
+    private val isSolid: Entity => Boolean = {
+        case en: PhysicsHolder => en.physics.solid
+        case _ => false
+    }
+    
+    private val isOpaque: Entity => Boolean = {
+        case en: PhysicsHolder => en.physics.opaque
+        case _ => false
+    }
+    
     final case class GetBooleanValue(entityId: Long, name: String)
                                     (implicit entityRepository: EntityRepository) extends BooleanValue {
         override def get: Option[Boolean] = entityRepository.getById(entityId) match {
@@ -25,12 +35,7 @@ object CustomBooleanValue {
     final case class IsSolidAtCoordinates(value: CoordinatesValue)
                                          (implicit entityRepository: EntityRepository) extends BooleanValue {
         override def get: Option[Boolean] = value.get match {
-            case Some(v) =>
-                val condition: Entity => Boolean = {
-                    case en: PhysicsHolder => en.physics.solid
-                    case _ => false
-                }
-                Some(entityRepository.existsAtCoordinates(v, condition))
+            case Some(v) => Some(entityRepository.existsAtCoordinates(v, isSolid))
             case None => None
         }
     }
@@ -38,12 +43,7 @@ object CustomBooleanValue {
     final case class IsOpaqueAtCoordinates(value: CoordinatesValue)
                                           (implicit entityRepository: EntityRepository) extends BooleanValue {
         override def get: Option[Boolean] = value.get match {
-            case Some(v) =>
-                val condition: Entity => Boolean = {
-                    case en: PhysicsHolder => en.physics.opaque
-                    case _ => false
-                }
-                Some(entityRepository.existsAtCoordinates(v, condition))
+            case Some(v) => Some(entityRepository.existsAtCoordinates(v, isOpaque))
             case None => None
         }
     }
