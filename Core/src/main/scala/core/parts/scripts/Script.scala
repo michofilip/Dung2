@@ -4,7 +4,7 @@ import core.events.Event.Delete
 import core.parts.scripts.Instruction._
 import core.parts.state.State.Open
 import core.parts.value.basic.Implicits._
-import core.parts.value.custom.Implicits._
+import core.parts.value.custom.CustomValueImports._
 import core.parts.value.custom.StateValue.GetState
 
 class Script(private val instructions: Vector[Instruction]) {

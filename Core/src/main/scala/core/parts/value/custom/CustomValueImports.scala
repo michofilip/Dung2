@@ -2,40 +2,25 @@ package core.parts.value.custom
 
 import core.parts.position.{Coordinates, Direction}
 import core.parts.state.State
-import core.parts.value.basic.Implicits._
-import core.parts.value.basic._
-import core.parts.value.custom.CoordinatesValue.{CoordinatesConstant, CoordinatesNull}
-import core.parts.value.custom.DirectionValue.{DirectionConstant, DirectionNull}
-import core.parts.value.custom.StateValue.{StateConstant, StateNull}
+import value.ValueImports._
+import value.{NullValue, StringValue}
 
 import scala.language.implicitConversions
 
-object Implicits {
+object CustomValueImports {
     // null converters
-    implicit def null2CoordinatesValue(v: NullValue.type): CoordinatesValue = {
-        CoordinatesNull
-    }
+    implicit def null2CoordinatesValue(v: NullValue.type): CoordinatesValue = CoordinatesValue.CoordinatesNull
     
-    implicit def null2DirectionValue(v: NullValue.type): DirectionValue = {
-        DirectionNull
-    }
+    implicit def null2DirectionValue(v: NullValue.type): DirectionValue = DirectionValue.DirectionNull
     
-    implicit def null2StateValue(v: NullValue.type): StateValue = {
-        StateNull
-    }
+    implicit def null2StateValue(v: NullValue.type): StateValue = StateValue.StateNull
     
     // constant converters
-    implicit def coordinates2Value(value: Coordinates): CoordinatesValue = {
-        CoordinatesConstant(value)
-    }
+    implicit def coordinates2Value(value: Coordinates): CoordinatesValue = CoordinatesValue.CoordinatesConstant(value)
     
-    implicit def direction2Value(value: Direction): DirectionConstant = {
-        DirectionConstant(value)
-    }
+    implicit def direction2Value(value: Direction): DirectionValue = DirectionValue.DirectionConstant(value)
     
-    implicit def state2Value(value: State): StateValue = {
-        StateConstant(value)
-    }
+    implicit def state2Value(value: State): StateValue = StateValue.StateConstant(value)
     
     // additional methods
     implicit class Coordinates2Value(value: Coordinates) {

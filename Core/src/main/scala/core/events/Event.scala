@@ -11,7 +11,7 @@ import core.parts.timer.TimeStamp
 import core.parts.value.Value
 import core.parts.value.basic.Implicits._
 import core.parts.value.custom.CustomLongValue.{GetTime, GetTurn}
-import core.parts.value.custom.Implicits._
+import core.parts.value.custom.CustomValueImports._
 import core.repository.EntityRepository
 import json.{JSONParsable, JValue}
 
