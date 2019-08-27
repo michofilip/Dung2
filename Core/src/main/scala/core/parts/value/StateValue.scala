@@ -1,4 +1,4 @@
-package core.parts.value.custom
+package core.parts.value
 
 import core.entities.traits.properties.{StateHolder, ValueHolder}
 import core.parts.state.State

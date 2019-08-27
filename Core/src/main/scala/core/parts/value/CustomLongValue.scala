@@ -1,4 +1,4 @@
-package core.parts.value.custom
+package core.parts.value
 
 import core.entities.traits.properties.{TimeCounterHolder, TurnCounterHolder, ValueHolder}
 import core.repository.EntityRepository

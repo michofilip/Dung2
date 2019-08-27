@@ -1,4 +1,4 @@
-package core.parts.value.custom
+package core.parts.value
 
 import core.parts.position.{Coordinates, Direction}
 import core.parts.state.State

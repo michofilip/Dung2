@@ -1,4 +1,4 @@
-package core.parts.value.custom
+package core.parts.value
 
 import core.entities.Entity
 import core.entities.traits.properties.{PhysicsHolder, ValueHolder}
