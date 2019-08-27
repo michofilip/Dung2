@@ -8,12 +8,12 @@ import core.parts.scripts.Instruction._
 import core.parts.scripts.Script
 import core.parts.state.State
 import core.parts.timer.TimeStamp
-import core.parts.value.Value
-import core.parts.value.basic.Implicits._
 import core.parts.value.CustomLongValue.{GetTime, GetTurn}
 import core.parts.value.CustomValueImports._
 import core.repository.EntityRepository
 import json.{JSONParsable, JValue}
+import value.Value
+import value.ValueImports._
 
 import scala.language.implicitConversions
 

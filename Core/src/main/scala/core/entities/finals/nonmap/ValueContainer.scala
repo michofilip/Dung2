@@ -1,7 +1,7 @@
 package core.entities.finals.nonmap
 
 import core.entities.traits.properties.ValueHolder
-import core.parts.value.Value
+import value.Value
 
 final class ValueContainer(override val id: Long,
                            override protected val values: Map[String, Value]
