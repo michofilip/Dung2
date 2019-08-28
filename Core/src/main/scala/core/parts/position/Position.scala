@@ -45,25 +45,25 @@ case class Position(coordinates: Coordinates, direction: Direction, canMove: Boo
     
     def rotate45Clockwise(): Position = {
         if (canRotate) {
-            update(direction = direction.next)
+            update(direction = direction.turnRight)
         } else this
     }
     
     def rotate90Clockwise(): Position = {
         if (canRotate) {
-            update(direction = direction.next.next)
+            update(direction = direction.turnRight.turnRight)
         } else this
     }
     
     def rotate45Counterclockwise(): Position = {
         if (canRotate) {
-            update(direction = direction.previous)
+            update(direction = direction.turnLeft)
         } else this
     }
     
     def rotate90Counterclockwise(): Position = {
         if (canRotate) {
-            update(direction = direction.previous.previous)
+            update(direction = direction.turnLeft.turnLeft)
         } else this
     }
     
