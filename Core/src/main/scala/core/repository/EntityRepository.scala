@@ -9,6 +9,7 @@ class EntityRepository private(private val entitiesById: Map[Long, Entity],
     
     def add(entity: Entity): EntityRepository = {
         val newEntitiesById = entitiesById + (entity.id -> entity)
+        
         val newEntitiesByCoordinates = entity match {
             case en: PositionHolder =>
                 val coordinates = en.position.coordinates
@@ -28,6 +29,7 @@ class EntityRepository private(private val entitiesById: Map[Long, Entity],
     
     def remove(entity: Entity): EntityRepository = {
         val newEntitiesById = entitiesById - entity.id
+        
         val newEntitiesByCoordinates = entity match {
             case en: PositionHolder =>
                 val coordinates = en.position.coordinates
@@ -49,6 +51,8 @@ class EntityRepository private(private val entitiesById: Map[Long, Entity],
     def --(entities: Seq[Entity]): EntityRepository = removeAll(entities)
     
     def contains(id: Long): Boolean = entitiesById.contains(id)
+    
+    def contains(coordinates: Coordinates): Boolean = entitiesByCoordinates.contains(coordinates)
     
     def getAll: Vector[Entity] = entitiesById.values.toVector
     
