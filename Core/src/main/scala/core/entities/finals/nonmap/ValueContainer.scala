@@ -1,11 +1,11 @@
 package core.entities.finals.nonmap
 
-import core.entities.traits.properties.ValueHolder
+import core.entities.traits.properties.ValueProperty
 import value.Value
 
 final class ValueContainer(override val id: Long,
                            override protected val values: Map[String, Value]
-                           ) extends ValueHolder {
+                           ) extends ValueProperty {
     
     private def update(values: Map[String, Value] = values): ValueContainer = {
         new ValueContainer(id, values)

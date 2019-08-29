@@ -1,13 +1,13 @@
 package core.entities.traits.templates
 
 import core.entities.Entity
-import core.entities.traits.properties.StateHolder
+import core.entities.traits.properties.StateProperty
 import core.parts.state.State.{Close, Closing, Open, Opening}
 import core.parts.timer.TimeStamp
 
 import scala.language.implicitConversions
 
-trait ClosingCapable extends SimpleEntity with StateHolder {
+trait ClosingCapable extends SimpleEntity with StateProperty {
     
     val openingDuration: Long = animationSelector.getAnimation(Some(Opening), Some(position.direction)).duration
     val closingDuration: Long = animationSelector.getAnimation(Some(Closing), Some(position.direction)).duration

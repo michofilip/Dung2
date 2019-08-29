@@ -1,26 +1,26 @@
 package core.parts.value
 
 import core.entities.Entity
-import core.entities.traits.properties.{PhysicsHolder, ValueHolder}
+import core.entities.traits.properties.{PhysicsProperty, ValueProperty}
 import core.repository.EntityRepository
 import value.BooleanValue
 
 object CustomBooleanValue {
     
     private val isSolid: Entity => Boolean = {
-        case en: PhysicsHolder => en.physics.solid
+        case en: PhysicsProperty => en.physics.solid
         case _ => false
     }
     
     private val isOpaque: Entity => Boolean = {
-        case en: PhysicsHolder => en.physics.opaque
+        case en: PhysicsProperty => en.physics.opaque
         case _ => false
     }
     
     final case class GetBooleanValue(entityId: Long, name: String)
                                     (implicit entityRepository: EntityRepository) extends BooleanValue {
         override def get: Option[Boolean] = entityRepository.getById(entityId) match {
-            case en: ValueHolder => en.getValue(name) match {
+            case en: ValueProperty => en.getValue(name) match {
                 case value: BooleanValue => value.get
                 case _ => None
             }

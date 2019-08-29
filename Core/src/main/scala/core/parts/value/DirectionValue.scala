@@ -1,6 +1,6 @@
 package core.parts.value
 
-import core.entities.traits.properties.{PositionHolder, ValueHolder}
+import core.entities.traits.properties.{PositionProperty, ValueProperty}
 import core.parts.position.Direction
 import core.repository.EntityRepository
 import value.Value
@@ -22,7 +22,7 @@ object DirectionValue {
     final case class GetDirection(entityId: Long)
                                  (implicit entityRepository: EntityRepository) extends DirectionValue {
         override def get: Option[Direction] = entityRepository.getById(entityId) match {
-            case Some(en: PositionHolder) => Some(en.position.direction)
+            case Some(en: PositionProperty) => Some(en.position.direction)
             case _ => None
         }
     }
@@ -30,7 +30,7 @@ object DirectionValue {
     final case class GetDirectionValue(entityId: Long, name: String)
                                       (implicit entityRepository: EntityRepository) extends DirectionValue {
         override def get: Option[Direction] = entityRepository.getById(entityId) match {
-            case en: ValueHolder => en.getValue(name) match {
+            case en: ValueProperty => en.getValue(name) match {
                 case value: DirectionValue => value.get
                 case _ => None
             }

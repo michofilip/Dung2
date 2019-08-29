@@ -1,6 +1,6 @@
 package core.parts.value
 
-import core.entities.traits.properties.{PositionHolder, ValueHolder}
+import core.entities.traits.properties.{PositionProperty, ValueProperty}
 import core.parts.position.Coordinates
 import core.repository.EntityRepository
 import value.Value
@@ -22,7 +22,7 @@ object CoordinatesValue {
     final case class GetCoordinates(entityId: Long)
                                    (implicit entityRepository: EntityRepository) extends CoordinatesValue {
         override def get: Option[Coordinates] = entityRepository.getById(entityId) match {
-            case Some(en: PositionHolder) => Some(en.position.coordinates)
+            case Some(en: PositionProperty) => Some(en.position.coordinates)
             case _ => None
         }
     }
@@ -30,7 +30,7 @@ object CoordinatesValue {
     final case class GetCoordinatesValue(entityId: Long, name: String)
                                         (implicit entityRepository: EntityRepository) extends CoordinatesValue {
         override def get: Option[Coordinates] = entityRepository.getById(entityId) match {
-            case en: ValueHolder => en.getValue(name) match {
+            case en: ValueProperty => en.getValue(name) match {
                 case value: CoordinatesValue => value.get
                 case _ => None
             }

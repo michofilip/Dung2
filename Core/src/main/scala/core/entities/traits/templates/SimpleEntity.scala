@@ -1,5 +1,5 @@
 package core.entities.traits.templates
 
-import core.entities.traits.properties.{AnimationHolder, PhysicsHolder, PositionHolder}
+import core.entities.traits.properties.{AnimationProperty, PhysicsProperty, PositionProperty}
 
-trait SimpleEntity extends PositionHolder with PhysicsHolder with AnimationHolder
+trait SimpleEntity extends PositionProperty with PhysicsProperty with AnimationProperty

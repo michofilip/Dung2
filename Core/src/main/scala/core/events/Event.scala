@@ -67,7 +67,7 @@ object Event {
     final case class MoveTo(override val entityId: Long, x: Int, y: Int) extends Event {
         override def applyTo(entity: Entity)(implicit entityRepository: EntityRepository): (Vector[Entity], Vector[Event]) = {
             entity match {
-                case ent: PositionHolder =>
+                case ent: PositionProperty =>
                     (ent.moveTo(x, y), Vector.empty)
                 case _ =>
                     (entity, Vector.empty)
@@ -88,7 +88,7 @@ object Event {
     final case class MoveBy(override val entityId: Long, dx: Int, dy: Int) extends Event {
         override def applyTo(entity: Entity)(implicit entityRepository: EntityRepository): (Vector[Entity], Vector[Event]) = {
             entity match {
-                case ent: PositionHolder =>
+                case ent: PositionProperty =>
                     (ent.moveBy(dx, dy), Vector.empty)
                 case _ =>
                     (entity, Vector.empty)
@@ -270,7 +270,7 @@ object Event {
     final case class SetValue(override val entityId: Long, name: String, value: Value) extends Event {
         override def applyTo(entity: Entity)(implicit entityRepository: EntityRepository): (Vector[Entity], Vector[Event]) = {
             entity match {
-                case en: ValueHolder =>
+                case en: ValueProperty =>
                     (en.setValue(name, value), Vector.empty)
                 case _ =>
                     (entity, Vector.empty)
@@ -290,7 +290,7 @@ object Event {
     final case class RemoveValue(override val entityId: Long, name: String) extends Event {
         override def applyTo(entity: Entity)(implicit entityRepository: EntityRepository): (Vector[Entity], Vector[Event]) = {
             entity match {
-                case en: ValueHolder =>
+                case en: ValueProperty =>
                     (en.removeValue(name), Vector.empty)
                 case _ =>
                     (entity, Vector.empty)
@@ -309,7 +309,7 @@ object Event {
     final case class SetCalculatedValue(override val entityId: Long, name: String, value: Value) extends Event {
         override def applyTo(entity: Entity)(implicit entityRepository: EntityRepository): (Vector[Entity], Vector[Event]) = {
             entity match {
-                case en: ValueHolder =>
+                case en: ValueProperty =>
                     value.get match {
                         case Some(v: Boolean) =>
                             (en.setValue(name, v), Vector.empty)
@@ -359,7 +359,7 @@ object Event {
     final case class RunScript(override val entityId: Long, scriptName: String) extends Event {
         override def applyTo(entity: Entity)(implicit entityRepository: EntityRepository): (Vector[Entity], Vector[Event]) = {
             entity match {
-                case ent: ScriptHolder =>
+                case ent: ScriptProperty =>
                     (entity, ExecuteScriptLine(entityId, ent.getScript(scriptName), 0))
                 case _ =>
                     (entity, Vector.empty)
@@ -415,7 +415,7 @@ object Event {
         
         override def applyTo(entity: Entity)(implicit entityRepository: EntityRepository): (Vector[Entity], Vector[Event]) = {
             entity match {
-                case en: TimeCounterHolder if !en.isTimerRunning =>
+                case en: TimeCounterProperty if !en.isTimerRunning =>
                     (en.startTimer(), Vector.empty)
                 case _ =>
                     (entity, Vector.empty)
@@ -435,7 +435,7 @@ object Event {
         
         override def applyTo(entity: Entity)(implicit entityRepository: EntityRepository): (Vector[Entity], Vector[Event]) = {
             entity match {
-                case en: TimeCounterHolder if en.isTimerRunning =>
+                case en: TimeCounterProperty if en.isTimerRunning =>
                     (en.stopTimer(), Vector.empty)
                 case _ =>
                     (entity, Vector.empty)
@@ -493,7 +493,7 @@ object Event {
         
         override def applyTo(entity: Entity)(implicit entityRepository: EntityRepository): (Vector[Entity], Vector[Event]) = {
             entity match {
-                case en: TurnCounterHolder =>
+                case en: TurnCounterProperty =>
                     (en.nextTurn, Vector.empty)
                 case _ =>
                     (entity, Vector.empty)

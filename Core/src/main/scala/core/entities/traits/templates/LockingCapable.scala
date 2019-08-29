@@ -1,13 +1,13 @@
 package core.entities.traits.templates
 
 import core.entities.Entity
-import core.entities.traits.properties.StateHolder
+import core.entities.traits.properties.StateProperty
 import core.parts.state.State.{Locked, Locking, Unlocked, Unlocking}
 import core.parts.timer.TimeStamp
 
 import scala.language.implicitConversions
 
-trait LockingCapable extends SimpleEntity with StateHolder {
+trait LockingCapable extends SimpleEntity with StateProperty {
     val lockCode: Long
     
     val unlockingDuration: Long = animationSelector.getAnimation(Some(Unlocking), Some(position.direction)).duration

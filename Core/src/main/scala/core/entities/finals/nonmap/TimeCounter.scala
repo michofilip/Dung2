@@ -1,11 +1,11 @@
 package core.entities.finals.nonmap
 
-import core.entities.traits.properties.TimeCounterHolder
+import core.entities.traits.properties.TimeCounterProperty
 import core.parts.timer.Timer
 
 final class TimeCounter(override val id: Long,
                         override val timer: Timer
-                        ) extends TimeCounterHolder {
+                        ) extends TimeCounterProperty {
     private def update(timer: Timer = timer): TimeCounter = {
         new TimeCounter(id, timer)
     }

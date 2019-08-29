@@ -1,7 +1,7 @@
 package core.repository
 
 import core.entities.Entity
-import core.entities.traits.properties.PositionHolder
+import core.entities.traits.properties.PositionProperty
 import core.parts.position.Coordinates
 
 class EntityRepository private(private val entitiesById: Map[Long, Entity],
@@ -11,7 +11,7 @@ class EntityRepository private(private val entitiesById: Map[Long, Entity],
         val newEntitiesById = entitiesById + (entity.id -> entity)
         
         val newEntitiesByCoordinates = entity match {
-            case en: PositionHolder =>
+            case en: PositionProperty =>
                 val coordinates = en.position.coordinates
                 val newEntitiesAtCoordinates = entitiesByCoordinates.getOrElse(coordinates, Map.empty) + (en.id -> en)
                 entitiesByCoordinates + (coordinates -> newEntitiesAtCoordinates)
@@ -31,7 +31,7 @@ class EntityRepository private(private val entitiesById: Map[Long, Entity],
         val newEntitiesById = entitiesById - entity.id
         
         val newEntitiesByCoordinates = entity match {
-            case en: PositionHolder =>
+            case en: PositionProperty =>
                 val coordinates = en.position.coordinates
                 val newEntitiesAtCoordinates = entitiesByCoordinates.getOrElse(coordinates, Map.empty) - en.id
                 if (newEntitiesAtCoordinates.isEmpty)
