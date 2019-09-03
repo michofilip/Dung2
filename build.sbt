@@ -25,4 +25,11 @@ lazy val Core = project
             commonSettings,
             libraryDependencies ++= Dependencies.coreDependencies
         )
+
+lazy val EntityTest = project
+        .dependsOn(Value)
+        .settings(
+            commonSettings,
+            libraryDependencies ++= Dependencies.coreDependencies
+        )
         
