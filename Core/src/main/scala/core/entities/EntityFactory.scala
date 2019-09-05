@@ -1,6 +1,6 @@
 package core.entities
 
-import core.entities.finals.map.{LockableDoor, Switch}
+import core.entities.finals.map.{Door, Switch}
 import core.parts.graphics.AnimationSelector.{DoorAnimationSelector, LeverAnimationSelector}
 import core.parts.physics.PhysicsSelector.{DoorPhysicsSelector, LeverPhysicsSelector}
 import core.parts.position.Direction.North
@@ -29,7 +29,7 @@ class EntityFactory(private val timer: Timer) {
         new Switch(id, position, state, animationBeginningTimeStamp, physicsSelector, animationSelector)
     }
     
-    private def door(): LockableDoor = {
+    private def door(): Door = {
         val id = 1001
         val position = Position(coordinates = Coordinates(10, 20), direction = North, canMove = true, canRotate = true)
         val physicsSelector = DoorPhysicsSelector
@@ -38,6 +38,6 @@ class EntityFactory(private val timer: Timer) {
         val state = Open
         val lockCode = 1000
         
-        new LockableDoor(id, position, state, lockCode, animationBeginningTimeStamp, physicsSelector, animationSelector)
+        new Door(id, position, state, lockCode, animationBeginningTimeStamp, physicsSelector, animationSelector)
     }
 }

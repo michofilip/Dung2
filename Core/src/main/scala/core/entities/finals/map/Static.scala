@@ -11,18 +11,15 @@ final class Static(override val id: Long,
                    override protected val animationBeginningTimeStamp: TimeStamp,
                    override protected val physicsSelector: PhysicsSelector,
                    override protected val animationSelector: AnimationSelector
-                   ) extends SimpleEntity {
+                  ) extends SimpleEntity {
     
     private def update(position: Position = position,
-                       animationBeginningTimeStamp: TimeStamp = animationBeginningTimeStamp): Static = {
+                       animationBeginningTimeStamp: TimeStamp = animationBeginningTimeStamp): Static =
         new Static(id, position, animationBeginningTimeStamp, physicsSelector, animationSelector)
-    }
     
-    override protected def setPosition(position: Position): Static = {
+    override protected def setPosition(position: Position): Static =
         update(position = position)
-    }
     
-    override protected def setAnimationBeginningTimeStamp(animationBeginningTimeStamp: TimeStamp): Static = {
+    override protected def setAnimationBeginningTimeStamp(animationBeginningTimeStamp: TimeStamp): Static =
         update(animationBeginningTimeStamp = animationBeginningTimeStamp)
-    }
 }

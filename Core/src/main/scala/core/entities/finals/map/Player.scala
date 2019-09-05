@@ -1,6 +1,6 @@
 package core.entities.finals.map
 
-import core.entities.traits.templates.CharacterLike
+import core.entities.traits.templates.CharacterTemplate
 import core.parts.graphics.AnimationSelector
 import core.parts.physics.PhysicsSelector
 import core.parts.position.Position
@@ -13,23 +13,18 @@ final class Player(override val id: Long,
                    override protected val animationBeginningTimeStamp: TimeStamp,
                    override protected val physicsSelector: PhysicsSelector,
                    override protected val animationSelector: AnimationSelector
-                   ) extends CharacterLike {
+                  ) extends CharacterTemplate {
     
     private def update(position: Position = position, state: State = state,
-                       animationBeginningTimeStamp: TimeStamp = animationBeginningTimeStamp
-                      ): Player = {
+                       animationBeginningTimeStamp: TimeStamp = animationBeginningTimeStamp): Player =
         new Player(id, position, state, animationBeginningTimeStamp, physicsSelector, animationSelector)
-    }
     
-    override protected def setPosition(position: Position): Player = {
+    override protected def setPosition(position: Position): Player =
         update(position = position)
-    }
     
-    override protected def setState(state: State): Player = {
+    override protected def setState(state: State): Player =
         update(state = state)
-    }
     
-    override protected def setAnimationBeginningTimeStamp(animationBeginningTimeStamp: TimeStamp): Player = {
+    override protected def setAnimationBeginningTimeStamp(animationBeginningTimeStamp: TimeStamp): Player =
         update(animationBeginningTimeStamp = animationBeginningTimeStamp)
-    }
 }

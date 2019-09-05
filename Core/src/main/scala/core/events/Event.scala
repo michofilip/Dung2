@@ -2,7 +2,7 @@ package core.events
 
 import core.entities.Entity
 import core.entities.traits.properties._
-import core.entities.traits.templates.{ClosingCapable, LockingCapable, SwitchingCapable}
+import core.entities.traits.templates.{ClosableTemplate, SwitchTemplate}
 import core.parts.position.{Coordinates, Direction}
 import core.parts.scripts.Instruction._
 import core.parts.scripts.Script
@@ -140,9 +140,9 @@ object Event {
     final case class SwitchOff(override val entityId: Long) extends Event {
         override def applyTo(entity: Entity)(implicit entityRepository: EntityRepository): (Vector[Entity], Vector[Event]) = {
             entity match {
-                case ent: SwitchingCapable if ent.state == State.On =>
+                case ent: SwitchTemplate if ent.state == State.On =>
                     (ent.beginSwitchingOff(getTimeStamp), DelayTime(entityId, ent.switchingOffDuration, SwitchOff(entityId)))
-                case ent: SwitchingCapable if ent.state == State.SwitchingOff =>
+                case ent: SwitchTemplate if ent.state == State.SwitchingOff =>
                     (ent.finishSwitchingOff(getTimeStamp), Vector.empty)
                 case _ =>
                     (entity, Vector.empty)
@@ -161,9 +161,9 @@ object Event {
     final case class SwitchOn(override val entityId: Long) extends Event {
         override def applyTo(entity: Entity)(implicit entityRepository: EntityRepository): (Vector[Entity], Vector[Event]) = {
             entity match {
-                case ent: SwitchingCapable if ent.state == State.Off =>
+                case ent: SwitchTemplate if ent.state == State.Off =>
                     (ent.beginSwitchingOn(getTimeStamp), DelayTime(entityId, ent.switchingOnDuration, SwitchOn(entityId)))
-                case ent: SwitchingCapable if ent.state == State.SwitchingOn =>
+                case ent: SwitchTemplate if ent.state == State.SwitchingOn =>
                     (ent.finishSwitchingOn(getTimeStamp), Vector.empty)
                 case _ =>
                     (entity, Vector.empty)
@@ -183,9 +183,9 @@ object Event {
     final case class Open(override val entityId: Long) extends Event {
         override def applyTo(entity: Entity)(implicit entityRepository: EntityRepository): (Vector[Entity], Vector[Event]) = {
             entity match {
-                case ent: ClosingCapable if ent.state == State.Close =>
+                case ent: ClosableTemplate if ent.state == State.Close =>
                     (ent.beginOpening(getTimeStamp), DelayTime(entityId, ent.openingDuration, Open(entityId)))
-                case ent: ClosingCapable if ent.state == State.Opening =>
+                case ent: ClosableTemplate if ent.state == State.Opening =>
                     (ent.finishOpening(getTimeStamp), Vector.empty)
                 case _ =>
                     (entity, Vector.empty)
@@ -204,9 +204,9 @@ object Event {
     final case class Close(override val entityId: Long) extends Event {
         override def applyTo(entity: Entity)(implicit entityRepository: EntityRepository): (Vector[Entity], Vector[Event]) = {
             entity match {
-                case ent: ClosingCapable if ent.state == State.Open =>
+                case ent: ClosableTemplate if ent.state == State.Open =>
                     (ent.beginClosing(getTimeStamp), DelayTime(entityId, ent.closingDuration, Close(entityId)))
-                case ent: ClosingCapable if ent.state == State.Closing =>
+                case ent: ClosableTemplate if ent.state == State.Closing =>
                     (ent.finishClosing(getTimeStamp), Vector.empty)
                 case _ =>
                     (entity, Vector.empty)
@@ -225,9 +225,9 @@ object Event {
     final case class Unlock(override val entityId: Long, keys: Set[Long]) extends Event {
         override def applyTo(entity: Entity)(implicit entityRepository: EntityRepository): (Vector[Entity], Vector[Event]) = {
             entity match {
-                case ent: LockingCapable if ent.state == State.Locked =>
+                case ent: ClosableTemplate if ent.state == State.Locked =>
                     (ent.beginUnlocking(getTimeStamp), DelayTime(entityId, ent.unlockingDuration, Unlock(entityId, keys)))
-                case ent: LockingCapable if ent.state == State.Closing =>
+                case ent: ClosableTemplate if ent.state == State.Closing =>
                     (ent.finishUnlocking(getTimeStamp), Vector.empty)
                 case _ =>
                     (entity, Vector.empty)
@@ -247,9 +247,9 @@ object Event {
     final case class Lock(override val entityId: Long, keys: Set[Long]) extends Event {
         override def applyTo(entity: Entity)(implicit entityRepository: EntityRepository): (Vector[Entity], Vector[Event]) = {
             entity match {
-                case ent: LockingCapable if ent.state == State.Close =>
+                case ent: ClosableTemplate if ent.state == State.Close =>
                     (ent.beginLocking(getTimeStamp), DelayTime(entityId, ent.lockingDuration, Lock(entityId, keys)))
-                case ent: LockingCapable if ent.state == State.Locking =>
+                case ent: ClosableTemplate if ent.state == State.Locking =>
                     (ent.finishLocking(getTimeStamp), Vector.empty)
                 case _ =>
                     (entity, Vector.empty)

@@ -26,7 +26,7 @@ object State {
     
     case object Close extends State with OpenableState
     
-    case object Unlocked extends State with OpenableState
+//    case object Unlocked extends State with OpenableState
     
     case object Unlocking extends State with OpenableState
     
