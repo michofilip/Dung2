@@ -9,69 +9,50 @@ case class Position(coordinates: Coordinates, direction: Direction, canMove: Boo
         Position(coordinates, direction, canMove, canRotate)
     }
     
-    def enableMovement(): Position = {
+    def enableMovement(): Position =
         update(canMove = true)
-    }
     
-    def disableMovement(): Position = {
+    def disableMovement(): Position =
         update(canMove = false)
-    }
     
-    def enableRotation(): Position = {
+    def enableRotation(): Position =
         update(canRotate = true)
-    }
     
-    def disableRotation(): Position = {
+    def disableRotation(): Position =
         update(canRotate = false)
-    }
     
-    def moveTo(x: Int = coordinates.x, y: Int = coordinates.y): Position = {
-        if (canMove) {
-            update(coordinates = coordinates.moveTo(x, y))
-        } else this
-    }
+    def moveTo(x: Int = coordinates.x, y: Int = coordinates.y): Position =
+        if (canMove) update(coordinates = coordinates.moveTo(x, y))
+        else this
     
     def moveBy(dx: Int = 0, dy: Int = 0): Position = {
-        if (canMove) {
-            update(coordinates = coordinates.moveBy(dx, dy))
-        } else this
+        if (canMove) update(coordinates = coordinates.moveBy(dx, dy))
+        else this
     }
     
-    def rotateTo(direction: Direction = direction): Position = {
-        if (canRotate) {
-            update(direction = direction)
-        } else this
-    }
+    def rotateTo(direction: Direction = direction): Position =
+        if (canRotate) update(direction = direction)
+        else this
     
-    def rotate45Clockwise(): Position = {
-        if (canRotate) {
-            update(direction = direction.turnRight)
-        } else this
-    }
+    def rotate45Clockwise(): Position =
+        if (canRotate) update(direction = direction.turnRight)
+        else this
     
-    def rotate90Clockwise(): Position = {
-        if (canRotate) {
-            update(direction = direction.turnRight.turnRight)
-        } else this
-    }
+    def rotate90Clockwise(): Position =
+        if (canRotate) update(direction = direction.turnRight.turnRight)
+        else this
     
-    def rotate45Counterclockwise(): Position = {
-        if (canRotate) {
-            update(direction = direction.turnLeft)
-        } else this
-    }
+    def rotate45Counterclockwise(): Position =
+        if (canRotate) update(direction = direction.turnLeft)
+        else this
     
-    def rotate90Counterclockwise(): Position = {
-        if (canRotate) {
-            update(direction = direction.turnLeft.turnLeft)
-        } else this
-    }
+    def rotate90Counterclockwise(): Position =
+        if (canRotate) update(direction = direction.turnLeft.turnLeft)
+        else this
     
-    def rotate180(): Position = {
-        if (canRotate) {
-            update(direction = direction.opposite)
-        } else this
-    }
+    def rotate180(): Position =
+        if (canRotate) update(direction = direction.opposite)
+        else this
     
     override def toJSON: JValue = {
         jObject(
