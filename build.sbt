@@ -25,3 +25,10 @@ lazy val Core = project
             commonSettings,
             libraryDependencies ++= Dependencies.coreDependencies
         )
+
+lazy val Old = project
+        .dependsOn(Value)
+        .settings(
+            commonSettings,
+            libraryDependencies ++= Dependencies.coreDependencies
+        )
