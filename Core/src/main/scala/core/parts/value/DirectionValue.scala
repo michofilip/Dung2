@@ -7,6 +7,8 @@ import value.Value
 
 abstract class DirectionValue extends Value {
     override final protected type T = Direction
+    
+    override final def calculate: DirectionValue = DirectionValue.DirectionCalculate(this)
 }
 
 object DirectionValue {
@@ -17,6 +19,12 @@ object DirectionValue {
     
     final case class DirectionConstant(value: Direction) extends DirectionValue {
         override def get: Option[Direction] = Some(value)
+    }
+    
+    final case class DirectionCalculate(value: DirectionValue) extends DirectionValue {
+        private val calculated: Option[Direction] = value.get
+        
+        override def get: Option[Direction] = calculated
     }
     
     final case class GetDirection(entityId: Long)

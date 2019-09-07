@@ -3,6 +3,8 @@ package value
 abstract class ByteValue extends Value with NumericValue {
     override final protected type T = Byte
     
+    override final def calculate: ByteValue = ByteValue.ByteCalculate(this)
+    
     final def unary_+ : ByteValue = this
     
     final def unary_- : ByteValue = ByteValue.ByteNegate(this)
@@ -77,6 +79,12 @@ object ByteValue {
     
     final case class ByteConstant(value: Byte) extends ByteValue {
         override def get: Option[Byte] = Some(value)
+    }
+    
+    final case class ByteCalculate(value: ByteValue) extends ByteValue {
+        private val calculated: Option[Byte] = value.get
+        
+        override def get: Option[Byte] = calculated
     }
     
     final case class ByteNegate(value: ByteValue) extends ByteValue {

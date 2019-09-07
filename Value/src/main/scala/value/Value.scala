@@ -10,6 +10,8 @@ abstract class Value {
         case None => default
     }
     
+    def calculate: Value
+    
     def ===(that: Value): BooleanValue = {
         BooleanValue.Equals(this, that)
     }

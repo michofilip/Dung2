@@ -3,6 +3,8 @@ package value
 abstract class ShortValue extends Value with NumericValue {
     override final protected type T = Short
     
+    override final def calculate: ShortValue = ShortValue.ShortCalculate(this)
+    
     final def unary_+ : ShortValue = this
     
     final def unary_- : ShortValue = ShortValue.ShortNegate(this)
@@ -77,6 +79,12 @@ object ShortValue {
     
     final case class ShortConstant(value: Short) extends ShortValue {
         override def get: Option[Short] = Some(value)
+    }
+    
+    final case class ShortCalculate(value: ShortValue) extends ShortValue {
+        private val calculated: Option[Short] = value.get
+        
+        override def get: Option[Short] = calculated
     }
     
     final case class ShortNegate(value: ShortValue) extends ShortValue {

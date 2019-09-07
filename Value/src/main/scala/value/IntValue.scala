@@ -3,6 +3,8 @@ package value
 abstract class IntValue extends Value with NumericValue {
     override final protected type T = Int
     
+    override final def calculate: IntValue = IntValue.IntCalculate(this)
+    
     final def unary_+ : IntValue = this
     
     final def unary_- : IntValue = IntValue.IntNegate(this)
@@ -77,6 +79,12 @@ object IntValue {
     
     final case class IntConstant(value: Int) extends IntValue {
         override def get: Option[Int] = Some(value)
+    }
+    
+    final case class IntCalculate(value: IntValue) extends IntValue {
+        private val calculated: Option[Int] = value.get
+        
+        override def get: Option[Int] = calculated
     }
     
     final case class IntNegate(value: IntValue) extends IntValue {

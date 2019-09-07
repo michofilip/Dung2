@@ -3,6 +3,8 @@ package value
 abstract class LongValue extends Value with NumericValue {
     override final protected type T = Long
     
+    override final def calculate: LongValue = LongValue.LongCalculate(this)
+    
     final def unary_+ : LongValue = this
     
     final def unary_- : LongValue = LongValue.LongNegate(this)
@@ -77,6 +79,12 @@ object LongValue {
     
     final case class LongConstant(value: Long) extends LongValue {
         override def get: Option[Long] = Some(value)
+    }
+    
+    final case class LongCalculate(value: LongValue) extends LongValue {
+        private val calculated: Option[Long] = value.get
+        
+        override def get: Option[Long] = calculated
     }
     
     final case class LongNegate(value: LongValue) extends LongValue {

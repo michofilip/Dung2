@@ -3,6 +3,8 @@ package value
 abstract class DoubleValue extends Value with NumericValue {
     override final protected type T = Double
     
+    override final def calculate: DoubleValue = DoubleValue.DoubleCalculate(this)
+    
     final def unary_+ : DoubleValue = this
     
     final def unary_- : DoubleValue = DoubleValue.DoubleNegate(this)
@@ -68,6 +70,12 @@ object DoubleValue {
     
     final case class DoubleConstant(value: Double) extends DoubleValue {
         override def get: Option[Double] = Some(value)
+    }
+    
+    final case class DoubleCalculate(value: DoubleValue) extends DoubleValue {
+        private val calculated: Option[Double] = value.get
+        
+        override def get: Option[Double] = calculated
     }
     
     final case class DoubleNegate(value: DoubleValue) extends DoubleValue {

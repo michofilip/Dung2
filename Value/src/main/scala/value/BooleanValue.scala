@@ -3,6 +3,8 @@ package value
 abstract class BooleanValue extends Value {
     override final protected type T = Boolean
     
+    override final def calculate: BooleanValue = BooleanValue.BooleanCalculate(this)
+    
     final def unary_! : BooleanValue = BooleanValue.NOT(this)
     
     final def &&(that: BooleanValue): BooleanValue = BooleanValue.AND(this, that)
@@ -26,6 +28,12 @@ object BooleanValue {
     
     final case class BooleanConstant(value: Boolean) extends BooleanValue {
         override def get: Option[Boolean] = Some(value)
+    }
+    
+    final case class BooleanCalculate(value: BooleanValue) extends BooleanValue {
+        private val calculated: Option[Boolean] = value.get
+        
+        override def get: Option[Boolean] = calculated
     }
     
     final case class NOT(value: BooleanValue) extends BooleanValue {

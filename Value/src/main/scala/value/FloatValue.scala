@@ -3,6 +3,8 @@ package value
 abstract class FloatValue extends Value with NumericValue {
     override final protected type T = Float
     
+    override final def calculate: FloatValue = FloatValue.FloatCalculate(this)
+    
     final def unary_+ : FloatValue = this
     
     final def unary_- : FloatValue = FloatValue.FloatNegate(this)
@@ -68,6 +70,12 @@ object FloatValue {
     
     final case class FloatConstant(value: Float) extends FloatValue {
         override def get: Option[Float] = Some(value)
+    }
+    
+    final case class FloatCalculate(value: FloatValue) extends FloatValue {
+        private val calculated: Option[Float] = value.get
+        
+        override def get: Option[Float] = calculated
     }
     
     final case class FloatNegate(value: FloatValue) extends FloatValue {
