@@ -1,9 +1,9 @@
-import core.entities.EntityFactory
-import core.entities.Entity
 import core.entities.finals.nonmap.TimeCounter
+import core.entities.{Entity, EntityFactory}
 import core.events.Event
 import core.events.Event._
 import core.parts.timer.Timer
+import core.repository.EntityRepository
 import core.world.WorldFrame
 
 object Main extends App {
@@ -17,12 +17,15 @@ object Main extends App {
         //        new entity.Entity.TurnCounter(0),
         //        new entity.Entity.ScriptRunner(0),
     )
+    implicit val er: EntityRepository = EntityRepository(entities)
+    
     val events = Vector[Event](
         SwitchOn(1000),
         //        StopTime
     )
     
-    var mapFrame = WorldFrame(entities, events)
+    
+    var mapFrame = new WorldFrame(er, events)
     
     (1 to 14).foldLeft({
         println(mapFrame.toJSON.prettyPrint)
