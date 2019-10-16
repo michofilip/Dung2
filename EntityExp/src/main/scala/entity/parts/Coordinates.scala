@@ -1,3 +1,3 @@
-package entity2.parts2
+package entity.parts
 
 case class Coordinates(x: Int, y: Int)

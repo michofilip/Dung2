@@ -26,8 +26,15 @@ lazy val Old = project
         )
 
 lazy val EntityExp = project
-        .settings(commonSettings,
+        .dependsOn(Commons)
+        .settings(
+            commonSettings,
             libraryDependencies ++= Dependencies.coreDependencies,
-            // https://mvnrepository.com/artifact/org.scala-lang.modules/scala-xml
             libraryDependencies += "org.scala-lang.modules" %% "scala-xml" % "1.2.0"
+        )
+
+lazy val Commons = project
+        .settings(
+            commonSettings,
+            libraryDependencies ++= Dependencies.commonsDependencies
         )
