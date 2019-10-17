@@ -2,7 +2,6 @@ package entity.parts
 
 import math.CustomMath._
 
-
 case class Animation(frames: Vector[Frame], duration: Long, isLooped: Boolean) {
     
     def getFrame(milliseconds: Long): Frame = {
