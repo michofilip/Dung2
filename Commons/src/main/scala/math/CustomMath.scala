@@ -6,9 +6,9 @@ object CustomMath {
     def bound(x: Int, min: Int, max: Int): Int = if (x < min) min else if (x < max) x else max
     
     implicit class CM(x: Int) {
-        def %%(n: Int): Int = mod(x, n)
+        def mod(n: Int): Int = CustomMath.mod(x, n)
         
-        def <|(min: Int, max: Int): Int = bound(x, min, max)
+        def bound(min: Int, max: Int): Int = CustomMath.bound(x, min, max)
     }
     
 }

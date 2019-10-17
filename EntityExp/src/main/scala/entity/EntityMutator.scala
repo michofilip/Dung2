@@ -2,17 +2,13 @@ package entity
 
 import entity.parts.Category._
 import entity.parts.State._
-import entity.parts.{Coordinates, Direction, Graphics, Physics, Position, State}
+import entity.parts.{Animation, Coordinates, Direction, Physics, State}
 import entity.selectors.{AnimationSelector, PhysicsSelector}
 
 object EntityMutator {
     
-    implicit class TimestampMutator(entity: Entity) {
-        def setTimestamp(timestamp: Long): Entity = entity.copy(timestamp = timestamp)
-    }
-    
     implicit class StateMutator(entity: Entity) {
-        def setState(entityState: State): Entity = entity.copy(state = Some(entityState))
+        def setState(entityState: State): Entity = entity.copy(state = Some(entityState), timestamp = 0)
         
         def removeState(): Entity = entity.copy(state = None)
         
@@ -22,42 +18,44 @@ object EntityMutator {
         }
     }
     
-    implicit class PositionMutator(entity: Entity) {
-        def setPosition(position: Position): Entity = entity.copy(position = Some(position))
+    implicit class CoordinatesMutator(entity: Entity) {
+        def setCoordinates(coordinates: Coordinates): Entity = entity.copy(coordinates = Some(coordinates))
         
-        def removePosition(): Entity = entity.copy(position = None)
+        def removeCoordinates(): Entity = entity.copy(coordinates = None)
         
-        def moveTo(x: Int, y: Int): Entity = entity.position match {
-            case Some(position) if position.canMove => setPosition(position.copy(coordinates = Coordinates(x, y)))
+        def moveTo(x: Int, y: Int): Entity = entity.coordinates match {
+            case Some(_) => setCoordinates(Coordinates(x, y))
             case _ => entity
         }
         
-        def moveBy(dx: Int, dy: Int): Entity = entity.position match {
-            case Some(position@Position(Coordinates(x, y), _, canMove, _)) if canMove =>
-                setPosition(position.copy(coordinates = Coordinates(x + dx, y + dy)))
+        def moveBy(dx: Int, dy: Int): Entity = entity.coordinates match {
+            case Some(Coordinates(x, y)) => setCoordinates(Coordinates(x + dx, y + dy))
+            case _ => entity
+        }
+    }
+    
+    implicit class DirectionMutator(entity: Entity) {
+        def setDirection(direction: Direction): Entity = entity.copy(direction = Some(direction))
+        
+        def removeDirection(): Entity = entity.copy(direction = None)
+        
+        def turnTo(direction: Direction): Entity = entity.direction match {
+            case Some(_) => setDirection(direction)
             case _ => entity
         }
         
-        def rotateTo(direction: Direction): Entity = entity.position match {
-            case Some(position) if position.canRotate => setPosition(position.copy(direction = direction))
+        def turnRight(): Entity = entity.direction match {
+            case Some(direction) => setDirection(direction.turnRight)
             case _ => entity
         }
         
-        def turnRight(): Entity = entity.position match {
-            case Some(position@Position(_, direction, _, canRotate)) if canRotate =>
-                setPosition(position.copy(direction = direction.turnRight))
+        def turnLeft(): Entity = entity.direction match {
+            case Some(direction) => setDirection(direction.turnLeft)
             case _ => entity
         }
         
-        def turnLeft(): Entity = entity.position match {
-            case Some(position@Position(_, direction, _, canRotate)) if canRotate =>
-                setPosition(position.copy(direction = direction.turnLeft))
-            case _ => entity
-        }
-        
-        def turnBack(): Entity = entity.position match {
-            case Some(position@Position(_, direction, _, canRotate)) if canRotate =>
-                setPosition(position.copy(direction = direction.turnBack))
+        def turnBack(): Entity = entity.direction match {
+            case Some(direction) => setDirection(direction.turnBack)
             case _ => entity
         }
     }
@@ -73,54 +71,49 @@ object EntityMutator {
         }
     }
     
-    implicit class GraphicsMutator(entity: Entity)(implicit animationSelector: AnimationSelector) {
-        def setGraphics(graphics: Graphics): Entity = entity.copy(graphics = Some(graphics))
+    implicit class AnimationMutator(entity: Entity)(implicit animationSelector: AnimationSelector) {
+        def setAnimation(animation: Animation): Entity = entity.copy(animation = Some(animation))
         
-        def removeGraphics(): Entity = entity.copy(state = None)
+        def removeAnimation(): Entity = entity.copy(state = None)
         
-        def selectGraphics(): Entity =
-            animationSelector.select(entity.category, entity.state, entity.position) match {
-                case Some(animation) => entity.setGraphics(Graphics(animation, 0))
-                case None => entity.removeGraphics()
-            }
+        def selectAnimation(): Entity = animationSelector.select(entity.category, entity.state, entity.direction) match {
+            case Some(animation) => entity.setAnimation(animation)
+            case None => entity.removeAnimation()
+        }
     }
     
-    implicit class SwitchMutator(entity: Entity)
-                                (implicit physicsSelector: PhysicsSelector,
-                                 animationSelector: AnimationSelector) {
+    implicit class SwitchMutator(entity: Entity)(implicit
+                                                 physicsSelector: PhysicsSelector,
+                                                 animationSelector: AnimationSelector) {
         def beginSwitchingOff(): Entity = (entity.category, entity.state) match {
             case (Switch, Some(On)) => entity
                     .updateState(SwitchingOff)
-                    .setTimestamp(0)
                     .selectPhysics()
-                    .selectGraphics()
+                    .selectAnimation()
             case _ => entity
         }
         
         def finishSwitchingOff(): Entity = (entity.category, entity.state) match {
             case (Switch, Some(SwitchingOff)) => entity
                     .updateState(Off)
-                    .setTimestamp(0)
                     .selectPhysics()
-                    .selectGraphics()
+                    .selectAnimation()
             case _ => entity
         }
         
         def beginSwitchingOn(): Entity = (entity.category, entity.state) match {
             case (Switch, Some(Off)) => entity
                     .updateState(SwitchingOn)
-                    .setTimestamp(0)
                     .selectPhysics()
-                    .selectGraphics()
+                    .selectAnimation()
             case _ => entity
         }
         
         def finishSwitchingOn(): Entity = (entity.category, entity.state) match {
             case (Switch, Some(SwitchingOn)) => entity
                     .updateState(On)
-                    .setTimestamp(0)
                     .selectPhysics()
-                    .selectGraphics()
+                    .selectAnimation()
             case _ => entity
         }
     }
