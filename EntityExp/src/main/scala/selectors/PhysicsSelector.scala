@@ -11,7 +11,7 @@ class PhysicsSelector {
     val physicsTF = Physics(solid = true, opaque = false)
     val physicsTT = Physics(solid = true, opaque = true)
     
-    def select(category: Category, state: Option[State]): Option[Physics] = (category, state) match {
+    def select(category: Category, stateOpt: Option[State]): Option[Physics] = (category, stateOpt) match {
         case (Floor, None) => Some(physicsFF)
         
         case (Wall, None) => Some(physicsTT)
