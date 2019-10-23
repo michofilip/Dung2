@@ -2,13 +2,13 @@ package entity
 
 import parts.Category._
 import parts.State._
-import parts.{Animation, Position, Direction, Physics, State}
+import parts.{Direction, Graphics, Physics, Position, State}
 import selectors.{AnimationSelector, PhysicsSelector}
 
 object EntityMutator {
     
     implicit class StateMutator(entity: Entity) {
-        def setState(entityState: State): Entity = entity.copy(stateOpt = Some(entityState), timestamp = 0)
+        def setState(entityState: State): Entity = entity.copy(stateOpt = Some(entityState))
         
         def removeState(): Entity = entity.copy(stateOpt = None)
         
@@ -71,14 +71,14 @@ object EntityMutator {
         }
     }
     
-    implicit class AnimationMutator(entity: Entity)(implicit animationSelector: AnimationSelector) {
-        def setAnimation(animation: Animation): Entity = entity.copy(animationOpt = Some(animation))
+    implicit class GraphicsMutator(entity: Entity)(implicit animationSelector: AnimationSelector) {
+        def setGraphics(graphics: Graphics): Entity = entity.copy(graphicsOpt = Some(graphics))
         
-        def removeAnimation(): Entity = entity.copy(stateOpt = None)
+        def removeGraphics(): Entity = entity.copy(graphicsOpt = None)
         
-        def selectAnimation(): Entity = animationSelector.select(entity.category, entity.stateOpt, entity.directionOpt) match {
-            case Some(animation) => entity.setAnimation(animation)
-            case None => entity.removeAnimation()
+        def selectGraphics(): Entity = animationSelector.select(entity.category, entity.stateOpt, entity.directionOpt) match {
+            case Some(animation) => entity.setGraphics(Graphics(animation = animation, initialTimestamp = 0))
+            case None => entity.removeGraphics()
         }
     }
     
@@ -89,7 +89,7 @@ object EntityMutator {
             case (Switch, Some(On)) => entity
                     .updateState(SwitchingOff)
                     .selectPhysics()
-                    .selectAnimation()
+                    .selectGraphics()
             case _ => entity
         }
         
@@ -97,7 +97,7 @@ object EntityMutator {
             case (Switch, Some(SwitchingOff)) => entity
                     .updateState(Off)
                     .selectPhysics()
-                    .selectAnimation()
+                    .selectGraphics()
             case _ => entity
         }
         
@@ -105,7 +105,7 @@ object EntityMutator {
             case (Switch, Some(Off)) => entity
                     .updateState(SwitchingOn)
                     .selectPhysics()
-                    .selectAnimation()
+                    .selectGraphics()
             case _ => entity
         }
         
@@ -113,7 +113,7 @@ object EntityMutator {
             case (Switch, Some(SwitchingOn)) => entity
                     .updateState(On)
                     .selectPhysics()
-                    .selectAnimation()
+                    .selectGraphics()
             case _ => entity
         }
     }

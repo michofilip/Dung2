@@ -11,28 +11,28 @@ class EntityFactory(implicit
                     graphicsSelector: AnimationSelector) {
     
     def makeFloor(id: Int, x: Int, y: Int): Entity =
-        Entity(id = id, category = Floor, timestamp = 0)
+        Entity(id = id, category = Floor)
                 .setPosition(Position(x, y))
                 .selectPhysics()
-                .selectAnimation()
+                .selectGraphics()
     
     def makeWall(id: Int, x: Int, y: Int): Entity =
-        Entity(id = id, category = Wall, timestamp = 0)
+        Entity(id = id, category = Wall)
                 .setPosition(Position(x, y))
                 .selectPhysics()
-                .selectAnimation()
+                .selectGraphics()
     
     def makeSwitch(id: Int, x: Int, y: Int): Entity =
-        Entity(id = id, category = Switch, timestamp = 0)
+        Entity(id = id, category = Switch)
                 .setState(Off)
                 .setPosition(Position(x, y))
                 .selectPhysics()
-                .selectAnimation()
+                .selectGraphics()
     
     def makeDoor(id: Int, x: Int, y: Int): Entity =
-        Entity(id = id, category = Door, timestamp = 0)
+        Entity(id = id, category = Door)
                 .setState(Open)
                 .setPosition(Position(x, y))
                 .selectPhysics()
-                .selectAnimation()
+                .selectGraphics()
 }

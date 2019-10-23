@@ -7,8 +7,8 @@ import parts.{Animation, Category, Direction, Frame, State}
 
 class AnimationSelector {
     
-    val animation = SingleFrameAnimation(Frame(1))
-    val animation2 = SingleFrameAnimation(Frame(2))
+    val animation = SingleFrameAnimation(frame = Frame(id = 1, layer = 0))
+    val animation2 = SingleFrameAnimation(frame = Frame(id = 2, layer = 0))
     
     def select(category: Category, stateOpt: Option[State], directionOpt: Option[Direction]): Option[Animation] =
         (category, stateOpt, directionOpt) match {

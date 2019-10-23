@@ -1,11 +1,10 @@
 package entity
 
-import parts.{Animation, Category, Position, Direction, Physics, State}
+import parts.{Category, Direction, Graphics, Physics, Position, State}
 
-
-case class Entity(id: Int, category: Category, timestamp: Long,
+case class Entity(id: Int, category: Category,
                   stateOpt: Option[State] = None,
                   positionOpt: Option[Position] = None,
                   directionOpt: Option[Direction] = None,
                   physicsOpt: Option[Physics] = None,
-                  animationOpt: Option[Animation] = None)
+                  graphicsOpt: Option[Graphics] = None)
