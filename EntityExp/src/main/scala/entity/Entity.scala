@@ -1,6 +1,6 @@
 package entity
 
-import entity.parts.{Animation, Category, Coordinates, Direction, Physics, State}
+import parts.{Animation, Category, Coordinates, Direction, Physics, State}
 
 
 case class Entity(id: Int, category: Category, timestamp: Long,

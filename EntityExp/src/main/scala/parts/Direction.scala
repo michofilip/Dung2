@@ -1,6 +1,6 @@
-package entity.parts
+package parts
 
-import entity.parts.Direction.{East, North, NorthEast, NorthWest, South, SouthEast, SouthWest, West}
+import parts.Direction.{East, North, NorthEast, NorthWest, South, SouthEast, SouthWest, West}
 
 sealed abstract class Direction {
     def turnRight: Direction = this match {

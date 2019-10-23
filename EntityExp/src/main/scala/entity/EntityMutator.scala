@@ -1,9 +1,9 @@
 package entity
 
-import entity.parts.Category._
-import entity.parts.State._
-import entity.parts.{Animation, Coordinates, Direction, Physics, State}
-import entity.selectors.{AnimationSelector, PhysicsSelector}
+import parts.Category._
+import parts.State._
+import parts.{Animation, Coordinates, Direction, Physics, State}
+import selectors.{AnimationSelector, PhysicsSelector}
 
 object EntityMutator {
     

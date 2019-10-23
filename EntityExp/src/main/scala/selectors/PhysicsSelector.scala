@@ -1,8 +1,8 @@
-package entity.selectors
+package selectors
 
-import entity.parts.Category._
-import entity.parts.State._
-import entity.parts.{Category, Physics, State}
+import parts.Category._
+import parts.State._
+import parts.{Category, Physics, State}
 
 class PhysicsSelector {
     

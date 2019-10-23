@@ -1,7 +1,7 @@
 //package xml
 //
 //import entity.Entity
-//import entity.parts.{Animation, Coordinates, Frame, Physics, Position}
+//import parts.{Animation, Coordinates, Frame, Physics, Position}
 //
 //import scala.xml.{Elem, NodeSeq}
 //

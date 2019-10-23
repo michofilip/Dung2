@@ -1,9 +1,9 @@
-package entity.selectors
+package selectors
 
-import entity.parts.Animation.SingleFrameAnimation
-import entity.parts.Category._
-import entity.parts.State.{Close, Closing, Locked, Locking, Off, On, Open, Opening, SwitchingOff, SwitchingOn, Unlocking}
-import entity.parts.{Animation, Category, Direction, Frame, State}
+import parts.Animation.SingleFrameAnimation
+import parts.Category._
+import parts.State.{Close, Closing, Locked, Locking, Off, On, Open, Opening, SwitchingOff, SwitchingOn, Unlocking}
+import parts.{Animation, Category, Direction, Frame, State}
 
 class AnimationSelector {
     

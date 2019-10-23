@@ -1,4 +1,4 @@
-package entity.parts
+package parts
 
 sealed abstract class State
 
