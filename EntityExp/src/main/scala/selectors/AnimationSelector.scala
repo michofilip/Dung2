@@ -1,6 +1,6 @@
 package selectors
 
-import parts.Animation.SingleFrameAnimation
+import parts.Animation.{LoopedAnimation, SingleFrameAnimation}
 import parts.Category._
 import parts.State.{Close, Closing, Locked, Locking, Off, On, Open, Opening, SwitchingOff, SwitchingOn, Unlocking}
 import parts.{Animation, Category, Direction, Frame, State}
@@ -8,7 +8,8 @@ import parts.{Animation, Category, Direction, Frame, State}
 class AnimationSelector {
     
     val animation = SingleFrameAnimation(frame = Frame(id = 1, layer = 0))
-    val animation2 = SingleFrameAnimation(frame = Frame(id = 2, layer = 0))
+    //    val animation2 = SingleFrameAnimation(frame = Frame(id = 2, layer = 0))
+    val animation2 = LoopedAnimation(frames = Vector(Frame(id = 2, layer = 0), Frame(id = 3, layer = 0)), fps = 15)
     
     def select(category: Category, stateOpt: Option[State], directionOpt: Option[Direction]): Option[Animation] =
         (category, stateOpt, directionOpt) match {

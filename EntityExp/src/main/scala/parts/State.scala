@@ -26,5 +26,4 @@ object State {
     
     case object Locked extends State
     
-    
 }
